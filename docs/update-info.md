@@ -2,22 +2,24 @@
 
 When a checkpoint was last updated, by which source, and a freshness rating.
 
-**Endpoint:** `GET /api/v1/data/update-info?ppid=id_13`
+**Endpoint:** `GET /api/v1/data/update-info`
+**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
 
-> Counts against **standard** daily quota.
+---
 
 ## Parameters
 
-| Parameter | Description |
-|---|---|
+| Name | Description |
+|------|-------------|
 | `ppid` | Checkpoint ID |
 | `lang` | Language code |
+
 
 ## Example
 
 ```bash
-curl "https://nakordoni.eu/api/v1/data/update-info?ppid=id_13" \
-  -H "Authorization: Bearer NKD-DEV-XXXX-XXXX-XXXX"
+curl "/api/v1/data/update-info?ppid=id_13" \
+  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
 
 ## Response envelope
@@ -34,4 +36,5 @@ curl "https://nakordoni.eu/api/v1/data/update-info?ppid=id_13" \
 
 ---
 
-[← Back to README](../README.md) · [Full docs](https://nakordoni.eu/en/developers/docs#update-info)
+Full docs: https://nakordoni.eu/en/developers/docs#update-info
+*Auto-generated 2026-06-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
