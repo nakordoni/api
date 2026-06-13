@@ -3,13 +3,17 @@
 Live health of every Developer-API product: online / degraded / offline, response latency and last-checked time, plus an overall rollup. Public — no API key required, never counts against your quota. Refreshed every 5 minutes. Mirrors the human status page at nakordoni.eu/{lang}/status.
 
 **Endpoint:** `GET /api/v1/data/status`
+**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
 
-> No API key required — public endpoint.
+---
+
+
 
 ## Example
 
 ```bash
-curl "https://nakordoni.eu/api/v1/data/status"
+curl "/api/v1/data/status" \
+  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
 
 ## Response envelope
@@ -26,4 +30,5 @@ curl "https://nakordoni.eu/api/v1/data/status"
 
 ---
 
-[← Back to README](../README.md) · [Full docs](https://nakordoni.eu/en/developers/docs#status)
+Full docs: https://nakordoni.eu/en/developers/docs#status
+*Auto-generated 2026-06-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
