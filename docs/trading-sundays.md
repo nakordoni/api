@@ -2,21 +2,23 @@
 
 Sunday retail-opening regulations and upcoming trading Sundays per regulated EU country.
 
-**Endpoint:** `GET /api/v1/data/trading-sundays?country=PL`
+**Endpoint:** `GET /api/v1/data/trading-sundays`
+**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
 
-> Counts against **standard** daily quota.
+---
 
 ## Parameters
 
-| Parameter | Description |
-|---|---|
+| Name | Description |
+|------|-------------|
 | `country` | ISO country code (optional) |
+
 
 ## Example
 
 ```bash
-curl "https://nakordoni.eu/api/v1/data/trading-sundays?country=PL" \
-  -H "Authorization: Bearer NKD-DEV-XXXX-XXXX-XXXX"
+curl "/api/v1/data/trading-sundays?country=PL" \
+  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
 
 ## Response envelope
@@ -33,4 +35,5 @@ curl "https://nakordoni.eu/api/v1/data/trading-sundays?country=PL" \
 
 ---
 
-[← Back to README](../README.md) · [Full docs](https://nakordoni.eu/en/developers/docs#trading-sundays)
+Full docs: https://nakordoni.eu/en/developers/docs#trading-sundays
+*Auto-generated 2026-06-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
