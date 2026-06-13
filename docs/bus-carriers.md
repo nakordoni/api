@@ -2,24 +2,26 @@
 
 Border-crossing performance per bus carrier: crossings, average/median/min/max wait minutes — built from our own plate-matched crossing records.
 
-**Endpoint:** `GET /api/v1/data/bus-carriers?ppid=all&days=30`
+**Endpoint:** `GET /api/v1/data/bus-carriers`
+**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
 
-> Counts against **standard** daily quota.
+---
 
 ## Parameters
 
-| Parameter | Description |
-|---|---|
+| Name | Description |
+|------|-------------|
 | `ppid` | Checkpoint ID or "all" for aggregated |
 | `days` | Period 1-90 (default 30) |
 | `min_crossings` | Minimum crossings to include a carrier (default 3) |
 | `limit` | Max carriers returned (default 20) |
 
+
 ## Example
 
 ```bash
-curl "https://nakordoni.eu/api/v1/data/bus-carriers?ppid=all&days=30" \
-  -H "Authorization: Bearer NKD-DEV-XXXX-XXXX-XXXX"
+curl "/api/v1/data/bus-carriers?ppid=all&days=30" \
+  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
 
 ## Response envelope
@@ -36,4 +38,5 @@ curl "https://nakordoni.eu/api/v1/data/bus-carriers?ppid=all&days=30" \
 
 ---
 
-[← Back to README](../README.md) · [Full docs](https://nakordoni.eu/en/developers/docs#bus-carriers)
+Full docs: https://nakordoni.eu/en/developers/docs#bus-carriers
+*Auto-generated 2026-06-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
