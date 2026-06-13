@@ -1,0 +1,779 @@
+# Nakordoni Developer API — OpenAPI 3.0
+# Import into Postman, Insomnia, Swagger UI, or any OpenAPI tool.
+# Docs: https://nakordoni.eu/en/developers/docs
+
+openapi: 3.0.3
+info:
+  title: Nakordoni Developer API
+  version: 1.0.0
+  description: Real-time border crossing data for Ukraine and its neighbours — queue
+    lengths, wait estimates, forecasts, fuel prices, driver POIs and more.
+  contact:
+    url: https://nakordoni.eu/en/developers/tickets
+  license:
+    name: Commercial — see nakordoni.eu/en/developers
+externalDocs:
+  description: Full documentation
+  url: https://nakordoni.eu/en/developers/docs
+servers:
+- url: https://nakordoni.eu
+  description: Production
+security:
+- BearerAuth: []
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: NKD-DEV-XXXX-XXXX-XXXX
+      description: Get your free key at https://nakordoni.eu/en/developers/signup
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        api_version:
+          type: string
+          example: '1'
+        product:
+          type: string
+        attribution:
+          type: string
+          example: Data by nakordoni.eu
+        data:
+          type: array
+          items:
+            type: object
+        snapshot:
+          type: object
+          description: Present on queue product
+          properties:
+            queue_now:
+              type: integer
+              description: Current cars in queue
+            wait_min:
+              type: integer
+              description: 'Prognosed wait: tmin + queue_now × tpercar'
+            tmin:
+              type: integer
+            tpercar:
+              type: number
+            updated_at:
+              type: string
+            age_min:
+              type: integer
+            source:
+              type: string
+        usage:
+          type: object
+          properties:
+            requests_today:
+              type: integer
+            limit_today:
+              type: integer
+            remaining:
+              type: integer
+paths:
+  /api/v1/data/status:
+    get:
+      operationId: get_status
+      summary: API Status
+      description: 'Live health of every Developer-API product: online / degraded
+        / offline, response latency and last-checked time, plus an overall rollup.
+        Public — no API key required, never counts against your quota. Refreshed every
+        5 minutes. Mirrors the human status page at nakordoni.eu/{lang}/status.'
+      tags:
+      - API
+      parameters: []
+      security: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/checkpoints:
+    get:
+      operationId: get_checkpoints
+      summary: Checkpoints Directory API
+      description: 'Directory of all monitored border checkpoints: IDs, names, countries,
+        coordinates and status. Use it to discover ppid values for the other APIs.'
+      tags:
+      - Checkpoints
+      parameters:
+      - name: country
+        in: query
+        required: false
+        description: Filter by numeric country code (1=UA, 2=PL, 3=SK, 4=HU, 5=RO,
+          6=MD, 7=BY, 8=LT, 9=LV, …)
+        schema:
+          type: string
+      - name: lang
+        in: query
+        required: false
+        description: Language for checkpoint names (default en)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/border/{origin}/{destination}/{crossing_type}:
+    get:
+      operationId: get_border
+      summary: Border Queue API
+      description: All checkpoints on a given border + vehicle type in one call —
+        live queue, wait estimate, and data freshness for every crossing point. Supports
+        single destination, comma-separated list, or "all" to query all neighbours
+        at once. Results sorted by queue length ascending, each checkpoint tagged
+        with its border country.
+      tags:
+      - Border
+      parameters:
+      - name: origin
+        in: path
+        required: false
+        description: 'Origin country code (URL path segment): 1=Ukraine, 2=Poland,
+          3=Slovakia, 4=Hungary, 5=Romania, 6=Moldova, 7=Belarus, 8=Lithuania, 9=Latvia,
+          10=Estonia, 11=Slovenia, 12=Bulgaria, 13=Serbia, 14=Turkey, 15=North Macedonia,
+          16=Croatia, 17=Bosnia, 18=Germany, 19=Greece, 20=Italy, 21=Albania, 22=Montenegro,
+          23=Kosovo'
+        schema:
+          type: string
+      - name: destination
+        in: path
+        required: false
+        description: 'Destination (URL path segment): single country code, comma-separated
+          list (e.g. 2,3,5), or "all" to expand to all neighbours with monitored data'
+        schema:
+          type: string
+      - name: crossing_type
+        in: path
+        required: false
+        description: 'Vehicle type (URL path segment): 4=car, 5=taxfree car, 6=bus,
+          7=pedestrian, 8=truck<7.5t, 9=truck'
+        schema:
+          type: string
+      - name: lang
+        in: query
+        required: false
+        description: Language for checkpoint names in the response (default en)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/search:
+    get:
+      operationId: get_search
+      summary: Checkpoint Search API
+      description: Find checkpoint PPIDs by name. Pass a single name or a comma-separated
+        list (up to 20). Searches all translation languages; returns all PPIDs at
+        that location grouped by vehicle type (4=car, 5=taxfree car, 6=bus, 7=pedestrian,
+        8=truck<7.5t, 9=truck). Use this to quickly discover the right ppid before
+        calling the queue or forecast APIs.
+      tags:
+      - Checkpoint
+      parameters:
+      - name: name
+        in: query
+        required: false
+        description: Checkpoint name or comma-separated names, in any language (e.g.
+          Krakovets, Краківець, Krakivets)
+        schema:
+          type: string
+      - name: lang
+        in: query
+        required: false
+        description: Language for returned names (default en)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/queue:
+    get:
+      operationId: get_queue
+      summary: Live Border Queue API
+      description: Real-time queue length, wait estimate and status for any monitored
+        checkpoint, plus hourly/daily aggregates.
+      tags:
+      - Live
+      parameters:
+      - name: ppid
+        in: query
+        required: false
+        description: Checkpoint ID, e.g. id_13 (see /api/v1/data/checkpoints)
+        schema:
+          type: string
+      - name: section
+        in: query
+        required: false
+        description: Data section (optional)
+        schema:
+          type: string
+      - name: origin
+        in: query
+        required: false
+        description: Origin country code (optional)
+        schema:
+          type: string
+      - name: destination
+        in: query
+        required: false
+        description: Destination country code (optional)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/stats:
+    get:
+      operationId: get_stats
+      summary: Checkpoint Hourly Statistics API
+      description: 'Hourly historical queue stats per checkpoint and date: 24 hourly
+        values, daily avg/min/max, peak and quietest hours, day-over-day comparison.'
+      tags:
+      - Checkpoint
+      parameters:
+      - name: ppid
+        in: query
+        required: false
+        description: Checkpoint ID
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        description: 'YYYY-MM-DD (default: yesterday)'
+        schema:
+          type: string
+      - name: compare
+        in: query
+        required: false
+        description: 1 = include previous day + delta
+        schema:
+          type: string
+      - name: lang
+        in: query
+        required: false
+        description: Language code (default uk)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/day-stats:
+    get:
+      operationId: get_day_stats
+      summary: Best Time to Cross API
+      description: 'Typical-week load statistics per checkpoint: 7×24 day-of-week
+        × hour matrix (median + p25/p75 band), quietest/busiest day, best/worst 2-hour
+        windows. Precomputed daily from ~60 days of real observations.'
+      tags:
+      - Best
+      parameters:
+      - name: ppid
+        in: query
+        required: false
+        description: Checkpoint ID, e.g. id_13
+        schema:
+          type: string
+      - name: lang
+        in: query
+        required: false
+        description: Language for weekday/unit labels (default uk)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/forecast:
+    get:
+      operationId: get_forecast
+      summary: Queue Forecast API
+      description: 'ML ensemble forecast of queue levels: 24-hour and 7-day (168h)
+        horizons with confidence bounds. The same model that powers nakordoni.eu predictions.'
+      tags:
+      - Queue
+      parameters:
+      - name: ppid
+        in: query
+        required: false
+        description: Checkpoint ID
+        schema:
+          type: string
+      - name: prediction_steps
+        in: query
+        required: false
+        description: 24 (default) or 168 for 7-day
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/alternatives:
+    get:
+      operationId: get_alternatives
+      summary: Checkpoint Alternatives API
+      description: Nearby alternative checkpoints on the same border with current
+        queues and distance deltas. By default filters to the same vehicle type as
+        the requested ppid. Use crossing_type to override — e.g. crossing_type=4 for
+        cars, crossing_type=7 for pedestrians.
+      tags:
+      - Checkpoint
+      parameters:
+      - name: ppid
+        in: query
+        required: false
+        description: Checkpoint ID (e.g. id_13)
+        schema:
+          type: string
+      - name: lang
+        in: query
+        required: false
+        description: Language code (default uk)
+        schema:
+          type: string
+      - name: crossing_type
+        in: query
+        required: false
+        description: 'Optional vehicle type override: 4=car, 5=taxfree car, 6=bus,
+          7=pedestrian, 8=truck<7.5t, 9=truck. Defaults to same type as the requested
+          ppid.'
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        description: Max results (1–10, default 5)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/update-info:
+    get:
+      operationId: get_update_info
+      summary: Data Freshness API
+      description: When a checkpoint was last updated, by which source, and a freshness
+        rating.
+      tags:
+      - Data
+      parameters:
+      - name: ppid
+        in: query
+        required: false
+        description: Checkpoint ID
+        schema:
+          type: string
+      - name: lang
+        in: query
+        required: false
+        description: Language code
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/fuel:
+    get:
+      operationId: get_fuel
+      summary: EU Fuel Prices API
+      description: Average petrol/diesel/LPG prices across EU countries plus nearest
+        stations, aggregated from official national sources.
+      tags:
+      - EU
+      parameters:
+      - name: country
+        in: query
+        required: false
+        description: ISO country code (optional)
+        schema:
+          type: string
+      - name: lat
+        in: query
+        required: false
+        description: Latitude (optional)
+        schema:
+          type: string
+      - name: lon
+        in: query
+        required: false
+        description: Longitude (optional)
+        schema:
+          type: string
+      - name: lang
+        in: query
+        required: false
+        description: Language code
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/pois:
+    get:
+      operationId: get_pois
+      summary: Driver POIs API
+      description: Truck parkings (14k+), free showers, services and supermarkets
+        across Europe with coordinates.
+      tags:
+      - Driver
+      parameters:
+      - name: type
+        in: query
+        required: false
+        description: parking|shower|supermarket|industrial
+        schema:
+          type: string
+      - name: lat
+        in: query
+        required: false
+        description: Latitude
+        schema:
+          type: string
+      - name: lon
+        in: query
+        required: false
+        description: Longitude
+        schema:
+          type: string
+      - name: radius
+        in: query
+        required: false
+        description: Radius km
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/truck-bans:
+    get:
+      operationId: get_truck_bans
+      summary: Truck Driving Bans API
+      description: European truck driving restrictions by country and date, including
+        seasonal and holiday bans.
+      tags:
+      - Truck
+      parameters:
+      - name: country
+        in: query
+        required: false
+        description: ISO country code (optional)
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        description: YYYY-MM-DD (optional)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/trading-sundays:
+    get:
+      operationId: get_trading_sundays
+      summary: Trading Sundays API
+      description: Sunday retail-opening regulations and upcoming trading Sundays
+        per regulated EU country.
+      tags:
+      - Trading
+      parameters:
+      - name: country
+        in: query
+        required: false
+        description: ISO country code (optional)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/bus-carriers:
+    get:
+      operationId: get_bus_carriers
+      summary: Bus Carrier Border Stats API
+      description: 'Border-crossing performance per bus carrier: crossings, average/median/min/max
+        wait minutes — built from our own plate-matched crossing records.'
+      tags:
+      - Bus
+      parameters:
+      - name: ppid
+        in: query
+        required: false
+        description: Checkpoint ID or "all" for aggregated
+        schema:
+          type: string
+      - name: days
+        in: query
+        required: false
+        description: Period 1-90 (default 30)
+        schema:
+          type: string
+      - name: min_crossings
+        in: query
+        required: false
+        description: Minimum crossings to include a carrier (default 3)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        description: Max carriers returned (default 20)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/road-conditions:
+    get:
+      operationId: get_road_conditions
+      summary: Road Conditions API
+      description: 'Approved road condition reports near borders and on major corridors:
+        potholes, roadworks, closures, ice, hazards — combining driver reports with
+        automatic accelerometer detections from our navigation app.'
+      tags:
+      - Road
+      parameters:
+      - name: country
+        in: query
+        required: false
+        description: ISO country code (optional)
+        schema:
+          type: string
+      - name: condition_type
+        in: query
+        required: false
+        description: pothole|speed_bump|roadwork|closure|hazard|ice|… (optional)
+        schema:
+          type: string
+      - name: severity
+        in: query
+        required: false
+        description: low|moderate|major|critical (optional)
+        schema:
+          type: string
+      - name: lat
+        in: query
+        required: false
+        description: Latitude (optional)
+        schema:
+          type: string
+      - name: lng
+        in: query
+        required: false
+        description: Longitude (optional)
+        schema:
+          type: string
+      - name: radius
+        in: query
+        required: false
+        description: Radius km (default 50)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        description: Max results (default 100, cap 500)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
+  /api/v1/data/assistant:
+    get:
+      operationId: get_assistant
+      summary: Border AI Assistant API
+      description: Ask our production AI assistant any border-crossing question (queues,
+        forecasts, rules, fuel, routes) and get the same grounded answer that powers
+        the nakordoni.eu widget — in 24 languages. Already used in production by yaknakordoni.com.ua.
+      tags:
+      - Border
+      parameters:
+      - name: q
+        in: query
+        required: false
+        description: The question (plain text)
+        schema:
+          type: string
+      - name: lang
+        in: query
+        required: false
+        description: Answer language (default en)
+        schema:
+          type: string
+      - name: ppid
+        in: query
+        required: false
+        description: Checkpoint context, e.g. id_13 (optional)
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          description: Missing or invalid API key
+        '429':
+          description: Quota or rate-limit exceeded
