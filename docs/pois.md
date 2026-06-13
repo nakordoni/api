@@ -2,24 +2,26 @@
 
 Truck parkings (14k+), free showers, services and supermarkets across Europe with coordinates.
 
-**Endpoint:** `GET /api/v1/data/pois?type=parking&lat=50.7&lon=23.9&radius=50`
+**Endpoint:** `GET /api/v1/data/pois`
+**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
 
-> Counts against **standard** daily quota.
+---
 
 ## Parameters
 
-| Parameter | Description |
-|---|---|
+| Name | Description |
+|------|-------------|
 | `type` | parking|shower|supermarket|industrial |
 | `lat` | Latitude |
 | `lon` | Longitude |
 | `radius` | Radius km |
 
+
 ## Example
 
 ```bash
-curl "https://nakordoni.eu/api/v1/data/pois?type=parking&lat=50.7&lon=23.9&radius=50" \
-  -H "Authorization: Bearer NKD-DEV-XXXX-XXXX-XXXX"
+curl "/api/v1/data/pois?type=parking&lat=50.7&lon=23.9&radius=50" \
+  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
 
 ## Response envelope
@@ -36,4 +38,5 @@ curl "https://nakordoni.eu/api/v1/data/pois?type=parking&lat=50.7&lon=23.9&radiu
 
 ---
 
-[← Back to README](../README.md) · [Full docs](https://nakordoni.eu/en/developers/docs#pois)
+Full docs: https://nakordoni.eu/en/developers/docs#pois
+*Auto-generated 2026-06-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
