@@ -27,6 +27,7 @@ curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
 |------|------|-------------|-------------|
 | `status` | API Status | Live health of every Developer-API product: online / degraded / offline, response latency and last-checked time, plus an overall rollup. Public — no API key required, never counts against your quota. Refreshed every 5 minutes. Mirrors the human status page at nakordoni.eu/{lang}/status. | standard |
 | `checkpoints` | Checkpoints Directory API | Directory of all monitored border checkpoints: IDs, names, countries, coordinates and status. Use it to discover ppid values for the other APIs. | standard |
+| `multi` | Multi-Checkpoint API | Fetch live queue status and/or data freshness for up to 20 checkpoints in a single request. Designed for dashboard builders who poll many PPIDs simultaneously — reduces 20+ individual calls to one. Quota counts as N PPIDs × number of sub-products requested (same total as individual calls, but one round-trip). | standard |
 | `border` | Border Queue API | All checkpoints on a given border + vehicle type in one call — live queue, wait estimate, and data freshness for every crossing point. Supports single destination, comma-separated list, or "all" to query all neighbours at once. Results sorted by queue length ascending, each checkpoint tagged with its border country. | standard |
 | `search` | Checkpoint Search API | Find checkpoint PPIDs by name. Pass a single name or a comma-separated list (up to 20). Searches all translation languages; returns all PPIDs at that location grouped by vehicle type (4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck). Use this to quickly discover the right ppid before calling the queue or forecast APIs. | standard |
 | `queue` | Live Border Queue API | Real-time queue length, wait estimate and status for any monitored checkpoint, plus hourly/daily aggregates. | standard |
@@ -148,4 +149,4 @@ OpenAPI 3.0 spec: [`openapi.yaml`](openapi.yaml)
 
 ---
 
-*Last updated: 2026-06-13*
+*Last updated: 2026-06-14*
