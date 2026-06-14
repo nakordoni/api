@@ -69,7 +69,7 @@ paths:
 /multi: 
   get: 
     summary: "Multi-Checkpoint API"
-    description: "Fetch live queue status and/or data freshness for up to 20 checkpoints in a single request. Designed for dashboard builders who poll many PPIDs simultaneously — reduces 20+ individual calls to one. Quota counts as N PPIDs × number of sub-products requested (same total as individual calls, but one round-trip)."
+    description: "Fetch live queue status and/or data freshness for up to 20 checkpoints in a single request. Designed for dashboard builders who poll many PPIDs simultaneously — reduces 20+ individual calls to one. Quota counts as ⌈(N PPIDs × sub-products) / 2⌉ — 50% cheaper than the equivalent individual calls. Use include=queue,update-info to get both datasets at once."
     operationId: get_multi
     parameters:       - name: ppids
         in: query
