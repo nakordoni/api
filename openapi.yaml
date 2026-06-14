@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-06-13
+# Generated 2026-06-14
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -53,6 +53,37 @@ paths:
       - name: lang
         in: query
         description: Language for checkpoint names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/multi: 
+  get: 
+    summary: "Multi-Checkpoint API"
+    description: "Fetch live queue status and/or data freshness for up to 20 checkpoints in a single request. Designed for dashboard builders who poll many PPIDs simultaneously — reduces 20+ individual calls to one. Quota counts as N PPIDs × number of sub-products requested (same total as individual calls, but one round-trip)."
+    operationId: get_multi
+    parameters:       - name: ppids
+        in: query
+        description: "Comma-separated list of checkpoint IDs (required, max 20) — e.g. id_2,id_13,id_15,id_59"
+        schema: 
+          type: string
+      - name: include
+        in: query
+        description: "Comma-separated sub-products to include: queue, update-info (default: queue,update-info)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: "Language code for checkpoint names in queue responses (default: en)"
         schema: 
           type: string
     responses: 
