@@ -39,4 +39,4 @@ curl "/api/v1/data/pois?type=parking&lat=50.7&lon=23.9&radius=50" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#pois
-*Auto-generated 2026-06-14 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-06-23 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
