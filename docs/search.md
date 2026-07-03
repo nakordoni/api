@@ -37,4 +37,4 @@ curl "/api/v1/data/search?name=Krakovets,Shehyni&lang=en" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#search
-*Auto-generated 2026-06-23 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-07-03 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
