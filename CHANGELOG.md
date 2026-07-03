@@ -6,6 +6,11 @@ See also the live changelog: https://nakordoni.eu/en/developers/changelog
 
 ---
 
+## 2026-07-03
+
+### Added
+- **History data export** — approved developers can download hourly-averaged, published border-queue history for up to **5 checkpoints** (rolling window up to **90 days**) as gzipped **CSV** or **NDJSON**, from the **Data export** tab in the portal. This is a **portal-only** feature — **not** an API endpoint. One row per checkpoint per UTC hour: `ppid, checkpoint_name, hour_utc, direction, vehicle_type, avg_queue_length, avg_wait_minutes, sample_count, source` (`avg_wait_minutes` is `null` where a checkpoint has no official wait feed). Published-only + data-quality filtered; files kept 10 days. Every file embeds a signed provenance fingerprint (`sha256` + `HMAC`) so any copy can be verified as genuine nakordoni.eu data. Access on request via a [Data ticket](https://nakordoni.eu/en/developers/tickets?cat=data). See [`docs/export.md`](docs/export.md).
+
 ## 2026-06-12
 
 ### Added
