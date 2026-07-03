@@ -39,4 +39,4 @@ curl "/api/v1/data/alternatives?ppid=id_13&crossing_type=4" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#alternatives
-*Auto-generated 2026-06-23 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-07-03 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
