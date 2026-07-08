@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-07-03
+# Generated 2026-07-08
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -182,6 +182,27 @@ paths:
       - name: destination
         in: query
         description: Destination country code (optional)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/queue-advanced: 
+  get: 
+    summary: Advanced Wait Time API
+    description: "Wait time using the full complex formula: base wait (tmin + queue x tpercar) adjusted by two live multipliers — section_mode (current traffic-flow condition: stuck 1.4x / normal 1.0x / fast 0.75x) and weather (Tomorrow.io-backed, 0.3x-1.0x for rain/snow/wind/fog/cold). Returns the full breakdown (base_wait_min, each modifier, and the final advanced_wait_min) so consumers can see exactly how the estimate was built, alongside the simpler wait_min from the queue/multi/border products."
+    operationId: get_queue_advanced
+    parameters:       - name: ppid
+        in: query
+        description: "Checkpoint ID, e.g. id_13 (see /api/v1/data/checkpoints)"
         schema: 
           type: string
     responses: 
