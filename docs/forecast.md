@@ -37,4 +37,4 @@ curl "/api/v1/data/forecast?ppid=id_13&prediction_steps=24" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#forecast
-*Auto-generated 2026-07-03 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-07-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
