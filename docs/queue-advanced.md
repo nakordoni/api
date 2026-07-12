@@ -1,6 +1,6 @@
 # Advanced Wait Time API
 
-Wait time adjusted for live traffic flow and weather, with a full breakdown of each adjustment.
+Wait time adjusted for live traffic flow and weather, with a full breakdown of each adjustment, plus the same wait_status/trend fields as border and multi. Billed at 1.5x a normal heavy-class call, reflecting the extra traffic/weather/driver-report lookups. Granted on request.
 
 **Endpoint:** `GET /api/v1/data/queue-advanced`
 **Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
@@ -36,4 +36,4 @@ curl "/api/v1/data/queue-advanced?ppid=id_13" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#queue-advanced
-*Auto-generated 2026-07-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-07-12 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
