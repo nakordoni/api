@@ -31,7 +31,7 @@ curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
 | `border` | Border Queue API | All checkpoints on a given border + vehicle type in one call — live queue, wait estimate, and data freshness for every crossing point. Supports single destination, comma-separated list, or "all" to query all neighbours at once. Results sorted by queue length ascending, each checkpoint tagged with its border country. | standard |
 | `search` | Checkpoint Search API | Find checkpoint PPIDs by name. Pass a single name or a comma-separated list (up to 20). Searches all translation languages; returns all PPIDs at that location grouped by vehicle type (4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck). Use this to quickly discover the right ppid before calling the queue or forecast APIs. | standard |
 | `queue` | Live Border Queue API | Real-time queue length, wait estimate and status for any monitored checkpoint, plus hourly/daily aggregates. | standard |
-| `queue-advanced` | Advanced Wait Time API | Wait time adjusted for live traffic flow and weather, with a full breakdown of each adjustment. | standard |
+| `queue-advanced` | Advanced Wait Time API | Wait time adjusted for live traffic flow and weather, with a full breakdown of each adjustment, plus the same wait_status/trend fields as border and multi. Billed at 1.5x a normal heavy-class call, reflecting the extra traffic/weather/driver-report lookups. Granted on request. | standard |
 | `stats` | Checkpoint Hourly Statistics API | Hourly historical queue stats per checkpoint and date: 24 hourly values, daily avg/min/max, peak and quietest hours, day-over-day comparison. | standard |
 | `day-stats` | Best Time to Cross API | Typical-week load statistics per checkpoint: 7×24 day-of-week × hour matrix (median + p25/p75 band), quietest/busiest day, best/worst 2-hour windows. Precomputed daily from ~60 days of real observations. | standard |
 | `forecast` | Queue Forecast API | ML ensemble forecast of queue levels: 24-hour and 7-day (168h) horizons with confidence bounds. The same model that powers nakordoni.eu predictions. | standard |
@@ -40,7 +40,7 @@ curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
 | `fuel` | EU Fuel Prices API | Fuel prices across EU countries — country averages, nearest stations by coordinates, or stations near a border checkpoint. Aggregated from official national sources (tankerkoenig for DE, petrol.pl for PL, fuelo.net for HU/SK/RO, EU bulletin for others). | standard |
 | `fuel-cities` | Fuel Prices by City API | Per-city fuel price summary for a country: cheapest station price and average across the top 5 stations in each major city. Covers the same countries as the nakordoni.eu fuel pages (AT, DE, FR, ES, IT, PT, SI, LU, RO, DK, HR). | standard |
 | `pois` | Driver POIs API | Truck parkings (14k+), free showers, services and supermarkets across Europe with coordinates. | standard |
-| `truck-bans` | Truck Driving Bans API | European truck driving restrictions by country and date, including seasonal and holiday bans. | standard |
+| `truck-bans` | Truck Driving Bans API | European truck driving restrictions by country and date, including seasonal and holiday bans. Each country carries a live status computed in its own timezone (active_window / next_window), plus a covered_countries list. | standard |
 | `trading-sundays` | Trading Sundays API | Sunday retail-opening regulations and upcoming trading Sundays per regulated EU country. | standard |
 | `bus-carriers` | Bus Carrier Border Stats API | Border-crossing performance per bus carrier: crossings, average/median/min/max wait minutes — built from our own plate-matched crossing records. | standard |
 | `road-conditions` | Road Conditions API | Approved road condition reports near borders and on major corridors: potholes, roadworks, closures, ice, hazards — combining driver reports with automatic accelerometer detections from our navigation app. | standard |
@@ -163,4 +163,4 @@ OpenAPI 3.0 spec: [`openapi.yaml`](openapi.yaml)
 
 ---
 
-*Last updated: 2026-07-08*
+*Last updated: 2026-07-12*
