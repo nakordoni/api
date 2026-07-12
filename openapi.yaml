@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-07-08
+# Generated 2026-07-12
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -198,7 +198,7 @@ paths:
 /queue-advanced: 
   get: 
     summary: Advanced Wait Time API
-    description: "Wait time adjusted for live traffic flow and weather, with a full breakdown of each adjustment."
+    description: "Wait time adjusted for live traffic flow and weather, with a full breakdown of each adjustment, plus the same wait_status/trend fields as border and multi. Billed at 1.5x a normal heavy-class call, reflecting the extra traffic/weather/driver-report lookups. Granted on request."
     operationId: get_queue_advanced
     parameters:       - name: ppid
         in: query
@@ -497,7 +497,7 @@ paths:
 /truck-bans: 
   get: 
     summary: Truck Driving Bans API
-    description: "European truck driving restrictions by country and date, including seasonal and holiday bans."
+    description: "European truck driving restrictions by country and date, including seasonal and holiday bans. Each country carries a live status computed in its own timezone (active_window / next_window), plus a covered_countries list."
     operationId: get_truck_bans
     parameters:       - name: country
         in: query
