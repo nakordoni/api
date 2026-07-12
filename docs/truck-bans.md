@@ -1,6 +1,6 @@
 # Truck Driving Bans API
 
-European truck driving restrictions by country and date, including seasonal and holiday bans.
+European truck driving restrictions by country and date, including seasonal and holiday bans. Each country carries a live status computed in its own timezone (active_window / next_window), plus a covered_countries list.
 
 **Endpoint:** `GET /api/v1/data/truck-bans`
 **Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
@@ -37,4 +37,4 @@ curl "/api/v1/data/truck-bans?country=PL" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#truck-bans
-*Auto-generated 2026-07-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-07-12 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
