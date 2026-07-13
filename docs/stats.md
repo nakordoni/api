@@ -39,4 +39,4 @@ curl "/api/v1/data/stats?ppid=id_15&date=2026-06-01&compare=1" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#stats
-*Auto-generated 2026-07-12 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-07-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
