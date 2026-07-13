@@ -40,6 +40,7 @@ curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
 | `fuel` | EU Fuel Prices API | Fuel prices across EU countries — country averages, nearest stations by coordinates, or stations near a border checkpoint. Aggregated from official national sources (tankerkoenig for DE, petrol.pl for PL, fuelo.net for HU/SK/RO, EU bulletin for others). | standard |
 | `fuel-cities` | Fuel Prices by City API | Per-city fuel price summary for a country: cheapest station price and average across the top 5 stations in each major city. Covers the same countries as the nakordoni.eu fuel pages (AT, DE, FR, ES, IT, PT, SI, LU, RO, DK, HR). | standard |
 | `pois` | Driver POIs API | Truck parkings (14k+), free showers, services and supermarkets across Europe with coordinates. | standard |
+| `currency` | Currency Exchange Rates API | EUR-based exchange rates for PLN, CZK, HUF, USD, GBP, CHF, NOK and UAH — sourced from Frankfurter (ECB), cached 6h. No parameters; always returns the full rate table. Powers the nakordoni.eu currency calculator and fuel-cost pages. | standard |
 | `truck-bans` | Truck Driving Bans API | European truck driving restrictions by country and date, including seasonal and holiday bans. Each country carries a live status computed in its own timezone (active_window / next_window), plus a covered_countries list. | standard |
 | `trading-sundays` | Trading Sundays API | Sunday retail-opening regulations and upcoming trading Sundays per regulated EU country. | standard |
 | `bus-carriers` | Bus Carrier Border Stats API | Border-crossing performance per bus carrier: crossings, average/median/min/max wait minutes — built from our own plate-matched crossing records. | standard |
@@ -163,4 +164,4 @@ OpenAPI 3.0 spec: [`openapi.yaml`](openapi.yaml)
 
 ---
 
-*Last updated: 2026-07-12*
+*Last updated: 2026-07-13*
