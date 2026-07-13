@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-07-12
+# Generated 2026-07-13
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -483,6 +483,23 @@ paths:
         description: Radius km
         schema: 
           type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/currency: 
+  get: 
+    summary: Currency Exchange Rates API
+    description: "EUR-based exchange rates for PLN, CZK, HUF, USD, GBP, CHF, NOK and UAH — sourced from Frankfurter (ECB), cached 6h. No parameters; always returns the full rate table. Powers the nakordoni.eu currency calculator and fuel-cost pages."
+    operationId: get_currency
+    parameters: []
     responses: 
       200: 
         description: Success
