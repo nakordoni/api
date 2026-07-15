@@ -561,11 +561,16 @@ paths:
 /holiday-calendar: 
   get: 
     summary: Holiday Calendar API
-    description: "Official public holidays per European country — dates, local names and type, each country's full holiday list included. Backed by the same Nager.Date / OpenHolidaysAPI service (7-day cache, locally-computed Kosovo calendar) that powers the nakordoni.eu holiday calendar page and the prediction system's calendar factors. One country -> a flat object; several -> the same shape wrapped in a list. upcoming=1 switches to a flat, date-sorted cross-country feed instead."
+    description: "Official public holidays per European country — dates, local names and type, each country's full holiday list included. Backed by the same Nager.Date / OpenHolidaysAPI service (7-day cache, locally-computed Kosovo calendar) that powers the nakordoni.eu holiday calendar page and the prediction system's calendar factors. One country -> a flat object; several -> the same shape wrapped in a list. upcoming=1 switches to a flat, date-sorted cross-country feed; compare_to switches to a same-vs-different comparison across countries — useful for checking whether a date is a holiday on both sides of a border crossing or just one."
     operationId: get_holiday_calendar
     parameters:       - name: country
         in: query
         description: "ISO-2 country code, or comma-separated list of up to 15, e.g. PL or PL,DE,UA. Omit for the default core set (UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT). One resolved country returns a flat object; several return a list."
+        schema: 
+          type: string
+      - name: compare_to
+        in: query
+        description: "ISO-2 country code, or comma-separated list, to compare against `country`. Switches to compare mode: returns which holiday dates are shared by ALL selected countries (`same`) vs only some of them (`different`, with per-date in/not_in lists)"
         schema: 
           type: string
       - name: year
