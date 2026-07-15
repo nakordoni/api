@@ -36,4 +36,4 @@ curl "/api/v1/data/queue-advanced?ppid=id_13" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#queue-advanced
-*Auto-generated 2026-07-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-07-15 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
