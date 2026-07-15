@@ -11,11 +11,10 @@ Official public holidays per European country — dates, local names and type, e
 
 | Name | Description |
 |------|-------------|
-| `country` | ISO-2 country code, or comma-separated list of up to 15, e.g. PL or PL,DE,UA (alias: `countries` — both accepted and merged if given together). Omit for the default core set (UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT). One resolved country returns a flat object; several return a list. |
+| `country` | ISO-2 country code, or comma-separated list of up to 15, e.g. PL or PL,DE,UA. Omit for the default core set (UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT). One resolved country returns a flat object; several return a list. |
 | `year` | YYYY (default: current year) |
 | `upcoming` | 1 = switch to a flat, date-sorted list of upcoming holidays across the selected countries within `days` (optional) |
 | `days` | Horizon in days for upcoming mode, 1-180. Omitted or 0 = no limit (everything the underlying service can see: this year + next) |
-| `countries` | Alias for `country` — same comma-separated ISO-2 list, max 15 |
 | `lang` | Language for the localized `name` field (default en) — same 24-language translator as the nakordoni.eu holiday calendar page. Falls back to the local/English name for anything not yet cached. |
 
 
