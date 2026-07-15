@@ -565,7 +565,7 @@ paths:
     operationId: get_holiday_calendar
     parameters:       - name: country
         in: query
-        description: "ISO-2 country code, or comma-separated list of up to 15, e.g. PL or PL,DE,UA (alias: `countries` — both accepted and merged if given together). Omit for the default core set (UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT). One resolved country returns a flat object; several return a list."
+        description: "ISO-2 country code, or comma-separated list of up to 15, e.g. PL or PL,DE,UA. Omit for the default core set (UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT). One resolved country returns a flat object; several return a list."
         schema: 
           type: string
       - name: year
@@ -581,11 +581,6 @@ paths:
       - name: days
         in: query
         description: "Horizon in days for upcoming mode, 1-180. Omitted or 0 = no limit (everything the underlying service can see: this year + next)"
-        schema: 
-          type: string
-      - name: countries
-        in: query
-        description: "Alias for `country` — same comma-separated ISO-2 list, max 15"
         schema: 
           type: string
       - name: lang
