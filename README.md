@@ -43,6 +43,7 @@ curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
 | `currency` | Currency Exchange Rates API | EUR-based exchange rates for PLN, CZK, HUF, USD, GBP, CHF, NOK and UAH — sourced from Frankfurter (ECB), cached 6h. No parameters; always returns the full rate table. Powers the nakordoni.eu currency calculator and fuel-cost pages. | standard |
 | `truck-bans` | Truck Driving Bans API | European truck driving restrictions by country and date, including seasonal and holiday bans. Each country carries a live status computed in its own timezone (active_window / next_window), plus a covered_countries list. | standard |
 | `trading-sundays` | Trading Sundays API | Sunday retail-opening regulations and upcoming trading Sundays per regulated EU country. | standard |
+| `holiday-calendar` | Holiday Calendar API | Official public holidays per European country — dates, local names and type. Backed by the same Nager.Date / OpenHolidaysAPI service (7-day cache, locally-computed Kosovo calendar) that powers the nakordoni.eu holiday calendar page and the prediction system's calendar factors. Country mode returns the full-year list; upcoming mode returns a flat cross-country list within N days; default mode indexes a core country set with each next holiday. | standard |
 | `bus-carriers` | Bus Carrier Border Stats API | Border-crossing performance per bus carrier: crossings, average/median/min/max wait minutes — built from our own plate-matched crossing records. | standard |
 | `road-conditions` | Road Conditions API | Approved road condition reports near borders and on major corridors: potholes, roadworks, closures, ice, hazards — combining driver reports with automatic accelerometer detections from our navigation app. | standard |
 | `assistant` | Border AI Assistant API | Ask our production AI assistant any border-crossing question (queues, forecasts, rules, fuel, routes) and get the same grounded answer that powers the nakordoni.eu widget — in 24 languages. Already used in production by yaknakordoni.com.ua. | standard |
@@ -164,4 +165,4 @@ OpenAPI 3.0 spec: [`openapi.yaml`](openapi.yaml)
 
 ---
 
-*Last updated: 2026-07-13*
+*Last updated: 2026-07-15*
