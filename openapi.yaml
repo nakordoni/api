@@ -565,17 +565,17 @@ paths:
     operationId: get_holiday_calendar
     parameters:       - name: country
         in: query
-        description: "ISO-2 country code for the full-year list of one country, e.g. PL (optional — omit for the index mode)"
+        description: "ISO-2 country code for the full-year list of one country, e.g. PL. Selects single-country mode — when set, `countries`/`upcoming` are ignored (omit `country` to use index/upcoming mode instead)"
         schema: 
           type: string
       - name: year
         in: query
-        description: "YYYY (default: current year)"
+        description: "YYYY (default: current year) — only used with `country`"
         schema: 
           type: string
       - name: upcoming
         in: query
-        description: "1 = flat list of upcoming holidays across countries within `days` (optional)"
+        description: "1 = flat list of upcoming holidays across countries within `days` (optional, ignored if `country` is set)"
         schema: 
           type: string
       - name: days
@@ -585,7 +585,7 @@ paths:
           type: string
       - name: countries
         in: query
-        description: "Comma-separated ISO-2 list to scope index/upcoming mode, max 15 (default: UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT)"
+        description: "Comma-separated ISO-2 list to scope index/upcoming mode, max 15 (default: UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT). Ignored if `country` is set"
         schema: 
           type: string
       - name: lang
