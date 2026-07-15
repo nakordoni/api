@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-07-13
+# Generated 2026-07-15
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -545,6 +545,47 @@ paths:
     parameters:       - name: country
         in: query
         description: ISO country code (optional)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/holiday-calendar: 
+  get: 
+    summary: Holiday Calendar API
+    description: "Official public holidays per European country — dates, local names and type. Backed by the same Nager.Date / OpenHolidaysAPI service (7-day cache, locally-computed Kosovo calendar) that powers the nakordoni.eu holiday calendar page and the prediction system's calendar factors. Country mode returns the full-year list; upcoming mode returns a flat cross-country list within N days; default mode indexes a core country set with each next holiday."
+    operationId: get_holiday_calendar
+    parameters:       - name: country
+        in: query
+        description: "ISO-2 country code for the full-year list of one country, e.g. PL (optional — omit for the index mode)"
+        schema: 
+          type: string
+      - name: year
+        in: query
+        description: "YYYY (default: current year)"
+        schema: 
+          type: string
+      - name: upcoming
+        in: query
+        description: "1 = flat list of upcoming holidays across countries within `days` (optional)"
+        schema: 
+          type: string
+      - name: days
+        in: query
+        description: "Horizon in days for upcoming mode, 1-180 (default 30)"
+        schema: 
+          type: string
+      - name: countries
+        in: query
+        description: "Comma-separated ISO-2 list to scope index/upcoming mode, max 15 (default: UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT)"
         schema: 
           type: string
     responses: 
