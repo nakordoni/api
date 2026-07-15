@@ -590,7 +590,7 @@ paths:
           type: string
       - name: lang
         in: query
-        description: "Language for the localized `name` field (default en) — same 24-language translator as the nakordoni.eu holiday calendar page. Falls back to the local/English name for anything not yet cached."
+        description: "Language(s) for the localized `name` field (default en) — same 24-language translator as the nakordoni.eu holiday calendar page. Falls back to the local/English name for anything not yet cached. Comma-separated for several, up to 10, e.g. lang=en,uk,pl — `name` stays the first requested language; every holiday also gets a `names` object keyed by language code with all of them."
         schema: 
           type: string
     responses: 
