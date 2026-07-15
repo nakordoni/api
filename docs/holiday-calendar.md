@@ -16,7 +16,7 @@ Official public holidays per European country — dates, local names and type, e
 | `year` | YYYY (default: current year) |
 | `upcoming` | 1 = switch to a flat, date-sorted list of upcoming holidays across the selected countries within `days` (optional) |
 | `days` | Horizon in days for upcoming mode, 1-180. Omitted or 0 = no limit (everything the underlying service can see: this year + next) |
-| `lang` | Language for the localized `name` field (default en) — same 24-language translator as the nakordoni.eu holiday calendar page. Falls back to the local/English name for anything not yet cached. |
+| `lang` | Language(s) for the localized `name` field (default en) — same 24-language translator as the nakordoni.eu holiday calendar page. Falls back to the local/English name for anything not yet cached. Comma-separated for several, up to 10, e.g. lang=en,uk,pl — `name` stays the first requested language; every holiday also gets a `names` object keyed by language code with all of them. |
 
 
 ## Example
