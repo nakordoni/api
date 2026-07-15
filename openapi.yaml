@@ -588,6 +588,11 @@ paths:
         description: "Comma-separated ISO-2 list to scope index/upcoming mode, max 15 (default: UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT)"
         schema: 
           type: string
+      - name: lang
+        in: query
+        description: "Language for the localized `name` field (default en) — same 24-language translator as the nakordoni.eu holiday calendar page. Falls back to the local/English name for anything not yet cached."
+        schema: 
+          type: string
     responses: 
       200: 
         description: Success
