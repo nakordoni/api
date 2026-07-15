@@ -16,12 +16,13 @@ Official public holidays per European country — dates, local names and type. B
 | `upcoming` | 1 = flat list of upcoming holidays across countries within `days` (optional) |
 | `days` | Horizon in days for upcoming mode, 1-180 (default 30) |
 | `countries` | Comma-separated ISO-2 list to scope index/upcoming mode, max 15 (default: UA,PL,SK,HU,RO,MD,DE,CZ,BG,AT) |
+| `lang` | Language for the localized `name` field (default en) — same 24-language translator as the nakordoni.eu holiday calendar page. Falls back to the local/English name for anything not yet cached. |
 
 
 ## Example
 
 ```bash
-curl "/api/v1/data/holiday-calendar?country=PL&year=2026" \
+curl "/api/v1/data/holiday-calendar?country=PL&year=2026&lang=en" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
 
