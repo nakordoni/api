@@ -56,10 +56,10 @@ curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
 
 ## History data export
 
-Approved developers can download **hourly-averaged, published** border-queue history for up to **5 checkpoints** (rolling window up to **90 days**) as gzipped **CSV** or **NDJSON**. This is **portal-only** — it is *not* an API endpoint; you build and download exports from the **Data export** tab in your account.
+Approved developers can download **hourly-averaged, published** border-queue history for up to **5 checkpoints** (rolling window up to **90 days**) as gzipped **CSV**, **NDJSON**, or **JSON**. This is **portal-only** — it is *not* an API endpoint; you build and download exports from the **Data export** tab in your account.
 
 - **Access** is granted on request — open a [Data ticket](https://nakordoni.eu/en/developers/tickets?cat=data) with the checkpoints, time window and intended use. Default limit: 1 export/day, ≤5 checkpoints.
-- **Fields** (one row per checkpoint per UTC hour): `ppid, checkpoint_name, hour_utc, direction, vehicle_type, avg_queue_length, avg_wait_minutes, sample_count, source`. `avg_wait_minutes` is `null` where a checkpoint has no official wait feed.
+- **Fields** (one row per checkpoint per UTC hour): `ppid, checkpoint_name, hour_utc, direction, vehicle_type, avg_queue_length, avg_wait_minutes, sample_count`. `avg_wait_minutes` is `null` where a checkpoint has no official wait feed.
 - **Quality:** published-only data, passed through our anomaly / data-quality checks (no raw per-report data). Files kept 10 days.
 - **Provenance:** every file embeds a signed fingerprint (`sha256` + `HMAC`) in its header, so any copy can be confirmed as genuine nakordoni.eu data and checked for tampering — even after download.
 
@@ -165,4 +165,4 @@ OpenAPI 3.0 spec: [`openapi.yaml`](openapi.yaml)
 
 ---
 
-*Last updated: 2026-07-15*
+*Last updated: 2026-07-20*
