@@ -38,4 +38,4 @@ curl "/api/v1/data/multi?ppids=id_2,id_13,id_15&include=queue,update-info&lang=e
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#multi
-*Auto-generated 2026-07-15 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-07-20 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
