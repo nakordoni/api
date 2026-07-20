@@ -1,8 +1,8 @@
 # History data export
 
 Approved developers can download **hourly-averaged, published** border-queue history
-for up to **5 checkpoints** (rolling window up to **90 days**) as gzipped **CSV** or
-**NDJSON**.
+for up to **5 checkpoints** (rolling window up to **90 days**) as gzipped **CSV**,
+**NDJSON**, or **JSON**.
 
 > This is a **portal-only** feature — it is **not** an API endpoint (nothing under
 > `/api/v1/data/…`). You build and download exports from the **Data export** tab in
@@ -22,7 +22,7 @@ Once approved, the **Data export** tab appears in your account. Default limit:
 
 ## Output
 
-One row per checkpoint per UTC hour, in either `csv.gz` or `ndjson.gz`:
+One row per checkpoint per UTC hour, in `csv.gz`, `ndjson.gz`, or `json.gz`:
 
 | Field | Description |
 |-------|-------------|
@@ -34,12 +34,11 @@ One row per checkpoint per UTC hour, in either `csv.gz` or `ndjson.gz`:
 | `avg_queue_length` | Hourly average queue length |
 | `avg_wait_minutes` | Hourly average wait; `null` where a checkpoint has no official wait feed |
 | `sample_count` | Number of observations in the hour |
-| `source` | Underlying data feed(s) |
 
 ```
 # sha256: 3f9c…   # signature: e87b…
-ppid,checkpoint_name,hour_utc,direction,vehicle_type,avg_queue_length,avg_wait_minutes,sample_count,source
-id_10,Hrushiv,2026-06-12T02:00:00Z,UA->PL,car,11.3,,4,line+granicaua
+ppid,checkpoint_name,hour_utc,direction,vehicle_type,avg_queue_length,avg_wait_minutes,sample_count
+id_10,Hrushiv,2026-06-12T02:00:00Z,UA->PL,car,11,,4
 ```
 
 ## Quality & retention
@@ -57,4 +56,4 @@ tampering — even long after download.
 
 Full docs: https://nakordoni.eu/en/developers/docs#export
 
-*Last updated: 2026-07-15*
+*Last updated: 2026-07-20*
