@@ -41,4 +41,4 @@ curl "/api/v1/data/travel-matrix?origin_lat=50.06&origin_lon=19.94&type=4&dest=a
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#travel-matrix
-*Auto-generated 2026-07-15 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-07-20 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
