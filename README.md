@@ -36,7 +36,7 @@ curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
 | `day-stats` | Best Time to Cross API | Typical-week load statistics per checkpoint: 7×24 day-of-week × hour matrix (median + p25/p75 band), quietest/busiest day, best/worst 2-hour windows. Precomputed daily from ~60 days of real observations. | standard |
 | `forecast` | Queue Forecast API | ML ensemble forecast of queue levels: 24-hour and 7-day (168h) horizons with confidence bounds. The same model that powers nakordoni.eu predictions. | standard |
 | `alternatives` | Checkpoint Alternatives API | Nearby alternative checkpoints on the same border with current queues and distance deltas. By default filters to the same vehicle type as the requested ppid. Use crossing_type to override — e.g. crossing_type=4 for cars, crossing_type=7 for pedestrians. | standard |
-| `update-info` | Data Freshness API | When a checkpoint was last updated, by which source, and a freshness rating. | standard |
+| `update-info` | Live Queue & Freshness API | Current queue length for one checkpoint plus how fresh that reading is — returns queue_now, freshness, age_minutes, is_realtime, status, timestamp and timezone. This is the STANDARD-class way to poll live queue data: use it for frequent refreshes and keep the heavy quota for /queue, /multi and /forecast, which return the fuller payload (wait_min, trend, history). | standard |
 | `fuel` | EU Fuel Prices API | Fuel prices across EU countries — country averages, nearest stations by coordinates, or stations near a border checkpoint. Aggregated from official national sources (tankerkoenig for DE, petrol.pl for PL, fuelo.net for HU/SK/RO, EU bulletin for others). | standard |
 | `fuel-cities` | Fuel Prices by City API | Per-city fuel price summary for a country: cheapest station price and average across the top 5 stations in each major city. Covers the same countries as the nakordoni.eu fuel pages (AT, DE, FR, ES, IT, PT, SI, LU, RO, DK, HR). | standard |
 | `pois` | Driver POIs API | Truck parkings (14k+), free showers, services and supermarkets across Europe with coordinates. | standard |
@@ -47,6 +47,7 @@ curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
 | `bus-carriers` | Bus Carrier Border Stats API | Border-crossing performance per bus carrier: crossings, average/median/min/max wait minutes — built from our own plate-matched crossing records. | standard |
 | `road-conditions` | Road Conditions API | Approved road condition reports near borders and on major corridors: potholes, roadworks, closures, ice, hazards — combining driver reports with automatic accelerometer detections from our navigation app. | standard |
 | `assistant` | Border AI Assistant API | Ask our production AI assistant any border-crossing question (queues, forecasts, rules, fuel, routes) and get the same grounded answer that powers the nakordoni.eu widget — in 24 languages. Already used in production by yaknakordoni.com.ua. | standard |
+| `assistant-custom` | Personalised AI Assistant API | Your own AI assistant, grounded on YOUR content plus OUR live border data. Point it at your markdown files or let us fetch the pages you name — we index them and answer from them. Choose which of our data feeds it may use (queue, forecast, alternatives, fuel, truck bans, holidays, road conditions…), choose the model tier (that is what sets the price), write your own instructions with {{feed.slug}} placeholders saying exactly where our data goes in the answer, and add a closing sentence of your own that is appended to every reply. Build it and test it at /{lang}/developers/studio, then call it here. Price per answer = model tier units + 1 unit per enabled feed (shown in the studio and in X-Devapi-Units). | standard |
 | `travel-matrix` | Travel Matrix API | Travel time + border queue data for all checkpoints from a given origin. Returns drive time, current queue, total estimated journey time, and distance for every relevant crossing — sorted from fastest. Supports multi-leg routes (e.g. Germany → Poland → Ukraine border). Powers the nakordoni.eu navigator "Choose a crossing" feature. | standard |
 
 
@@ -165,4 +166,4 @@ OpenAPI 3.0 spec: [`openapi.yaml`](openapi.yaml)
 
 ---
 
-*Last updated: 2026-07-20*
+*Last updated: 2026-08-01*
