@@ -11,7 +11,7 @@ All checkpoints on a given border + vehicle type in one call — live queue, wai
 
 | Name | Description |
 |------|-------------|
-| `origin` | Origin country code (URL path segment): 1=Ukraine, 2=Poland, 3=Slovakia, 4=Hungary, 5=Romania, 6=Moldova, 7=Belarus, 8=Lithuania, 9=Latvia, 10=Estonia, 11=Slovenia, 12=Bulgaria, 13=Serbia, 14=Turkey, 15=North Macedonia, 16=Croatia, 17=Bosnia, 18=Germany, 19=Greece, 20=Italy, 21=Albania, 22=Montenegro, 23=Kosovo |
+| `origin` | Origin country code (URL path segment): 1=Ukraine, 2=Poland, 3=Slovakia, 4=Hungary, 5=Romania, 6=Moldova, 7=Belarus, 8=Lithuania, 9=Latvia, 11=Slovenia, 12=Bulgaria, 13=Serbia, 14=Turkey, 15=North Macedonia, 16=Croatia, 17=Bosnia, 18=Germany, 19=Greece, 20=Italy, 21=Albania, 22=Montenegro, 23=Kosovo |
 | `destination` | Destination (URL path segment): single country code, comma-separated list (e.g. 2,3,5), or "all" to expand to all neighbours with monitored data |
 | `crossing_type` | Vehicle type (URL path segment): 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck |
 | `lang` | Language for checkpoint names in the response (default en) |
@@ -39,4 +39,4 @@ curl "/api/v1/data/border/1/all/4" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#border
-*Auto-generated 2026-07-20 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-01 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
