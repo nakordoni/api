@@ -41,4 +41,4 @@ curl "/api/v1/data/holiday-calendar?country=PL&compare_to=UA&year=2026&lang=en" 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#holiday-calendar
-*Auto-generated 2026-08-01 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-05 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
