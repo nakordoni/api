@@ -834,3 +834,89 @@ paths:
         description: Unauthorized
       429: 
         description: Rate limit exceeded
+/route-plan: 
+  get: 
+    summary: Route Planner API
+    description: "A door-to-door plan for a border trip, not just a driving time. Returns the route, the crossings actually on it with their live or arrival-time-forecast queue, and the stops a driver really makes — rest breaks, a meal, refuelling — laid out on one timeline. The border is part of that timeline: a long queue satisfies the break that was coming up and resets the driving clock, so a 3-hour wait is never reported as 3 hours PLUS a full set of breaks nobody took. Car stops follow a driving-hygiene model; bus and truck stops respect the mandatory EU 561/2006 rest, and the bus service overhead is calibrated on 1000+ licensed international coach schedules. Set stop_places=1 to name a real rest area or fuel station for each stop."
+    operationId: get_route_plan
+    parameters:       - name: origin_lat
+        in: query
+        description: Origin latitude (required)
+        schema: 
+          type: string
+      - name: origin_lon
+        in: query
+        description: Origin longitude (required)
+        schema: 
+          type: string
+      - name: dest_lat
+        in: query
+        description: Destination latitude (required)
+        schema: 
+          type: string
+      - name: dest_lon
+        in: query
+        description: Destination longitude (required)
+        schema: 
+          type: string
+      - name: vehicle
+        in: query
+        description: "car (default), bus or truck — picks both the routing profile and the stop model"
+        schema: 
+          type: string
+      - name: depart
+        in: query
+        description: "ISO-8601 departure time, up to 14 days ahead (default: now). Drives the arrival-time queue forecast"
+        schema: 
+          type: string
+      - name: via
+        in: query
+        description: "Optional waypoints as lat,lon;lat,lon (max 3) — e.g. to route through a different crossing"
+        schema: 
+          type: string
+      - name: forecast
+        in: query
+        description: "1 (default) = forecast the queue for your arrival time at each crossing; 0 = use the current queue"
+        schema: 
+          type: string
+      - name: stop_places
+        in: query
+        description: "1 = name a real rest area / fuel station for each stop (default 0)"
+        schema: 
+          type: string
+      - name: overnight
+        in: query
+        description: "1 = add an advisory overnight stop when the drive exceeds 11 h (default 0)"
+        schema: 
+          type: string
+      - name: geometry
+        in: query
+        description: "1 = include the full route geometry (default 0)"
+        schema: 
+          type: string
+      - name: alternatives
+        in: query
+        description: "1 (default) = include nearby alternative crossings with their queues"
+        schema: 
+          type: string
+      - name: preference
+        in: query
+        description: "recommended (default), fastest or shortest"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language code for checkpoint names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
