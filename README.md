@@ -166,4 +166,4 @@ OpenAPI 3.0 spec: [`openapi.yaml`](openapi.yaml)
 
 ---
 
-*Last updated: 2026-08-01*
+*Last updated: 2026-08-05*
