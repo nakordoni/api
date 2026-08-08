@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-08-05
+# Generated 2026-08-08
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -907,6 +907,76 @@ paths:
       - name: lang
         in: query
         description: Language code for checkpoint names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/fleet-vehicles: 
+  get: 
+    summary: Fleet Vehicles API
+    description: "Your own NakBus Live fleet: every vehicle registered to your company with plate, label, assigned route, public-map flag, status, whether a driver device is currently on shift, and the last measured timetable delay. Owner-scoped — the key sees its own fleet only, including vehicles hidden from the public bus map. Activate fleet tracking at nakordoni.eu/en/developers/fleet (first bus free)."
+    operationId: get_fleet_vehicles
+    parameters: []
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/fleet-live: 
+  get: 
+    summary: Fleet Live Positions API
+    description: "Where your buses are right now — one row per active vehicle with lat/lon, timestamp and age, speed, bearing and timetable delay, read from the same live store that powers the public bus map. Unlike the public feed this includes vehicles marked non-public and companies that opted out of the public map: it is your own data. Vehicles whose driver device is off shift (or silent for more than 10 minutes) are still listed, with live=false."
+    operationId: get_fleet_live
+    parameters: []
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/fleet-history: 
+  get: 
+    summary: Fleet History API
+    description: "Recorded GPS track of your own vehicles: every stored position point in a time window, in chronological order, with speed, bearing and accuracy. Filter to one vehicle or take the whole fleet. Window is limited to 31 days per call and 5000 points per response — page through longer periods by moving ?from= to the last returned timestamp."
+    operationId: get_fleet_history
+    parameters:       - name: vehicle_id
+        in: query
+        description: Restrict to one of your vehicles (optional; ids come from fleet/vehicles). Omit for the whole fleet.
+        schema: 
+          type: string
+      - name: from
+        in: query
+        description: "Window start — unix timestamp or ISO-8601 datetime (default: 24 h before `to`). A datetime without an explicit offset is read as UTC."
+        schema: 
+          type: string
+      - name: to
+        in: query
+        description: "Window end — unix timestamp or ISO-8601 datetime (default: now). The window may not exceed 31 days."
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max points returned, 1-5000 (default 1000, values above 5000 are clamped). `truncated: true` means more points exist in the window."
         schema: 
           type: string
     responses: 
