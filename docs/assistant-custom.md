@@ -45,4 +45,4 @@ curl "/api/v2/data/assistant-custom?assistant_id=1&q=Should I cross tonight or i
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#assistant-custom
-*Auto-generated 2026-08-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-09 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
