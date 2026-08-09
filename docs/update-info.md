@@ -11,7 +11,7 @@ Current queue length for one checkpoint plus how fresh that reading is — retur
 
 | Name | Description |
 |------|-------------|
-| `ppid` | Checkpoint ID |
+| `ppid` | Checkpoint ID, e.g. id_13 (see /api/v1/data/checkpoints) |
 | `lang` | Language code |
 
 
@@ -37,4 +37,4 @@ curl "/api/v1/data/update-info?ppid=id_13" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#update-info
-*Auto-generated 2026-08-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-09 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
