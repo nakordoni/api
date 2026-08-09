@@ -11,7 +11,7 @@ Hourly historical queue stats per checkpoint and date: 24 hourly values, daily a
 
 | Name | Description |
 |------|-------------|
-| `ppid` | Checkpoint ID |
+| `ppid` | Checkpoint ID, e.g. id_13 (see /api/v1/data/checkpoints) |
 | `date` | YYYY-MM-DD (default: yesterday) |
 | `compare` | 1 = include previous day + delta |
 | `lang` | Language code (default uk) |
@@ -39,4 +39,4 @@ curl "/api/v1/data/stats?ppid=id_15&date=2026-06-01&compare=1" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#stats
-*Auto-generated 2026-08-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-09 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
