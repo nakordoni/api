@@ -11,7 +11,7 @@ Border-crossing performance per bus carrier: crossings, average/median/min/max w
 
 | Name | Description |
 |------|-------------|
-| `ppid` | Checkpoint ID or "all" for aggregated |
+| `ppid` | Checkpoint ID, e.g. id_13 — or "all" for the aggregated roster |
 | `days` | Period 1-90 (default 30) |
 | `min_crossings` | Minimum crossings to include a carrier (default 3) |
 | `limit` | Max carriers returned (default 20) |
@@ -39,4 +39,4 @@ curl "/api/v1/data/bus-carriers?ppid=all&days=30" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#bus-carriers
-*Auto-generated 2026-08-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-09 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
