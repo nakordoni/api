@@ -31,4 +31,4 @@ curl "/api/v1/data/status" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#status
-*Auto-generated 2026-08-09 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-12 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
