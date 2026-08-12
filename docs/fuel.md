@@ -1,6 +1,6 @@
 # EU Fuel Prices API
 
-Fuel prices across EU countries — country averages, nearest stations by coordinates, or stations near a border checkpoint. Aggregated from official national sources (tankerkoenig for DE, petrol.pl for PL, fuelo.net for HU/SK/RO, EU bulletin for others).
+Fuel prices across EU countries — country averages, nearest stations by coordinates, or stations near a border checkpoint. Aggregated from official national price registries and market data.
 
 **Endpoint:** `GET /api/v1/data/fuel`
 **Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
@@ -44,4 +44,4 @@ curl "/api/v1/data/fuel?country=PL" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fuel
-*Auto-generated 2026-08-09 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-12 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
