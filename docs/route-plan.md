@@ -49,4 +49,4 @@ curl "/api/v2/data/route-plan?origin_lat=50.4501&origin_lon=30.5234&dest_lat=52.
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#route-plan
-*Auto-generated 2026-08-09 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-12 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
