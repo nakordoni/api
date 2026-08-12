@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-08-09
+# Generated 2026-08-12
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -369,7 +369,7 @@ paths:
 /fuel: 
   get: 
     summary: EU Fuel Prices API
-    description: "Fuel prices across EU countries — country averages, nearest stations by coordinates, or stations near a border checkpoint. Aggregated from official national sources (tankerkoenig for DE, petrol.pl for PL, fuelo.net for HU/SK/RO, EU bulletin for others)."
+    description: "Fuel prices across EU countries — country averages, nearest stations by coordinates, or stations near a border checkpoint. Aggregated from official national price registries and market data."
     operationId: get_fuel
     parameters:       - name: mode
         in: query
@@ -461,11 +461,11 @@ paths:
 /pois: 
   get: 
     summary: Driver POIs API
-    description: "Truck parkings (14k+), free showers, services and supermarkets across Europe with coordinates."
+    description: "Truck parkings (14k+), free showers, services and supermarkets across Europe with coordinates. Results are sorted closest-first with distance_km. Locate by lat/lon or by city (+country)."
     operationId: get_pois
     parameters:       - name: type
         in: query
-        description: "parking|shower|supermarket|industrial"
+        description: "parking|autohof|truck_stop|shower|restaurant|supermarket|industrial (comma-separable)"
         schema: 
           type: string
       - name: lat
@@ -478,9 +478,468 @@ paths:
         description: Longitude
         schema: 
           type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city (e.g. city=Brest needs FR vs BY)"
+        schema: 
+          type: string
       - name: radius
         in: query
-        description: Radius km
+        description: "Radius km (default 25, max 150)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max results (default 50, max 500)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for country names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/truck-parkings: 
+  get: 
+    summary: Truck Parking API
+    description: "The closest truck parkings, Autohöfe and truck stops to a point or city — sorted by distance with distance_km, name, coordinates and country. 14k+ locations across Europe."
+    operationId: get_truck_parkings
+    parameters:       - name: lat
+        in: query
+        description: Latitude
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city"
+        schema: 
+          type: string
+      - name: radius
+        in: query
+        description: "Radius km (default 25, max 150)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max results (default 50, max 500)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for country names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/shops: 
+  get: 
+    summary: Nearby Shops API
+    description: "The closest supermarkets and grocery shops to a point or city — sorted by distance with distance_km, name, coordinates and country."
+    operationId: get_shops
+    parameters:       - name: lat
+        in: query
+        description: Latitude
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city"
+        schema: 
+          type: string
+      - name: radius
+        in: query
+        description: "Radius km (default 25, max 150)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max results (default 50, max 500)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for country names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/showers: 
+  get: 
+    summary: Free Showers API
+    description: "The closest free showers for drivers to a point or city — sorted by distance with distance_km, name, coordinates and country."
+    operationId: get_showers
+    parameters:       - name: lat
+        in: query
+        description: Latitude
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city"
+        schema: 
+          type: string
+      - name: radius
+        in: query
+        description: "Radius km (default 25, max 150)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max results (default 50, max 500)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for country names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/restaurants: 
+  get: 
+    summary: Driver Restaurants API
+    description: "The closest driver-friendly restaurants to a point or city — sorted by distance with distance_km, name, coordinates and country."
+    operationId: get_restaurants
+    parameters:       - name: lat
+        in: query
+        description: Latitude
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city"
+        schema: 
+          type: string
+      - name: radius
+        in: query
+        description: "Radius km (default 25, max 150)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max results (default 50, max 500)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for country names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/industrial: 
+  get: 
+    summary: Industrial Zones API
+    description: "The closest industrial and logistics zones to a point or city (3k+ across Europe) — sorted by distance with distance_km, name, coordinates and country."
+    operationId: get_industrial
+    parameters:       - name: lat
+        in: query
+        description: Latitude
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city"
+        schema: 
+          type: string
+      - name: radius
+        in: query
+        description: "Radius km (default 25, max 150)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max results (default 50, max 500)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for country names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/fuel-stations: 
+  get: 
+    summary: Nearby Fuel Stations API
+    description: "The closest petrol stations to a point or city with current prices per fuel type, sorted by distance. Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK (same data as the nakordoni.eu fuel pages; use the fuel API country mode for national averages elsewhere)."
+    operationId: get_fuel_stations
+    parameters:       - name: lat
+        in: query
+        description: Latitude
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city"
+        schema: 
+          type: string
+      - name: radius_km
+        in: query
+        description: "Search radius km (default 30, max 150)"
+        schema: 
+          type: string
+      - name: fuel_type
+        in: query
+        description: "diesel | e5 | e10 | lpg (optional filter)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max stations (default 5, max 20)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for labels (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/internet-points: 
+  get: 
+    summary: Internet Points API
+    description: "Mobile-operator shops and WiFi points useful to drivers on the road, nearest-first from a point or city with distance_km."
+    operationId: get_internet_points
+    parameters:       - name: lat
+        in: query
+        description: Latitude
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max results (default 20, max 50)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for country names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/vignettes: 
+  get: 
+    summary: "Vignettes & Road Tolls API"
+    description: "Whether a country requires a vignette for highway travel, current prices per duration and where to read more — per country or for a whole trip."
+    operationId: get_vignettes
+    parameters:       - name: country
+        in: query
+        description: "ISO-2 country code (e.g. AT, CH, SI)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language code (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/fuel-cheapest: 
+  get: 
+    summary: Cheapest Fuel Nearby API
+    description: "The cheapest petrol stations around a point or city, ranked by price for the chosen fuel type (closest wins a tie). Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK."
+    operationId: get_fuel_cheapest
+    parameters:       - name: lat
+        in: query
+        description: Latitude
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city"
+        schema: 
+          type: string
+      - name: radius_km
+        in: query
+        description: "Search radius km (default 30, max 150)"
+        schema: 
+          type: string
+      - name: fuel_type
+        in: query
+        description: "diesel (default) | e5 | e10 | lpg — price ranking is per fuel type"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max stations (default 5, max 20)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for labels (default en)
         schema: 
           type: string
     responses: 
@@ -514,7 +973,7 @@ paths:
 /truck-bans: 
   get: 
     summary: Truck Driving Bans API
-    description: "European truck driving restrictions by country and date, including seasonal and holiday bans. Each country carries a live status computed in its own timezone (active_window / next_window), plus a covered_countries list."
+    description: "European truck driving restrictions by country and date, including seasonal and holiday bans. Each ban carries its restriction type (General / Local / Sunday / Holiday / Seasonal), the exact scope or roads affected and the minimum weight, and each country a live status computed in its own timezone (active_window / next_window), plus a covered_countries list."
     operationId: get_truck_bans
     parameters:       - name: country
         in: query
@@ -524,6 +983,11 @@ paths:
       - name: date
         in: query
         description: "YYYY-MM-DD (optional)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language code for country names and summary (default en)
         schema: 
           type: string
     responses: 
@@ -790,7 +1254,7 @@ paths:
         description: Rate limit exceeded
 /travel-matrix: 
   get: 
-    summary: Travel Matrix API
+    summary: Border Travel Matrix API
     description: "Travel time + border queue data for all checkpoints from a given origin. Returns drive time, current queue, total estimated journey time, and distance for every relevant crossing — sorted from fastest. Supports multi-leg routes (e.g. Germany → Poland → Ukraine border). Powers the nakordoni.eu navigator \"Choose a crossing\" feature."
     operationId: get_travel_matrix
     parameters:       - name: origin_lat
