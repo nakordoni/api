@@ -43,4 +43,4 @@ curl "/api/v2/data/fuel-cheapest?city=Munich&country=DE&radius_km=25" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fuel-cheapest
-*Auto-generated 2026-08-12 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
