@@ -14,6 +14,7 @@ European truck driving restrictions by country and date, including seasonal and 
 | `country` | ISO country code (optional) |
 | `date` | YYYY-MM-DD (optional) |
 | `lang` | Language code for country names and summary (default en) |
+| `include_ua_heat` | 1 = also return Ukraine's computed summer heat ban (trucks >24 t banned 10:00-22:00 when forecast temp >+28 °C), per oblast. Included automatically when Ukraine is in scope (country=UA, a Ukrainian border ppid, or no filter at all) — this flag only adds it to a request scoped to some other country |
 
 
 ## Example
@@ -38,4 +39,4 @@ curl "/api/v1/data/truck-bans?country=PL" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#truck-bans
-*Auto-generated 2026-08-12 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
