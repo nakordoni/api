@@ -42,4 +42,4 @@ curl "/api/v2/data/shops?city=Przemysl&country=PL&radius=20" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#shops
-*Auto-generated 2026-08-12 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
