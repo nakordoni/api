@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-08-13
+# Generated 2026-08-18
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -393,7 +393,7 @@ paths:
           type: string
       - name: radius_km
         in: query
-        description: "Search radius km for mode=nearest (default 30)"
+        description: "Search radius km for mode=nearest (default 30; alias: radius)"
         schema: 
           type: string
       - name: ppid
@@ -772,7 +772,7 @@ paths:
 /fuel-stations: 
   get: 
     summary: Nearby Fuel Stations API
-    description: "The closest petrol stations to a point or city with current prices per fuel type, sorted by distance. Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK (same data as the nakordoni.eu fuel pages; use the fuel API country mode for national averages elsewhere)."
+    description: "The closest petrol stations to a point or city with current prices per fuel type, sorted by distance. Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK (same data as the nakordoni.eu fuel pages; use the fuel API country mode for national averages elsewhere). When no stations match, the response includes a coverage object naming the covered countries instead of a silent empty list."
     operationId: get_fuel_stations
     parameters:       - name: lat
         in: query
@@ -796,7 +796,7 @@ paths:
           type: string
       - name: radius_km
         in: query
-        description: "Search radius km (default 30, max 150)"
+        description: "Search radius km (default 30, max 150; alias: radius)"
         schema: 
           type: string
       - name: fuel_type
@@ -900,7 +900,7 @@ paths:
 /fuel-cheapest: 
   get: 
     summary: Cheapest Fuel Nearby API
-    description: "The cheapest petrol stations around a point or city, ranked by price for the chosen fuel type (closest wins a tie). Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK."
+    description: "The cheapest petrol stations around a point or city, ranked by price for the chosen fuel type (closest wins a tie). Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK. When no stations match, the response includes a coverage object naming the covered countries instead of a silent empty list."
     operationId: get_fuel_cheapest
     parameters:       - name: lat
         in: query
@@ -924,7 +924,7 @@ paths:
           type: string
       - name: radius_km
         in: query
-        description: "Search radius km (default 30, max 150)"
+        description: "Search radius km (default 30, max 150; alias: radius)"
         schema: 
           type: string
       - name: fuel_type
@@ -1306,7 +1306,7 @@ paths:
 /route-plan: 
   get: 
     summary: Route Planner API
-    description: "A door-to-door plan for a border trip, not just a driving time. Returns the route, the crossings actually on it with their live or arrival-time-forecast queue, and the stops a driver really makes — rest breaks, a meal, refuelling — laid out on one timeline. The border is part of that timeline: a long queue satisfies the break that was coming up and resets the driving clock, so a 3-hour wait is never reported as 3 hours PLUS a full set of breaks nobody took. Car stops follow a driving-hygiene model; bus and truck stops respect the mandatory EU 561/2006 rest, and the bus service overhead is calibrated on 1000+ licensed international coach schedules. Set stop_places=1 to name a real rest area or fuel station for each stop."
+    description: "A door-to-door plan for a border trip, not just a driving time. Returns the route, the crossings actually on it with their live or arrival-time-forecast queue, and the stops a driver really makes — rest breaks, a meal, refuelling — laid out on one timeline. The border is part of that timeline: a long queue satisfies the break that was coming up and resets the driving clock, so a 3-hour wait is never reported as 3 hours PLUS a full set of breaks nobody took. Car stops follow a driving-hygiene model; bus and truck stops respect the mandatory EU 561/2006 rest, and the bus service overhead is calibrated on 1000+ licensed international coach schedules. Set stop_places=1 to name a real rest area or fuel station for each stop. Each border also reports wait_basis: vehicle_lane when your vehicle class has its own measured queue, car_lane when the car-lane queue is the best available signal for that crossing."
     operationId: get_route_plan
     parameters:       - name: origin_lat
         in: query
