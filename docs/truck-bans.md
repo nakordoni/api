@@ -39,4 +39,4 @@ curl "/api/v1/data/truck-bans?country=PL" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#truck-bans
-*Auto-generated 2026-08-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-18 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
