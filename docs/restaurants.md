@@ -42,4 +42,4 @@ curl "/api/v2/data/restaurants?city=Lublin&country=PL&radius=30" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#restaurants
-*Auto-generated 2026-08-13 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-18 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
