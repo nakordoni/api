@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-08-18
+# Generated 2026-08-19
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -801,7 +801,7 @@ paths:
           type: string
       - name: fuel_type
         in: query
-        description: "diesel | e5 | e10 | lpg (optional filter)"
+        description: "Optional filter: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 (availability varies by station/region)"
         schema: 
           type: string
       - name: limit
