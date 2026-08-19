@@ -16,7 +16,7 @@ The closest petrol stations to a point or city with current prices per fuel type
 | `city` | City name — alternative to lat/lon, resolved to coordinates |
 | `country` | ISO-2 country code, disambiguates city |
 | `radius_km` | Search radius km (default 30, max 150; alias: radius) |
-| `fuel_type` | diesel | e5 | e10 | lpg (optional filter) |
+| `fuel_type` | Optional filter: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 (availability varies by station/region) |
 | `limit` | Max stations (default 5, max 20) |
 | `lang` | Language for labels (default en) |
 
@@ -43,4 +43,4 @@ curl "/api/v2/data/fuel-stations?city=Munich&country=DE&radius_km=20&fuel_type=d
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fuel-stations
-*Auto-generated 2026-08-18 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-19 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
