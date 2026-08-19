@@ -42,4 +42,4 @@ curl "/api/v2/data/truck-parkings?city=Katowice&country=PL&radius=40" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#truck-parkings
-*Auto-generated 2026-08-18 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-19 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
