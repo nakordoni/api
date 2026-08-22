@@ -36,4 +36,4 @@ curl "/api/v1/data/trading-sundays?country=PL" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#trading-sundays
-*Auto-generated 2026-08-19 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
