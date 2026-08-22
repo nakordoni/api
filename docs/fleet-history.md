@@ -2,8 +2,8 @@
 
 Recorded GPS track of your own vehicles: every stored position point in a time window, in chronological order, with speed, bearing and accuracy. Filter to one vehicle or take the whole fleet. Window is limited to 31 days per call and 5000 points per response — page through longer periods by moving ?from= to the last returned timestamp.
 
-**Endpoint:** `GET /api/v1/data/fleet-history`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Endpoint:** `GET /api/v2/data/fleet-history`
+**Quota class:** heavy — 200/day (Explorer), 10000/day (PAYG)
 
 ---
 
