@@ -3,7 +3,7 @@
 Ask our production AI assistant any border-crossing question (queues, forecasts, rules, fuel, routes) and get the same grounded answer that powers the nakordoni.eu widget — in 24 languages. Already used in production by yaknakordoni.com.ua.
 
 **Endpoint:** `GET /api/v1/data/assistant`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** heavy — 200/day (Explorer), 10000/day (PAYG)
 
 ---
 
