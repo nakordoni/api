@@ -17,7 +17,7 @@ Fuel prices across EU countries — country averages, nearest stations by coordi
 | `lon` | Longitude for mode=nearest (alias: lng) |
 | `radius_km` | Search radius km for mode=nearest (default 30; alias: radius) |
 | `ppid` | Checkpoint ID for mode=border (e.g. id_13) |
-| `fuel_type` | diesel | e5 | e10 | lpg | petrol (optional, for mode=nearest) |
+| `fuel_type` | Optional, for mode=nearest: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng (availability varies by station/region) |
 | `lang` | Language code for labels |
 | `limit` | Max stations returned for mode=nearest/border (default 5) |
 
@@ -44,4 +44,4 @@ curl "/api/v1/data/fuel?country=PL" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fuel
-*Auto-generated 2026-08-19 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
