@@ -3,7 +3,7 @@
 Sunday retail-opening regulations and upcoming trading Sundays per regulated EU country.
 
 **Endpoint:** `GET /api/v1/data/trading-sundays`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
