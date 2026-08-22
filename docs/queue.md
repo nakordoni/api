@@ -3,7 +3,7 @@
 Real-time queue length, wait estimate and status for any monitored checkpoint, plus hourly/daily aggregates.
 
 **Endpoint:** `GET /api/v1/data/queue`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** heavy — 200/day (Explorer), 10000/day (PAYG)
 
 ---
 
