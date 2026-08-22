@@ -2,8 +2,8 @@
 
 Where your buses are right now — one row per active vehicle with lat/lon, timestamp and age, speed, bearing and timetable delay, read from the same live store that powers the public bus map. Unlike the public feed this includes vehicles marked non-public and companies that opted out of the public map: it is your own data. Vehicles whose driver device is off shift (or silent for more than 10 minutes) are still listed, with live=false.
 
-**Endpoint:** `GET /api/v1/data/fleet-live`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Endpoint:** `GET /api/v2/data/fleet-live`
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
