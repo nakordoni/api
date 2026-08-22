@@ -3,7 +3,7 @@
 Fetch live queue status and/or data freshness for up to 20 checkpoints in a single request. Designed for dashboard builders who poll many PPIDs simultaneously — reduces 20+ individual calls to one. Quota counts as ⌈(N PPIDs × sub-products) / 2⌉ — 50% cheaper than the equivalent individual calls. Use include=queue,update-info to get both datasets at once.
 
 **Endpoint:** `GET /api/v1/data/multi`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** heavy — 200/day (Explorer), 10000/day (PAYG)
 
 ---
 
