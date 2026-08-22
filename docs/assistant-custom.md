@@ -2,8 +2,8 @@
 
 Your own AI assistant, grounded on YOUR content plus OUR live border data. Point it at your markdown files or let us fetch the pages you name — we index them and answer from them. Choose which of our data feeds it may use (queue, forecast, alternatives, fuel, truck bans, holidays, road conditions…), choose the model tier (that is what sets the price), write your own instructions with {{feed.slug}} placeholders saying exactly where our data goes in the answer, and add a closing sentence of your own that is appended to every reply. Build it and test it at /{lang}/developers/studio, then call it here. Price per answer = model tier units + 1 unit per enabled feed (shown in the studio and in X-Devapi-Units).
 
-**Endpoint:** `GET /api/v1/data/assistant-custom`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Endpoint:** `GET /api/v2/data/assistant-custom`
+**Quota class:** heavy — 200/day (Explorer), 10000/day (PAYG)
 
 ---
 
