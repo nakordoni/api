@@ -2,8 +2,8 @@
 
 The closest truck parkings, Autohöfe and truck stops to a point or city — sorted by distance with distance_km, name, coordinates and country. 14k+ locations across Europe.
 
-**Endpoint:** `GET /api/v1/data/truck-parkings`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Endpoint:** `GET /api/v2/data/truck-parkings`
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
