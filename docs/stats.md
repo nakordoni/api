@@ -3,7 +3,7 @@
 Hourly historical queue stats per checkpoint and date: 24 hourly values, daily avg/min/max, peak and quietest hours, day-over-day comparison.
 
 **Endpoint:** `GET /api/v1/data/stats`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** heavy — 200/day (Explorer), 10000/day (PAYG)
 
 ---
 
