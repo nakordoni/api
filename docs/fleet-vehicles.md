@@ -2,8 +2,8 @@
 
 Your own NakBus Live fleet: every vehicle registered to your company with plate, label, assigned route, public-map flag, status, whether a driver device is currently on shift, and the last measured timetable delay. Owner-scoped — the key sees its own fleet only, including vehicles hidden from the public bus map. Activate fleet tracking at nakordoni.eu/en/developers/fleet (first bus free).
 
-**Endpoint:** `GET /api/v1/data/fleet-vehicles`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Endpoint:** `GET /api/v2/data/fleet-vehicles`
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
