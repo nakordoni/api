@@ -3,7 +3,7 @@
 Find checkpoint PPIDs by name. Pass a single name or a comma-separated list (up to 20). Searches all translation languages; returns all PPIDs at that location grouped by vehicle type (4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck). Use this to quickly discover the right ppid before calling the queue or forecast APIs.
 
 **Endpoint:** `GET /api/v1/data/search`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
