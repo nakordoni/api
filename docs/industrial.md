@@ -42,4 +42,4 @@ curl "/api/v2/data/industrial?city=Duisburg&country=DE&radius=40" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#industrial
-*Auto-generated 2026-08-19 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
