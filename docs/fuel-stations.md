@@ -1,6 +1,6 @@
 # Nearby Fuel Stations API
 
-The closest petrol stations to a point or city with current prices per fuel type, sorted by distance. Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK (same data as the nakordoni.eu fuel pages; use the fuel API country mode for national averages elsewhere). When no stations match, the response includes a coverage object naming the covered countries instead of a silent empty list.
+The closest petrol stations to a point or city with current prices per fuel type, sorted by distance. Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area only (Gdansk/Gdynia/Sopot and nearby towns) — same data as the nakordoni.eu fuel pages; use the fuel API country mode for national averages elsewhere. Prices are returned in each station's own currency (PLN for Polish stations, EUR elsewhere) — read the per-station currency field, never compare the raw numbers. When no stations match, the response includes a coverage object naming the covered countries, and a sparse_coverage list of countries covered only in part, instead of a silent empty list.
 
 **Endpoint:** `GET /api/v1/data/fuel-stations`
 **Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
@@ -15,8 +15,8 @@ The closest petrol stations to a point or city with current prices per fuel type
 | `lon` | Longitude |
 | `city` | City name — alternative to lat/lon, resolved to coordinates |
 | `country` | ISO-2 country code, disambiguates city |
-| `radius_km` | Search radius km (default 30, max 150; alias: radius) |
-| `fuel_type` | Optional filter: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 (availability varies by station/region) |
+| `radius_km` | Search radius km (default 25, max 25; alias: radius) |
+| `fuel_type` | Optional filter: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng (availability varies by station/region; Polish stations report Pb95 as e5, Pb98 as superplus and ON as diesel) |
 | `limit` | Max stations (default 5, max 20) |
 | `lang` | Language for labels (default en) |
 
@@ -43,4 +43,4 @@ curl "/api/v2/data/fuel-stations?city=Munich&country=DE&radius_km=20&fuel_type=d
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fuel-stations
-*Auto-generated 2026-08-19 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
