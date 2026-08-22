@@ -2,8 +2,8 @@
 
 Mobile-operator shops and WiFi points useful to drivers on the road, nearest-first from a point or city with distance_km.
 
-**Endpoint:** `GET /api/v1/data/internet-points`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Endpoint:** `GET /api/v2/data/internet-points`
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
