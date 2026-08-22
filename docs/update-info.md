@@ -3,7 +3,7 @@
 Current queue length for one checkpoint plus how fresh that reading is — returns queue_now, freshness, age_minutes, is_realtime, status, timestamp and timezone. This is the STANDARD-class way to poll live queue data: use it for frequent refreshes and keep the heavy quota for /queue, /multi and /forecast, which return the fuller payload (wait_min, trend, history).
 
 **Endpoint:** `GET /api/v1/data/update-info`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
