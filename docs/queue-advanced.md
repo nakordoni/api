@@ -3,7 +3,7 @@
 Wait time adjusted for live traffic flow and weather, with a full breakdown of each adjustment, plus the same wait_status/trend fields as border and multi. Billed at 1.5x a normal heavy-class call, reflecting the extra traffic/weather/driver-report lookups. Granted on request.
 
 **Endpoint:** `GET /api/v1/data/queue-advanced`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** heavy — 200/day (Explorer), 10000/day (PAYG)
 
 ---
 
