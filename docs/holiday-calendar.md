@@ -3,7 +3,7 @@
 Official public holidays per European country — dates, local names and type, each country's full holiday list included. Backed by the same Nager.Date / OpenHolidaysAPI service (7-day cache, locally-computed Kosovo calendar) that powers the nakordoni.eu holiday calendar page and the prediction system's calendar factors. One country -> a flat object; several -> the same shape wrapped in a list. upcoming=1 switches to a flat, date-sorted cross-country feed; compare_to switches to a same-vs-different comparison across countries — useful for checking whether a date is a holiday on both sides of a border crossing or just one.
 
 **Endpoint:** `GET /api/v1/data/holiday-calendar`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
