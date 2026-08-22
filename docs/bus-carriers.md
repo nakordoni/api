@@ -3,7 +3,7 @@
 Border-crossing performance per bus carrier: crossings, average/median/min/max wait minutes — built from our own plate-matched crossing records.
 
 **Endpoint:** `GET /api/v1/data/bus-carriers`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
