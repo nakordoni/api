@@ -3,7 +3,7 @@
 Truck parkings (14k+), free showers, services and supermarkets across Europe with coordinates. Results are sorted closest-first with distance_km. Locate by lat/lon or by city (+country).
 
 **Endpoint:** `GET /api/v1/data/pois`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
