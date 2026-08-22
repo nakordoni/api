@@ -2,8 +2,8 @@
 
 The closest free showers for drivers to a point or city — sorted by distance with distance_km, name, coordinates and country.
 
-**Endpoint:** `GET /api/v1/data/showers`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Endpoint:** `GET /api/v2/data/showers`
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
