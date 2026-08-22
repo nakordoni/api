@@ -2,8 +2,8 @@
 
 A door-to-door plan for a border trip, not just a driving time. Returns the route, the crossings actually on it with their live or arrival-time-forecast queue, and the stops a driver really makes — rest breaks, a meal, refuelling — laid out on one timeline. The border is part of that timeline: a long queue satisfies the break that was coming up and resets the driving clock, so a 3-hour wait is never reported as 3 hours PLUS a full set of breaks nobody took. Car stops follow a driving-hygiene model; bus and truck stops respect the mandatory EU 561/2006 rest, and the bus service overhead is calibrated on 1000+ licensed international coach schedules. Set stop_places=1 to name a real rest area or fuel station for each stop. Each border also reports wait_basis: vehicle_lane when your vehicle class has its own measured queue, car_lane when the car-lane queue is the best available signal for that crossing.
 
-**Endpoint:** `GET /api/v1/data/route-plan`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Endpoint:** `GET /api/v2/data/route-plan`
+**Quota class:** heavy — 200/day (Explorer), 10000/day (PAYG)
 
 ---
 
