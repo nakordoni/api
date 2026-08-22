@@ -2,8 +2,8 @@
 
 The closest driver-friendly restaurants to a point or city — sorted by distance with distance_km, name, coordinates and country.
 
-**Endpoint:** `GET /api/v1/data/restaurants`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Endpoint:** `GET /api/v2/data/restaurants`
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
