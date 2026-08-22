@@ -3,7 +3,7 @@
 Per-city fuel price summary for a country: cheapest station price and average across the top 5 stations in each major city. Covers the same countries as the nakordoni.eu fuel pages (AT, DE, FR, ES, IT, PT, SI, LU, RO, DK, HR).
 
 **Endpoint:** `GET /api/v1/data/fuel-cities`
-**Quota class:** standard — 200/day (Explorer), 50000/day (PAYG)
+**Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
 
 ---
 
