@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-08-22
+# Generated 2026-08-24
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -772,7 +772,7 @@ paths:
 /fuel-stations: 
   get: 
     summary: Nearby Fuel Stations API
-    description: "The closest petrol stations to a point or city with current prices per fuel type, sorted by distance. Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area only (Gdansk/Gdynia/Sopot and nearby towns) — same data as the nakordoni.eu fuel pages; use the fuel API country mode for national averages elsewhere. Prices are returned in each station's own currency (PLN for Polish stations, EUR elsewhere) — read the per-station currency field, never compare the raw numbers. When no stations match, the response includes a coverage object naming the covered countries, and a sparse_coverage list of countries covered only in part, instead of a silent empty list."
+    description: "The closest petrol stations to a point or city with current prices per fuel type, sorted by distance. Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area and the DE/PL border crossings only (Gdansk/Gdynia/Sopot and nearby towns) — same data as the nakordoni.eu fuel pages; use the fuel API country mode for national averages elsewhere. Prices are returned in each station's own currency (PLN for Polish stations, EUR elsewhere) — read the per-station currency field, never compare the raw numbers. When no stations match, the response includes a coverage object naming the covered countries, and a sparse_coverage list of countries covered only in part, instead of a silent empty list."
     operationId: get_fuel_stations
     parameters:       - name: lat
         in: query
@@ -900,7 +900,7 @@ paths:
 /fuel-cheapest: 
   get: 
     summary: Cheapest Fuel Nearby API
-    description: "The cheapest petrol stations around a point or city, ranked by price for the chosen fuel type (closest wins a tie). Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area only (Gdansk/Gdynia/Sopot and nearby towns). Ranking is per fuel type within one search area, and prices carry each station's own currency (PLN in Poland, EUR elsewhere). When no stations match, the response includes a coverage object naming the covered countries, and a sparse_coverage list of countries covered only in part, instead of a silent empty list."
+    description: "The cheapest petrol stations around a point or city, ranked by price for the chosen fuel type (closest wins a tie). Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area and the DE/PL border crossings only (Gdansk/Gdynia/Sopot and nearby towns). Ranking is per fuel type within one search area, and prices carry each station's own currency (PLN in Poland, EUR elsewhere). When no stations match, the response includes a coverage object naming the covered countries, and a sparse_coverage list of countries covered only in part, instead of a silent empty list."
     operationId: get_fuel_cheapest
     parameters:       - name: lat
         in: query
@@ -956,7 +956,7 @@ paths:
 /fuel-local: 
   get: 
     summary: Local Fuel Price API
-    description: "Best available fuel price for ANY point in Europe, resolved down a three-tier fallback ladder so a coordinate never comes back empty where we have data at all: pump prices from the nearest stations when the point is inside station-level coverage (DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area only), else the regional average for the administrative region the point falls in (Ukraine only today — the UA oblast feed, in UAH), else the national average for the country. Every response carries a `resolution` field naming the tier that answered — `station` (data is a list of stations with distance_km, each in its own currency), `region` (one oblast-average object plus `region`, an ISO 3166-2 code such as UA-46, `region_name` and `region_center_dist_km`) or `country` (one national-average object). The region and country tiers return the same price keys: petrol/petrol95plus/petrol92/diesel/lpg + currency + updated date. Branch on `resolution`, never on the shape. Ukraine has no per-station prices anywhere, so a UA point answers at `region` where the oblast is quoted and falls back to `country` otherwise. 404 when the point is outside every covered country (mid-ocean, outside Europe). For a plain national average without coordinates use the `fuel` product, for a pure station search `fuel-stations`, for price ranking `fuel-cheapest`."
+    description: "Best available fuel price for ANY point in Europe, resolved down a three-tier fallback ladder so a coordinate never comes back empty where we have data at all: pump prices from the nearest stations when the point is inside station-level coverage (DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area and the DE/PL border crossings only), else the regional average for the administrative region the point falls in (Ukraine only today — the UA oblast feed, in UAH), else the national average for the country. Every response carries a `resolution` field naming the tier that answered — `station` (data is a list of stations with distance_km, each in its own currency), `region` (one oblast-average object plus `region`, an ISO 3166-2 code such as UA-46, `region_name` and `region_center_dist_km`) or `country` (one national-average object). The region and country tiers return the same price keys: petrol/petrol95plus/petrol92/diesel/lpg + currency + updated date. Branch on `resolution`, never on the shape. Ukraine has no per-station prices anywhere, so a UA point answers at `region` where the oblast is quoted and falls back to `country` otherwise. 404 when the point is outside every covered country (mid-ocean, outside Europe). For a plain national average without coordinates use the `fuel` product, for a pure station search `fuel-stations`, for price ranking `fuel-cheapest`."
     operationId: get_fuel_local
     parameters:       - name: lat
         in: query
@@ -1029,16 +1029,11 @@ paths:
 /truck-bans: 
   get: 
     summary: Truck Driving Bans API
-    description: "European truck driving restrictions by country and date, including seasonal and holiday bans. Each ban carries its restriction type (General / Local / Sunday / Holiday / Seasonal), the exact scope or roads affected and the minimum weight, and each country a live status computed in its own timezone (active_window / next_window), plus a covered_countries list."
+    description: "European truck driving restrictions for one or more countries, including seasonal and holiday bans. Each ban carries its restriction type (General / Local / Sunday / Holiday / Seasonal), the exact scope or roads affected and the minimum weight, and each country a live status computed in its own timezone (active_window / next_window), plus a covered_countries list. ?country= accepts a comma-separated list of up to 10 codes; it is optional in v1 and required in v2. The response also reports `returned`, `total_available` and `truncated` so a capped answer is never mistaken for a complete one."
     operationId: get_truck_bans
     parameters:       - name: country
         in: query
-        description: ISO country code (optional)
-        schema: 
-          type: string
-      - name: date
-        in: query
-        description: "YYYY-MM-DD (optional)"
+        description: "ISO-2 country code, or a comma-separated list of up to 10, e.g. RO or DE,RO. Optional in v1, where an unscoped call returns a capped slice — check truncated. Required in v2."
         schema: 
           type: string
       - name: lang
@@ -1048,7 +1043,7 @@ paths:
           type: string
       - name: include_ua_heat
         in: query
-        description: "1 = also return Ukraine's computed summer heat ban (trucks >24 t banned 10:00-22:00 when forecast temp >+28 °C), per oblast. Included automatically when Ukraine is in scope (country=UA, a Ukrainian border ppid, or no filter at all) — this flag only adds it to a request scoped to some other country"
+        description: "1 = also return Ukraine's computed summer heat ban (trucks >24 t banned 10:00-22:00 when forecast temp >+28 °C), per oblast. Included automatically when Ukraine is in scope (country=UA) — this flag only adds it to a request scoped to some other country"
         schema: 
           type: string
     responses: 
