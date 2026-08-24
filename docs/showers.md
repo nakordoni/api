@@ -42,4 +42,4 @@ curl "/api/v2/data/showers?lat=50.7&lon=23.9&radius=50" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#showers
-*Auto-generated 2026-08-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-24 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
