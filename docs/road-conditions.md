@@ -13,12 +13,12 @@ Live road conditions on the approaches to a border crossing: accidents, roadwork
 |------|-------------|
 | `country` | ISO-2 country code (optional). Returns that country's side of the border corridors — not a country-wide dump |
 | `ppid` | Checkpoint ID, e.g. id_13 (optional). Scopes the answer to that crossing's corridor: the last 50 km of the main road to it on BOTH sides of the border |
-| `condition_type` | accident|roadwork|closure|congestion|weather|hazard|pothole|speed_bump|object|stopped|ice|other (optional). In v1 anything an upstream feed reports outside this list is mapped to `other`; v2 returns the raw value |
-| `severity` | low|moderate|major|critical (optional) |
+| `condition_type` | accident\|roadwork\|closure\|congestion\|weather\|hazard\|pothole\|speed_bump\|object\|stopped\|ice\|other (optional). In v1 anything an upstream feed reports outside this list is mapped to `other`; v2 returns the raw value |
+| `severity` | low\|moderate\|major\|critical (optional) |
 | `lat` | Latitude (optional) — with lng, switches to a plain radius search |
 | `lng` | Longitude (optional) |
 | `radius` | Radius km (default 50). Applies ONLY with lat+lng; on the corridor path the road itself is the filter, not a circle |
-| `sources` | all (default) | user (our own driver reports only) | external (road-authority and provider feeds only) |
+| `sources` | all (default) \| user (our own driver reports only) \| external (road-authority and provider feeds only) |
 | `limit` | Max results (default 100, cap 500) |
 | `offset` | Pagination offset (optional) |
 | `include_expired` | 1 = also return conditions whose expiry has passed (optional) |
@@ -28,9 +28,25 @@ Live road conditions on the approaches to a border crossing: accidents, roadwork
 ## Example
 
 ```bash
-curl "/api/v1/data/road-conditions?ppid=id_13&lang=en" \
+curl "https://nakordoni.eu/api/v1/data/road-conditions?ppid=id_13&lang=en" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.conditions[].condition_type` | What it is (roadworks, closure, accident, weather…), with condition_type_name in the requested language. |
+| `data.conditions[].severity` | How bad it is, with severity_name. |
+| `data.conditions[].description` | Free-text detail as published, with road_name and direction. |
+| `data.conditions[].latitude` | Where it is, with longitude and country_code. |
+| `data.conditions[].corridor_ppid` | The border crossing whose approach corridor this sits on, when it is on one. |
+| `data.conditions[].estimated_duration` | How long it is expected to last, with expires_at and created_at. |
+| `data.conditions[].source` | Upstream that reported it, with external_id — stable across refreshes, use it to deduplicate. |
+| `data.total` | Matches for the query, with limit and offset for paging. |
+
 
 ## Response envelope
 
