@@ -18,9 +18,23 @@ Current queue length for one checkpoint plus how fresh that reading is — retur
 ## Example
 
 ```bash
-curl "/api/v1/data/update-info?ppid=id_13" \
+curl "https://nakordoni.eu/api/v1/data/update-info?ppid=id_13" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.queue_now` | Vehicles in the queue at the latest reading. |
+| `data.timestamp` | When that reading was taken (unix), with datetime and timezone — the checkpoint's own zone. |
+| `data.age_seconds` | How old the reading is now, also as age_minutes and age_hours. |
+| `data.freshness` | Plain-language band for that age; is_realtime is true only for a live feed. |
+| `data.found` | false = we monitor the checkpoint but hold no reading; status carries the reason. |
+| `data.origin` | Which upstream the reading came from. |
+
 
 ## Response envelope
 
