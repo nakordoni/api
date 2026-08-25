@@ -20,9 +20,30 @@ All checkpoints on a given border + vehicle type in one call — live queue, wai
 ## Example
 
 ```bash
-curl "/api/v1/data/border/1/all/4" \
+curl "https://nakordoni.eu/api/v1/data/border/1/all/4" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.origin` | Numeric country code the path asked for, plus origin_name in the requested language. |
+| `data.destinations` | Numeric country codes the call expanded to, plus destination_names. |
+| `data.crossing_type` | Vehicle type of every row, plus crossing_type_label. |
+| `data.checkpoints[].ppid` | Checkpoint ID. |
+| `data.checkpoints[].name` | Checkpoint name in the requested language. |
+| `data.checkpoints[].border` | Numeric country code of the neighbour this crossing leads to, plus border_name. |
+| `data.checkpoints[].queue` | Vehicles counted in the queue right now. |
+| `data.checkpoints[].wait_min` | Estimated wait in minutes; null where the crossing has no wait signal. |
+| `data.checkpoints[].wait_status` | Plain-language band for the wait (e.g. free_flow, moderate, heavy). |
+| `data.checkpoints[].trend_percent` | Change against the recent baseline, with trend_direction (up \| down \| flat). |
+| `data.checkpoints[].updated_at` | When this reading was taken, plus age_min — how old it is now. |
+| `data.checkpoints[].source_url` | Public page for the checkpoint, for the attribution link. |
+| `data.count` | Number of checkpoints returned; generated_at is when the set was assembled. |
+
 
 ## Response envelope
 
