@@ -18,9 +18,25 @@ The naming table behind every fuel product: our canonical grade vocabulary (dies
 ## Example
 
 ```bash
-curl "/api/v2/data/fuel-grades?country=PL&fuel_type=ON" \
+curl "https://nakordoni.eu/api/v2/data/fuel-grades?country=PL&fuel_type=ON" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.grades[].code` | Canonical grade code — the value fuel_type takes in every fuel product. |
+| `data.grades[].label` | Plain-English description of the grade. |
+| `data.grades[].family` | diesel \| petrol \| gas \| other. |
+| `data.grades[].station_level` | true when station feeds report this grade anywhere; false means it only ever appears in national averages. |
+| `data.countries` | Keyed by ISO-2 country, then by grade code, valued with that country's names for it. The first name in each list is the one to show a driver. |
+| `data.count` | How many countries the answer covers (41 unfiltered, 1 with ?country=). |
+| `data.resolved` | Only with ?fuel_type=: requested, country, grade (null when we cannot place the name), label and local_name. |
+| `data.note` | How resolution works, in one paragraph — safe to show to your users. |
+
 
 ## Response envelope
 
