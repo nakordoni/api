@@ -18,9 +18,26 @@ Directory of all monitored border checkpoints: IDs, names, countries, coordinate
 ## Example
 
 ```bash
-curl "/api/v1/data/checkpoints" \
+curl "https://nakordoni.eu/api/v1/data/checkpoints" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.checkpoints[].ppid` | Checkpoint ID — the value every other product's ppid parameter takes. |
+| `data.checkpoints[].name` | Checkpoint name in the requested language. |
+| `data.checkpoints[].origin` | Numeric country code of the side the crossing is operated from. |
+| `data.checkpoints[].destination` | Numeric country code of the country across the border. |
+| `data.checkpoints[].crossing_type` | Vehicle type this row is monitored for: 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck. |
+| `data.checkpoints[].timezone` | IANA timezone of the crossing — every timestamp for it is in this zone. |
+| `data.checkpoints[].status` | 1=open, 3=closed, 0=inactive. |
+| `data.checkpoints[].has_day_stats` | false means the Best Time to Cross product has no matrix for this checkpoint and would answer 404 — skip it rather than poll it. |
+| `data.count` | Number of checkpoints returned. |
+
 
 ## Response envelope
 
