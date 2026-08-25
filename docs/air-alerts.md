@@ -23,9 +23,25 @@ Air-raid alerts and airborne objects near ONE border crossing. Anchor on a check
 ## Example
 
 ```bash
-curl "/api/v2/data/air-alerts?ppid=id_94&radius_km=100" \
+curl "https://nakordoni.eu/api/v2/data/air-alerts?ppid=id_94&radius_km=100" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.anchor` | What the radius was measured from: ppid, lat, lng, radius_km. |
+| `data.as_of` | Snapshot time — DELIBERATELY not real-time. lag_min states the delay, re-randomised per request, and lag_note explains it. |
+| `data.alerts.count` | Regions under alert inside the radius, with region_codes (ISO 3166-2) and items — each with its distance from the anchor. |
+| `data.alerts.unresolved` | Alerts that could not be placed on a region, with merged — how many overlapping ones were combined. |
+| `data.targets.count` | Tracked objects inside the radius, with items — distance, bearing, speed and a 1-5 proximity band ONLY. Coordinates are never returned. |
+| `data.targets.by_type` | Counts per object type, with tracked_total across the whole feed. |
+| `data.attribution` | Source labels you must display, with a note per source. |
+| `data.labels` | Localised UI strings, including the disclaimer — crowd/OSINT data, never a substitute for official air-raid warnings. |
+
 
 ## Response envelope
 
