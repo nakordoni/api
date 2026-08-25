@@ -1,6 +1,6 @@
 # Checkpoints Directory API
 
-Directory of all monitored border checkpoints: IDs, names, countries, coordinates and status. Use it to discover ppid values for the other APIs.
+Directory of all monitored border checkpoints: IDs, names, countries, coordinates and status. Use it to discover ppid values for the other APIs. Each row carries has_day_stats — false means the Best Time to Cross API has no matrix for that checkpoint and would answer 404, so skip it instead of polling.
 
 **Endpoint:** `GET /api/v1/data/checkpoints`
 **Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
@@ -37,4 +37,4 @@ curl "/api/v1/data/checkpoints" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#checkpoints
-*Auto-generated 2026-08-24 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-25 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
