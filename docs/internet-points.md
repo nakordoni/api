@@ -22,9 +22,20 @@ Mobile-operator shops and WiFi points useful to drivers on the road, nearest-fir
 ## Example
 
 ```bash
-curl "/api/v2/data/internet-points?lat=52.2&lon=21.0" \
+curl "https://nakordoni.eu/api/v2/data/internet-points?lat=52.2&lon=21.0" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.points[].name` | Public internet point, with description and id. |
+| `data.points[].lat` | Coordinates, with lng, distance_km, country and country_name. |
+| `data.total_found` | Matches inside the radius; search_location echoes the point searched. |
+
 
 ## Response envelope
 
