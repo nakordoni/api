@@ -18,9 +18,25 @@ Typical-week load statistics per checkpoint: 7×24 day-of-week × hour matrix (m
 ## Example
 
 ```bash
-curl "/api/v1/data/day-stats?ppid=id_13&lang=en" \
+curl "https://nakordoni.eu/api/v1/data/day-stats?ppid=id_13&lang=en" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.matrix` | 7×24 median queue: matrix[dayOfWeek][hour], day 0 = Monday, hours in the checkpoint's timezone (data.tz). |
+| `data.lo` | Same 7×24 shape — the p25 floor of the band; hi is the p75 ceiling. |
+| `data.counts` | Observations behind each cell — a cell with few counts is a weak median. |
+| `data.weekday_avg` | Seven averages, one per weekday; best_day and worst_day index into them. |
+| `data.best_slots[]` | Quietest 2-hour windows: dow, hour, v (the value). worst_slots is the same for the busiest. |
+| `data.overall_avg` | Average across the whole matrix, with overall_max. |
+| `data.samples` | Readings the matrix was built from, over period_days; data_quality grades that sample. |
+| `data.generated_at` | When the matrix was last recomputed (unix). It is precomputed daily, not per request. |
+
 
 ## Response envelope
 
