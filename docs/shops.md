@@ -23,9 +23,20 @@ The closest supermarkets and grocery shops to a point or city — sorted by dist
 ## Example
 
 ```bash
-curl "/api/v2/data/shops?city=Przemysl&country=PL&radius=20" \
+curl "https://nakordoni.eu/api/v2/data/shops?city=Przemysl&country=PL&radius=20" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.pois[]` | Shops near the point: id, type, name, address, lat, lng, country, country_code, country_name, distance_km. An empty list means nothing mapped inside the radius, not an error. |
+| `data.total_found` | Matches inside the radius, with limit and search_location. |
+| `resolved_location` | Envelope level: the coordinates a city query resolved to. |
+
 
 ## Response envelope
 
