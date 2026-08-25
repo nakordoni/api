@@ -23,9 +23,20 @@ The closest truck parkings, Autohöfe and truck stops to a point or city — sor
 ## Example
 
 ```bash
-curl "/api/v2/data/truck-parkings?city=Katowice&country=PL&radius=40" \
+curl "https://nakordoni.eu/api/v2/data/truck-parkings?city=Katowice&country=PL&radius=40" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.pois[]` | Truck parkings, autohofs and truck stops near the point: id, type, name, address, lat, lng, country, country_code, country_name, distance_km. |
+| `data.total_found` | Matches inside the radius, with limit and search_location. |
+| `resolved_location` | Envelope level: when you passed a city, the coordinates it resolved to — query, lat, lon, label. |
+
 
 ## Response envelope
 
