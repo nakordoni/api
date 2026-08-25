@@ -16,7 +16,7 @@ The cheapest petrol stations around a point or city, ranked by price for the cho
 | `city` | City name — alternative to lat/lon, resolved to coordinates |
 | `country` | ISO-2 country code, disambiguates city |
 | `radius_km` | Search radius km (default 25, max 25; alias: radius) |
-| `fuel_type` | diesel (default) | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng — price ranking is per fuel type. Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades. |
+| `fuel_type` | diesel (default) \| e5 \| e10 \| superplus \| super100 \| premdiesel \| truckdiesel \| hvo \| lpg \| cng \| adblue \| e85 \| lng — price ranking is per fuel type. Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades. |
 | `limit` | Max stations (default 5, max 20) |
 | `lang` | Language for labels (default en) |
 
@@ -24,9 +24,21 @@ The cheapest petrol stations around a point or city, ranked by price for the cho
 ## Example
 
 ```bash
-curl "/api/v2/data/fuel-cheapest?city=Munich&country=DE&radius_km=25" \
+curl "https://nakordoni.eu/api/v2/data/fuel-cheapest?city=Munich&country=DE&radius_km=25" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.data[]` | Same station objects as fuel-stations, but ranked cheapest first for the chosen grade (closest wins a tie). |
+| `data.anchor` | The point searched and the resolved grade: lat, lng, radius_km, fuel_type, fuel_type_requested, fuel_type_local, fuel_type_country. |
+| `data.count` | Stations returned. |
+| `data.coverage` | Only when nothing matched — the covered countries, the partially-covered ones, and fuel_type_note when the grade name could not be placed. |
+
 
 ## Response envelope
 
