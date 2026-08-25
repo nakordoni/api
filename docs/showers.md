@@ -23,9 +23,19 @@ The closest free showers for drivers to a point or city — sorted by distance w
 ## Example
 
 ```bash
-curl "/api/v2/data/showers?lat=50.7&lon=23.9&radius=50" \
+curl "https://nakordoni.eu/api/v2/data/showers?lat=50.7&lon=23.9&radius=50" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.pois[]` | Free shower points near the coordinates: id, type, name, address, lat, lng, country, country_code, country_name, distance_km. |
+| `data.total_found` | Matches inside the radius, with limit and search_location. |
+
 
 ## Response envelope
 
