@@ -23,9 +23,22 @@ The closest driver-friendly restaurants to a point or city — sorted by distanc
 ## Example
 
 ```bash
-curl "/api/v2/data/restaurants?city=Lublin&country=PL&radius=30" \
+curl "https://nakordoni.eu/api/v2/data/restaurants?city=Lublin&country=PL&radius=30" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.pois[].name` | Restaurant, with brand, address and type. |
+| `data.pois[].amenities` | What it offers, with facilities — parking, truck access and the like, where mapped. |
+| `data.pois[].distance_km` | Distance from the search point, with lat, lng, country, country_code, country_name. |
+| `data.total_found` | Matches inside the radius, with limit and search_location. |
+| `resolved_location` | Envelope level: the coordinates a city query resolved to. |
+
 
 ## Response envelope
 
