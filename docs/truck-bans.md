@@ -40,6 +40,7 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.total_bans` | Bans in the window, with returned, total_available and truncated — true means narrow the window or page. |
 | `data.covered_countries` | Countries we track bans for; countries_not_covered names the ones you asked about that we do not. |
 | `data.summary` | One-sentence plain-language summary, ready to show a driver. as_of is when it was assembled. |
+| `data.ua_heat_ban` | Ukraine's computed heat ban (see include_ua_heat): per-oblast status plus forecast_horizon, the last date the underlying weather forecast reaches. Heat rows are never returned past that date, so compare it with data.window before reading an empty answer as 'no ban'. |
 
 
 ## Response envelope
