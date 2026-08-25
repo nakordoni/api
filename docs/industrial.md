@@ -23,9 +23,20 @@ The closest industrial and logistics zones to a point or city (3k+ across Europe
 ## Example
 
 ```bash
-curl "/api/v2/data/industrial?city=Duisburg&country=DE&radius=40" \
+curl "https://nakordoni.eu/api/v2/data/industrial?city=Duisburg&country=DE&radius=40" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.pois[]` | Industrial and logistics zones near the point: id, type, name, address, lat, lng, country, country_code, country_name, distance_km. |
+| `data.total_found` | Matches inside the radius, with limit and search_location. |
+| `resolved_location` | Envelope level: the coordinates a city query resolved to. |
+
 
 ## Response envelope
 
