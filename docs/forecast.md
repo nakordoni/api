@@ -18,9 +18,25 @@ ML ensemble forecast of queue levels: 24-hour and 7-day (168h) horizons with con
 ## Example
 
 ```bash
-curl "/api/v1/data/forecast?ppid=id_13&prediction_steps=24" \
+curl "https://nakordoni.eu/api/v1/data/forecast?ppid=id_13&prediction_steps=24" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data[]` | One element per forecast step, nearest first — 24 or 168 of them. |
+| `data[].time` | Unix timestamp the step forecasts, with hours_from_now. |
+| `data[].avg_cars` | Predicted queue at that hour. |
+| `data[].lower_bound` | Confidence band around avg_cars, with upper_bound; the _50 pair is the narrower 50% band. |
+| `data[].type_of_data` | Provenance marker of the input reading the step was built from. |
+| `data[].source` | Which model produced the step, with formula and the corrected flag when a calibrator adjusted it. |
+| `data[].learned_mult` | Per-checkpoint learned multiplier applied, and weather_mult the weather one. |
+| `data[].v4` | Full breakdown from the v4 ensemble — component scores behind avg_cars. |
+
 
 ## Response envelope
 
