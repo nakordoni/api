@@ -19,9 +19,28 @@ European truck driving restrictions for one or more countries, including seasona
 ## Example
 
 ```bash
-curl "/api/v1/data/truck-bans?country=PL" \
+curl "https://nakordoni.eu/api/v1/data/truck-bans?country=PL" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.current_bans[]` | Bans in force right now, same fields as upcoming_bans. is_ban_active is the quick boolean for 'may a truck drive at this moment'. |
+| `data.upcoming_bans[].date` | Ban day, with time_from and time_until in local time. |
+| `data.upcoming_bans[].country_code` | Country the ban applies in, with country_name. |
+| `data.upcoming_bans[].restriction_type` | What kind of ban it is (weekend, holiday, heat…), with restriction_details in the requested language. |
+| `data.upcoming_bans[].min_weight_tons` | Weight from which the ban bites — a lighter truck is unaffected. |
+| `data.upcoming_bans[].details_url` | Official source page for that ban. |
+| `data.bans_by_country` | The same bans grouped by ISO-2 country, for rendering per country. |
+| `data.window` | The period covered: from, to, days and whether you requested it. |
+| `data.total_bans` | Bans in the window, with returned, total_available and truncated — true means narrow the window or page. |
+| `data.covered_countries` | Countries we track bans for; countries_not_covered names the ones you asked about that we do not. |
+| `data.summary` | One-sentence plain-language summary, ready to show a driver. as_of is when it was assembled. |
+
 
 ## Response envelope
 
