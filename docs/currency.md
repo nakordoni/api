@@ -12,9 +12,21 @@ EUR-based exchange rates for PLN, CZK, HUF, USD, GBP, CHF, NOK and UAH — sourc
 ## Example
 
 ```bash
-curl "/api/v1/data/currency" \
+curl "https://nakordoni.eu/api/v1/data/currency" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.rates` | Rate per currency against data.base (EUR = 1): CHF, CZK, GBP, HUF, NOK, PLN, RON, USD, UAH. |
+| `data.base` | The currency every rate is quoted against. |
+| `data.date` | Date of the quoted rates, with source (ECB via Frankfurter). Cached 6 h — not intraday. |
+| `data.success` | false = the upstream rate table could not be refreshed and nothing is returned. |
+
 
 ## Response envelope
 
