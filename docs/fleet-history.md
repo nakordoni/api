@@ -20,9 +20,23 @@ Recorded GPS track of your own vehicles: every stored position point in a time w
 ## Example
 
 ```bash
-curl "/api/v2/data/fleet/history?vehicle_id=1&from=2026-08-01T00:00:00Z&to=2026-08-02T00:00:00Z&limit=1000" \
+curl "https://nakordoni.eu/api/v2/data/fleet/history?vehicle_id=1&from=2026-08-01T00:00:00Z&to=2026-08-02T00:00:00Z&limit=1000" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.points[].vehicle_id` | Vehicle the fix belongs to, with plate. |
+| `data.points[].lat` | Position, with lon, ts, datetime (UTC) and accuracy_m. |
+| `data.points[].speed_ms` | Speed in m/s at the fix, with bearing_deg. |
+| `data.from` | Window actually queried, with to and limit. |
+| `data.count` | Points returned; truncated is true when count reached limit — continue from the last ts rather than widening the window. |
+| `data.vehicle_id` | The vehicle filtered to, null when the window covers the whole fleet. |
+
 
 ## Response envelope
 
