@@ -22,9 +22,23 @@ Official public holidays per European country — dates, local names and type, e
 ## Example
 
 ```bash
-curl "/api/v1/data/holiday-calendar?country=PL&compare_to=UA&year=2026&lang=en" \
+curl "https://nakordoni.eu/api/v1/data/holiday-calendar?country=PL&compare_to=UA&year=2026&lang=en" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.countries` | The countries compared — the one you asked about and compare_to. |
+| `data.same[]` | Days that are a public holiday in BOTH countries: date, weekday, names (one per country). |
+| `data.different[]` | Days that are a holiday in one country only: date, weekday, in (where it applies), not_in, names. These are the border-traffic days that catch drivers out. |
+| `data.same_count` | Size of same, with different_count for different. |
+| `data.window` | Period covered, inside data.year. |
+| `data.mode` | Single-country listing or two-country comparison. |
+
 
 ## Response envelope
 
