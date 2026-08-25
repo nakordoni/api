@@ -18,9 +18,23 @@ Whether a country requires a vignette for highway travel, current prices per dur
 ## Example
 
 ```bash
-curl "/api/v2/data/vignettes?country=AT" \
+curl "https://nakordoni.eu/api/v2/data/vignettes?country=AT" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.country` | Country name, with country_code (ISO-2). |
+| `data.required` | false = no vignette is needed to drive there; info and prices then explain what applies instead (tolls, none at all). |
+| `data.info` | What the vignette covers and who needs it, in the requested language. |
+| `data.prices` | Current price tiers as published by the operator. |
+| `data.note` | Extra caveat when one applies, otherwise null. |
+| `data.more_info_url` | Official source page — link it when you display the prices. |
+
 
 ## Response envelope
 
