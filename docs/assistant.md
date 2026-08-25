@@ -19,9 +19,20 @@ Ask our production AI assistant any border-crossing question (queues, forecasts,
 ## Example
 
 ```bash
-curl "/api/v1/data/assistant?q=How long is the queue at Krakovets now?&lang=en&ppid=id_13" \
+curl "https://nakordoni.eu/api/v1/data/assistant?q=How long is the queue at Krakovets now?&lang=en&ppid=id_13" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.question` | The question as asked, with lang and ppid — the checkpoint context the answer was grounded on. |
+| `data.answer_text` | The answer, in the requested language. Structured answers add their own fields beside it (summary, figures, sources) depending on the question type. |
+| `usage` | Envelope level: limit, used, reset — this product is metered like any other. |
+
 
 ## Response envelope
 
