@@ -41,4 +41,4 @@ curl "/api/v2/data/internet-points?lat=52.2&lon=21.0" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#internet-points
-*Auto-generated 2026-08-24 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-25 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
