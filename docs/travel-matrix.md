@@ -22,9 +22,24 @@ Travel time + border queue data for all checkpoints from a given origin. Returns
 ## Example
 
 ```bash
-curl "/api/v1/data/travel-matrix?origin_lat=50.06&origin_lon=19.94&type=4&dest=all&lang=en" \
+curl "https://nakordoni.eu/api/v1/data/travel-matrix?origin_lat=50.06&origin_lon=19.94&type=4&dest=all&lang=en" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.results[].ppid` | Crossing, with checkpoint_name, country, country_id, lat and lon. |
+| `data.results[].distance_km` | Road distance from your origin, with drive_minutes. |
+| `data.results[].queue_minutes` | Current border wait, with queue_cars behind it. |
+| `data.results[].total_minutes` | drive_minutes + queue_minutes — the ranking figure. |
+| `data.results[].avg_crossing_minutes` | Typical time inside the crossing itself, with total_with_avg_crossing for a door-to-door estimate. |
+| `data.results[].status` | Checkpoint status — a closed crossing still appears, so filter on it. |
+| `data.origin` | The origin the matrix was computed from; count is the number of crossings, updated_at when the queues were read. |
+
 
 ## Response envelope
 
