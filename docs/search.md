@@ -18,9 +18,20 @@ Find checkpoint PPIDs by name. Pass a single name or a comma-separated list (up 
 ## Example
 
 ```bash
-curl "/api/v1/data/search?name=Krakovets,Shehyni&lang=en" \
+curl "https://nakordoni.eu/api/v1/data/search?name=Krakovets,Shehyni&lang=en" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.results[].query` | The name you searched for — one result object per comma-separated query, in the order you sent them. |
+| `data.results[].count` | How many checkpoints matched that query. |
+| `data.results[].matches[]` | Matching checkpoints with ppid, name and the identifying fields needed to call the other products. An empty list means no match — not an error. |
+
 
 ## Response envelope
 
