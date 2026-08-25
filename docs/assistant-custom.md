@@ -26,9 +26,25 @@ Your own AI assistant, grounded on YOUR content plus OUR live border data. Point
 ## Example
 
 ```bash
-curl "/api/v2/data/assistant-custom?assistant_id=1&q=Should I cross tonight or in the morning?&ppid=id_13&lang=uk" \
+curl "https://nakordoni.eu/api/v2/data/assistant-custom?assistant_id=1&q=Should I cross tonight or in the morning?&ppid=id_13&lang=uk" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.assistant_id` | Which of your assistants answered, with assistant — its name. |
+| `data.question` | The question as asked, with lang. |
+| `data.answer` | The answer, grounded on your indexed content plus the feeds you enabled. |
+| `data.model_tier` | Model tier that ran — this is what sets the price, together with the feed count. |
+| `data.sources` | Your content chunks the answer drew on, so you can cite them. |
+| `data.feeds` | Our live feeds that were actually used in this answer. |
+| `data.feeds_skipped` | Feeds enabled on the assistant but skipped because the request lacked their context — each value names the parameters to pass next time. |
+| `data.ms` | How long the answer took to generate. |
+
 
 ## Response envelope
 
