@@ -56,4 +56,4 @@ tampering — even long after download.
 
 Full docs: https://nakordoni.eu/en/developers/docs#export
 
-*Last updated: 2026-08-24*
+*Last updated: 2026-08-25*
