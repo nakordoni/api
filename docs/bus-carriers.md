@@ -20,9 +20,24 @@ Border-crossing performance per bus carrier: crossings, average/median/min/max w
 ## Example
 
 ```bash
-curl "/api/v1/data/bus-carriers?ppid=all&days=30" \
+curl "https://nakordoni.eu/api/v1/data/bus-carriers?ppid=all&days=30" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.companies[].name` | Carrier, as matched from plates seen at the border. |
+| `data.companies[].crossings` | How many crossings of theirs we matched in the period. |
+| `data.companies[].avg_wait_min` | Their average border wait, with median_wait_min, min_wait_min and max_wait_min. |
+| `data.companies[].max_wait_days_ago` | How long ago the worst wait happened — an old outlier is not today's carrier. |
+| `data.total_crossings` | Crossings observed in period_days, with matched_crossings — the subset a carrier could be identified for. |
+| `data.data_available` | false = too little matched data for the checkpoint/period to report anything. |
+| `data.ppid` | Checkpoint the stats are for ('all' when aggregated), with mode and generated_at. |
+
 
 ## Response envelope
 
