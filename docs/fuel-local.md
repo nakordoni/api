@@ -16,7 +16,7 @@ Best available fuel price for ANY point in Europe, resolved down a three-tier fa
 | `city` | City name — alternative to lat/lon, resolved to coordinates |
 | `country` | ISO-2 country code, disambiguates city |
 | `radius_km` | Station-tier search radius km (default 25, max 25; alias: radius). No station inside it means the answer falls through to the country tier — it never widens the search on its own. |
-| `fuel_type` | Optional station-tier filter: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng. Ignored at country tier, which always returns every grade the country reports. Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades. |
+| `fuel_type` | Optional station-tier filter: diesel \| e5 \| e10 \| superplus \| super100 \| premdiesel \| truckdiesel \| hvo \| lpg \| cng \| adblue \| e85 \| lng. Ignored at country tier, which always returns every grade the country reports. Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades. |
 | `limit` | Max stations at station tier (default 5, max 20) |
 | `lang` | Language for labels and the country name (default en) |
 
@@ -24,9 +24,24 @@ Best available fuel price for ANY point in Europe, resolved down a three-tier fa
 ## Example
 
 ```bash
-curl "/api/v2/data/fuel-local?lat=50.45&lon=30.52&lang=uk" \
+curl "https://nakordoni.eu/api/v2/data/fuel-local?lat=50.45&lon=30.52&lang=uk" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.resolution` | Which tier answered: station \| region \| country. Branch on this, never on the shape. |
+| `data.anchor` | The point the answer was resolved for: lat, lng, ppid, radius_km and the fuel_type fields. |
+| `data.country` | ISO-2 country the point fell in; region is its ISO 3166-2 code at the region tier. |
+| `data.data` | At station tier a list of stations (see fuel-stations). At region and country tier one averages object: petrol, petrol95plus, petrol92, petrol98, diesel, lpg, lpg_eur, currency, updated, trend_petrol, trend_diesel, country_name. |
+| `data.data.region_name` | Region tier only: the region's name, with region_center_dist_km — how far its centre sits from your point. |
+| `data.grades` | Region and country tier only: each price key mapped to its canonical grade and the local pump name. |
+| `data.labels` | Localised UI strings — for rendering, not data. |
+
 
 ## Response envelope
 
