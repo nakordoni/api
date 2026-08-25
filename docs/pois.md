@@ -11,7 +11,7 @@ Truck parkings (14k+), free showers, services and supermarkets across Europe wit
 
 | Name | Description |
 |------|-------------|
-| `type` | parking|autohof|truck_stop|shower|restaurant|supermarket|industrial (comma-separable) |
+| `type` | parking\|autohof\|truck_stop\|shower\|restaurant\|supermarket\|industrial (comma-separable) |
 | `lat` | Latitude |
 | `lon` | Longitude |
 | `city` | City name — alternative to lat/lon, resolved to coordinates |
@@ -24,9 +24,23 @@ Truck parkings (14k+), free showers, services and supermarkets across Europe wit
 ## Example
 
 ```bash
-curl "/api/v1/data/pois?type=parking&lat=50.7&lon=23.9&radius=50" \
+curl "https://nakordoni.eu/api/v1/data/pois?type=parking&lat=50.7&lon=23.9&radius=50" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.pois[].id` | POI ID, with type — which of the requested types this one is. |
+| `data.pois[].name` | Name, with address. |
+| `data.pois[].lat` | Coordinates, with lng and distance_km from the search point. |
+| `data.pois[].country` | ISO-2 country, with country_code and country_name. |
+| `data.pois[].amenities` | What the place offers, where we know it — absent rather than empty when unknown. |
+| `data.total_found` | Matches inside the radius; limit is how many were returned. search_location echoes the point searched. |
+
 
 ## Response envelope
 
