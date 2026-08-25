@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-08-24
+# Generated 2026-08-25
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -43,7 +43,7 @@ paths:
 /checkpoints: 
   get: 
     summary: Checkpoints Directory API
-    description: "Directory of all monitored border checkpoints: IDs, names, countries, coordinates and status. Use it to discover ppid values for the other APIs."
+    description: "Directory of all monitored border checkpoints: IDs, names, countries, coordinates and status. Use it to discover ppid values for the other APIs. Each row carries has_day_stats — false means the Best Time to Cross API has no matrix for that checkpoint and would answer 404, so skip it instead of polling."
     operationId: get_checkpoints
     parameters:       - name: country
         in: query
@@ -369,7 +369,7 @@ paths:
 /fuel: 
   get: 
     summary: EU Fuel Prices API
-    description: "Fuel prices across EU countries — country averages, nearest stations by coordinates, or stations near a border checkpoint. Aggregated from official national price registries and market data."
+    description: "Fuel prices across EU countries — country averages, nearest stations by coordinates, or stations near a border checkpoint. Aggregated from official national price registries and market data. A single-country answer carries a `grades` object mapping each price key (petrol, petrol95plus, petrol92, petrol98, diesel, lpg) to its canonical grade and to the local pump name for that country; the all-countries summary carries the canonical mapping only, as `grade_keys`."
     operationId: get_fuel
     parameters:       - name: mode
         in: query
@@ -403,7 +403,7 @@ paths:
           type: string
       - name: fuel_type
         in: query
-        description: "Optional, for mode=nearest: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng (availability varies by station/region)"
+        description: "Optional, for mode=nearest: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng (availability varies by station/region). Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades."
         schema: 
           type: string
       - name: lang
@@ -430,16 +430,16 @@ paths:
 /fuel-cities: 
   get: 
     summary: Fuel Prices by City API
-    description: "Per-city fuel price summary for a country: cheapest station price and average across the top 5 stations in each major city. Covers the same countries as the nakordoni.eu fuel pages (AT, DE, FR, ES, IT, PT, SI, LU, RO, DK, HR)."
+    description: "Per-city fuel price summary for a country: cheapest station price and average across the top 5 stations in each major city. City-level data today: AT, DE, ES, FR, HR, IT, LU, PT, SI, DK — RO is accepted but has no priced stations yet and returns no cities. Which grades a country can answer differs sharply (SI, IT and PT carry diesel only; HR diesel and lpg; DE, AT, FR and LU carry most of the range), so every response reports `available_fuel_types` derived from the station data actually reachable from that country's cities — read it before choosing `fuel_type`. Asking for a grade the country has no price for returns `cities: []` and a `note` naming what is available; it is never silently answered with a different grade."
     operationId: get_fuel_cities
     parameters:       - name: country
         in: query
-        description: "ISO-2 country code (required). Supported: at, de, fr, es, it, pt, si, lu, ro, dk, hr"
+        description: "ISO-2 country code (required). Accepted: at, de, fr, es, it, pt, si, lu, ro, dk, hr — ro currently answers with no cities (no priced stations recorded)"
         schema: 
           type: string
       - name: fuel_type
         in: query
-        description: "diesel (default) | e5 | e10 | lpg — see available_fuel_types in the response for what each country supports"
+        description: "diesel (default) | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng — availability is per country, not per platform. Read `available_fuel_types` in the response and pick from it; a grade absent from that list returns an empty `cities` array with a `note`, not a fallback grade. Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades."
         schema: 
           type: string
       - name: lang
@@ -801,7 +801,7 @@ paths:
           type: string
       - name: fuel_type
         in: query
-        description: "Optional filter: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng (availability varies by station/region; Polish stations report Pb95 as e5, Pb98 as superplus and ON as diesel)"
+        description: "Optional filter: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng (availability varies by station/region; Polish stations report Pb95 as e5, Pb98 as superplus and ON as diesel). Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades."
         schema: 
           type: string
       - name: limit
@@ -929,7 +929,7 @@ paths:
           type: string
       - name: fuel_type
         in: query
-        description: "diesel (default) | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng — price ranking is per fuel type"
+        description: "diesel (default) | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng — price ranking is per fuel type. Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades."
         schema: 
           type: string
       - name: limit
@@ -953,10 +953,36 @@ paths:
         description: Unauthorized
       429: 
         description: Rate limit exceeded
+/fuel-grades: 
+  get: 
+    summary: Fuel Grade Names API
+    description: "The naming table behind every fuel product: our canonical grade vocabulary (diesel, premdiesel, truckdiesel, hvo, petrol92, e5, e10, superplus, super100, e85, lpg, cng, lng, adblue) and what each grade is called at a pump in 41 European countries — ON and Olej napędowy in Poland, Nafta in Czechia, Gázolaj in Hungary, Motorină in Romania and Moldova, ДП in Ukraine, Motorin in Turkey, Gasóleo in Portugal and Spain. Every name listed here is accepted by the fuel_type parameter of the fuel, fuel-local, fuel-stations, fuel-cheapest and fuel-cities products, so you can pass a driver's own wording straight through. Resolution is country-first because the same word is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one — send `country` together with a local name. This is a NAMING table and is deliberately wider than our price coverage: it answers what a grade is called in a country whether or not we quote a price there (we hold no station prices for TR or MD at all), and `station_level` on each grade says only which grades station feeds report anywhere. Pass `fuel_type` to probe one name and get back the canonical grade it resolves to, or null when we cannot place it — we never guess a default grade."
+    operationId: get_fuel_grades
+    parameters:       - name: country
+        in: query
+        description: "Optional ISO-2 filter — return just that country's local names instead of all 41 (PL, DE, UA, TR, MD, …). 404 when the country is not in the table."
+        schema: 
+          type: string
+      - name: fuel_type
+        in: query
+        description: "Optional probe: resolve one name in the context of `country` and report the canonical grade under `resolved` (e.g. country=PL&fuel_type=ON → diesel; country=DK&fuel_type=95 → e10; country=PL&fuel_type=95 → e5). null means we could not place it."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
 /fuel-local: 
   get: 
     summary: Local Fuel Price API
-    description: "Best available fuel price for ANY point in Europe, resolved down a three-tier fallback ladder so a coordinate never comes back empty where we have data at all: pump prices from the nearest stations when the point is inside station-level coverage (DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area and the DE/PL border crossings only), else the regional average for the administrative region the point falls in (Ukraine only today — the UA oblast feed, in UAH), else the national average for the country. Every response carries a `resolution` field naming the tier that answered — `station` (data is a list of stations with distance_km, each in its own currency), `region` (one oblast-average object plus `region`, an ISO 3166-2 code such as UA-46, `region_name` and `region_center_dist_km`) or `country` (one national-average object). The region and country tiers return the same price keys: petrol/petrol95plus/petrol92/diesel/lpg + currency + updated date. Branch on `resolution`, never on the shape. Ukraine has no per-station prices anywhere, so a UA point answers at `region` where the oblast is quoted and falls back to `country` otherwise. 404 when the point is outside every covered country (mid-ocean, outside Europe). For a plain national average without coordinates use the `fuel` product, for a pure station search `fuel-stations`, for price ranking `fuel-cheapest`."
+    description: "Best available fuel price for ANY point in Europe, resolved down a three-tier fallback ladder so a coordinate never comes back empty where we have data at all: pump prices from the nearest stations when the point is inside station-level coverage (DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area and the DE/PL border crossings only), else the regional average for the administrative region the point falls in (Ukraine only today — the UA oblast feed, in UAH), else the national average for the country. Every response carries a `resolution` field naming the tier that answered — `station` (data is a list of stations with distance_km, each in its own currency), `region` (one oblast-average object plus `region`, an ISO 3166-2 code such as UA-46, `region_name` and `region_center_dist_km`) or `country` (one national-average object). The region and country tiers return the same price keys: petrol/petrol95plus/petrol92/diesel/lpg + currency + updated date. Branch on `resolution`, never on the shape. Ukraine has no per-station prices anywhere, so a UA point answers at `region` where the oblast is quoted and falls back to `country` otherwise. 404 when the point is outside every covered country (mid-ocean, outside Europe). The region and country tiers also carry a `grades` object mapping each price key to its canonical grade and to the name a driver in that country would use at the pump (UA `diesel` → ДП, PL `petrol` → Pb95). For a plain national average without coordinates use the `fuel` product, for a pure station search `fuel-stations`, for price ranking `fuel-cheapest`."
     operationId: get_fuel_local
     parameters:       - name: lat
         in: query
@@ -985,7 +1011,7 @@ paths:
           type: string
       - name: fuel_type
         in: query
-        description: "Optional station-tier filter: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng. Ignored at country tier, which always returns every grade the country reports."
+        description: "Optional station-tier filter: diesel | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng. Ignored at country tier, which always returns every grade the country reports. Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades."
         schema: 
           type: string
       - name: limit
@@ -1029,11 +1055,11 @@ paths:
 /truck-bans: 
   get: 
     summary: Truck Driving Bans API
-    description: "European truck driving restrictions for one or more countries, including seasonal and holiday bans. Each ban carries its restriction type (General / Local / Sunday / Holiday / Seasonal), the exact scope or roads affected and the minimum weight, and each country a live status computed in its own timezone (active_window / next_window), plus a covered_countries list. ?country= accepts a comma-separated list of up to 10 codes; it is optional in v1 and required in v2. The response also reports `returned`, `total_available` and `truncated` so a capped answer is never mistaken for a complete one."
+    description: "European truck driving restrictions for one or more countries, including seasonal and holiday bans. Each ban carries its restriction type (General / Local / Sunday / Holiday / Seasonal), the exact scope or roads affected and the minimum weight, and each country a live status computed in its own timezone (active_window / next_window), plus a covered_countries list. ?country= accepts a comma-separated list of up to 3 codes; it is optional in v1 and required in v2. The response also reports `returned`, `total_available` and `truncated` so a capped answer is never mistaken for a complete one, plus `window` {from,to,days} naming the exact date range it covers. v1 always covers the next 7 days; v2 additionally accepts ?date= / ?date_from= + ?date_to= for any window up to 92 days, beginning at most 7 days in the past (this is a forward-looking calendar — older history is refused with 400 date_too_old) and running forward to 2028-12-31."
     operationId: get_truck_bans
     parameters:       - name: country
         in: query
-        description: "ISO-2 country code, or a comma-separated list of up to 10, e.g. RO or DE,RO. Optional in v1, where an unscoped call returns a capped slice — check truncated. Required in v2."
+        description: "ISO-2 country code, or a comma-separated list of up to 3, e.g. RO or DE,RO. More than 3 is refused with 400 too_many_countries — split the request. Optional in v1, where an unscoped call returns a capped slice — check truncated. Required in v2."
         schema: 
           type: string
       - name: lang
@@ -1163,16 +1189,21 @@ paths:
 /road-conditions: 
   get: 
     summary: Road Conditions API
-    description: "Approved road condition reports near borders and on major corridors: potholes, roadworks, closures, ice, hazards — combining driver reports with automatic accelerometer detections from our navigation app."
+    description: "Live road conditions on the approaches to a border crossing: accidents, roadworks, closures, congestion, weather hazards, potholes and ice. Merges our own driver reports with the incident feeds we run the navigator on — national road authorities (GDDKiA, autobahn.de, ÖAMTC, Zjazdnost, Digitraffic, CCISS, DGT) plus TomTom, HERE and crowd reports — deduplicated across sources, each row carrying the `source` it came from. Without coordinates the answer is scoped to the BORDER CORRIDORS rather than a whole country: the last 50 km of the main road from each capital to the crossing, on both sides of the border. Pass ?ppid= for one crossing, or lat/lng+radius for a plain radius search anywhere."
     operationId: get_road_conditions
     parameters:       - name: country
         in: query
-        description: ISO country code (optional)
+        description: "ISO-2 country code (optional). Returns that country's side of the border corridors — not a country-wide dump"
+        schema: 
+          type: string
+      - name: ppid
+        in: query
+        description: "Checkpoint ID, e.g. id_13 (optional). Scopes the answer to that crossing's corridor: the last 50 km of the main road to it on BOTH sides of the border"
         schema: 
           type: string
       - name: condition_type
         in: query
-        description: "pothole|speed_bump|roadwork|closure|hazard|ice|… (optional)"
+        description: "accident|roadwork|closure|congestion|weather|hazard|pothole|speed_bump|object|stopped|ice|other (optional). In v1 anything an upstream feed reports outside this list is mapped to `other`; v2 returns the raw value"
         schema: 
           type: string
       - name: severity
@@ -1182,7 +1213,7 @@ paths:
           type: string
       - name: lat
         in: query
-        description: Latitude (optional)
+        description: "Latitude (optional) — with lng, switches to a plain radius search"
         schema: 
           type: string
       - name: lng
@@ -1192,12 +1223,32 @@ paths:
           type: string
       - name: radius
         in: query
-        description: Radius km (default 50)
+        description: "Radius km (default 50). Applies ONLY with lat+lng; on the corridor path the road itself is the filter, not a circle"
+        schema: 
+          type: string
+      - name: sources
+        in: query
+        description: "all (default) | user (our own driver reports only) | external (road-authority and provider feeds only)"
         schema: 
           type: string
       - name: limit
         in: query
         description: "Max results (default 100, cap 500)"
+        schema: 
+          type: string
+      - name: offset
+        in: query
+        description: Pagination offset (optional)
+        schema: 
+          type: string
+      - name: include_expired
+        in: query
+        description: "1 = also return conditions whose expiry has passed (optional)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for condition_type_name / severity_name labels — all 24 site languages (default uk)
         schema: 
           type: string
     responses: 
@@ -1341,6 +1392,57 @@ paths:
       - name: lang
         in: query
         description: Language code for checkpoint names (default uk)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/air-alerts: 
+  get: 
+    summary: Air Alert Proximity API
+    description: "Air-raid alerts and airborne objects near ONE border crossing. Anchor on a checkpoint (ppid), a coordinate pair or a city and get back only what is inside your radius (default 100 km): which regions are under alert, how far each is, and how close any tracked object currently is on a 1-5 proximity band. Regions are returned as ISO 3166-2 region_code, the same classifier the regional fuel data uses. DELIBERATELY NOT REAL-TIME: every response is a snapshot 1-3 minutes old with the lag re-randomised per request and stated in as_of/lag_min, and object coordinates are never returned - only distance, bearing and speed relative to your anchor. Source data is crowd/OSINT-derived and partly hand-moderated: a signal, never ground truth, and never a substitute for official air-raid warnings."
+    operationId: get_air_alerts
+    parameters:       - name: ppid
+        in: query
+        description: "Checkpoint ID to anchor on, e.g. id_94 — use the Checkpoints Directory API to discover it. Alternative to lat/lon."
+        schema: 
+          type: string
+      - name: lat
+        in: query
+        description: Latitude of the anchor point (alternative to ppid)
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude of the anchor point (alternative to ppid)
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City name — alternative to lat/lon, resolved to coordinates"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, disambiguates city"
+        schema: 
+          type: string
+      - name: radius_km
+        in: query
+        description: "Search radius in km around the anchor (default 100, min 10, max 300). The 1-5 proximity band is scaled to this radius: 5 = nearest fifth, 1 = outermost fifth."
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language code (default en)
         schema: 
           type: string
     responses: 
