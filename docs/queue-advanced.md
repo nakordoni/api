@@ -17,9 +17,27 @@ Wait time adjusted for live traffic flow and weather, with a full breakdown of e
 ## Example
 
 ```bash
-curl "/api/v1/data/queue-advanced?ppid=id_13" \
+curl "https://nakordoni.eu/api/v1/data/queue-advanced?ppid=id_13" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.queue_now` | Vehicles in the queue right now, with base_wait_min — the wait before any adjustment. |
+| `data.advanced_wait_min` | Wait after every adjustment below is applied. dynamic_wait_min blends it with fresh driver reports. |
+| `data.wait_status` | Band for the wait, with trend_percent and trend_direction. |
+| `data.section_mode` | Measured section transit time feeding the model: value, modifier, age_min, stale. |
+| `data.weather` | Weather adjustment: multiplier, reason, weather_main, temperature, wind_speed, data_age_minutes. |
+| `data.service_rate` | Booth throughput: cars_per_min, modifier, age_min, stale. |
+| `data.shift_change` | Border-shift effect: adjustment_min, shift_hour, avg_coefficient, sample_count, in_window. |
+| `data.dynamic` | How driver reports were blended in: source, reports_n, reports_age_min, reported_median_min, blend_weight. |
+| `data.driver_reported` | The freshest driver-reported wait itself (wait_min, ts, age_min), or null when there is none. |
+| `data.exceeds_crossing_time` | true = the modelled wait came out longer than the measured total crossing time it is a part of — treat the number as unreliable. |
+
 
 ## Response envelope
 
