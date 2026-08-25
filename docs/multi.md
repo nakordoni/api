@@ -19,9 +19,22 @@ Fetch live queue status and/or data freshness for up to 20 checkpoints in a sing
 ## Example
 
 ```bash
-curl "/api/v1/data/multi?ppids=id_2,id_13,id_15&include=queue,update-info&lang=en" \
+curl "https://nakordoni.eu/api/v1/data/multi?ppids=id_2,id_13,id_15&include=queue,update-info&lang=en" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.<ppid>` | One object per requested checkpoint, keyed by ppid — not an array. A ppid you asked for that we do not monitor is absent. |
+| `data.<ppid>.queue` | Present when include contains queue: found, queue_now, wait_min, wait_status, trend_percent, trend_direction, age_min, freshness, name, updated_at. |
+| `data.<ppid>.update_info` | Present when include contains update-info: found, timestamp, datetime, timezone, age_seconds, age_minutes, freshness, queue_now. |
+| `meta.ppids_requested` | How many ppids the call asked for (envelope level, beside data). |
+| `meta.units_consumed` | Quota units this call actually cost — ⌈(ppids × sub-products) / 2⌉. |
+
 
 ## Response envelope
 
