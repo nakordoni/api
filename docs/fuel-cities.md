@@ -12,16 +12,32 @@ Per-city fuel price summary for a country: cheapest station price and average ac
 | Name | Description |
 |------|-------------|
 | `country` | ISO-2 country code (required). Accepted: at, de, fr, es, it, pt, si, lu, ro, dk, hr — ro currently answers with no cities (no priced stations recorded) |
-| `fuel_type` | diesel (default) | e5 | e10 | superplus | super100 | premdiesel | truckdiesel | hvo | lpg | cng | adblue | e85 | lng — availability is per country, not per platform. Read `available_fuel_types` in the response and pick from it; a grade absent from that list returns an empty `cities` array with a `note`, not a fallback grade. Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades. |
+| `fuel_type` | diesel (default) \| e5 \| e10 \| superplus \| super100 \| premdiesel \| truckdiesel \| hvo \| lpg \| cng \| adblue \| e85 \| lng — availability is per country, not per platform. Read `available_fuel_types` in the response and pick from it; a grade absent from that list returns an empty `cities` array with a `note`, not a fallback grade. Local pump names are accepted as well — ON, Olej napędowy, Pb95, Nafta, Dizel, Gázolaj, Motorină, Benzină 95, ДП, А-95, Motorin, Gasóleo, Sans plomb 95, Bleifrei … — resolved against `country` (or, for coordinate products, the country the point falls in), because the same wording is not the same grade everywhere: “95” is E10 at a Danish, Finnish, French, British, Belgian or Dutch pump and E5 at a Polish or German one. The response echoes `fuel_type` (canonical), `fuel_type_requested` (as you typed it) and `fuel_type_local`. A name we cannot place is never swapped for a default grade — the answer comes back empty and says so. Full table of names per country: /api/v2/data/fuel-grades. |
 | `lang` | Language code for city names (default en) |
 
 
 ## Example
 
 ```bash
-curl "/api/v1/data/fuel-cities?country=hr&fuel_type=diesel&lang=en" \
+curl "https://nakordoni.eu/api/v1/data/fuel-cities?country=hr&fuel_type=diesel&lang=en" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
+
+## Response fields
+
+Inside the `data` object of the envelope. A field is `null`, absent or an empty list when we hold no value for it — never a placeholder.
+
+| Field | Description |
+|-------|-------------|
+| `data.country` | ISO-2 country, with country_name in the requested language. |
+| `data.fuel_type` | The canonical grade the prices are for. fuel_type_requested is what you sent, fuel_type_local the name a driver there uses. |
+| `data.available_fuel_types` | Grades this country actually has priced stations for — derived from the data, not a menu. Pick fuel_type from it. |
+| `data.available_fuel_types_local` | The same list keyed by grade, valued with the local pump name. |
+| `data.cities[].city_name` | City, with city_key, lat and lng. |
+| `data.cities[].cheapest` | Lowest station price in that city, with avg_price across the top stations, both in data.currency. |
+| `data.cities[].stations[]` | The stations behind those numbers: name, brand, price, lat, lng. |
+| `data.count` | Cities returned. An empty cities list with a note means the country has no price for that grade — it is never answered with a different grade. |
+
 
 ## Response envelope
 
