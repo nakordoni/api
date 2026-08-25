@@ -1,6 +1,6 @@
 # Truck Driving Bans API
 
-European truck driving restrictions for one or more countries, including seasonal and holiday bans. Each ban carries its restriction type (General / Local / Sunday / Holiday / Seasonal), the exact scope or roads affected and the minimum weight, and each country a live status computed in its own timezone (active_window / next_window), plus a covered_countries list. ?country= accepts a comma-separated list of up to 10 codes; it is optional in v1 and required in v2. The response also reports `returned`, `total_available` and `truncated` so a capped answer is never mistaken for a complete one.
+European truck driving restrictions for one or more countries, including seasonal and holiday bans. Each ban carries its restriction type (General / Local / Sunday / Holiday / Seasonal), the exact scope or roads affected and the minimum weight, and each country a live status computed in its own timezone (active_window / next_window), plus a covered_countries list. ?country= accepts a comma-separated list of up to 3 codes; it is optional in v1 and required in v2. The response also reports `returned`, `total_available` and `truncated` so a capped answer is never mistaken for a complete one, plus `window` {from,to,days} naming the exact date range it covers. v1 always covers the next 7 days; v2 additionally accepts ?date= / ?date_from= + ?date_to= for any window up to 92 days, beginning at most 7 days in the past (this is a forward-looking calendar — older history is refused with 400 date_too_old) and running forward to 2028-12-31.
 
 **Endpoint:** `GET /api/v1/data/truck-bans`
 **Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
@@ -11,7 +11,7 @@ European truck driving restrictions for one or more countries, including seasona
 
 | Name | Description |
 |------|-------------|
-| `country` | ISO-2 country code, or a comma-separated list of up to 10, e.g. RO or DE,RO. Optional in v1, where an unscoped call returns a capped slice — check truncated. Required in v2. |
+| `country` | ISO-2 country code, or a comma-separated list of up to 3, e.g. RO or DE,RO. More than 3 is refused with 400 too_many_countries — split the request. Optional in v1, where an unscoped call returns a capped slice — check truncated. Required in v2. |
 | `lang` | Language code for country names and summary (default en) |
 | `include_ua_heat` | 1 = also return Ukraine's computed summer heat ban (trucks >24 t banned 10:00-22:00 when forecast temp >+28 °C), per oblast. Included automatically when Ukraine is in scope (country=UA) — this flag only adds it to a request scoped to some other country |
 
@@ -38,4 +38,4 @@ curl "/api/v1/data/truck-bans?country=PL" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#truck-bans
-*Auto-generated 2026-08-24 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-08-25 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
