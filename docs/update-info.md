@@ -31,7 +31,8 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.queue_now` | Vehicles in the queue at the latest reading. |
 | `data.timestamp` | When that reading was taken (unix), with datetime and timezone — the checkpoint's own zone. |
 | `data.age_seconds` | How old the reading is now, also as age_minutes and age_hours. |
-| `data.freshness` | Plain-language band for that age; is_realtime is true only for a live feed. |
+| `data.freshness` | Plain-language band for that age. is_realtime says the row is an observation rather than a forecast point — it does NOT say the observation was counted; read data_quality for that. |
+| `data.data_quality` | high = the reading was counted from a real observation source at the crossing; low = a modelled estimate, because that checkpoint has no counting source. Same high\|low vocabulary as the checkpoints directory, Border Queue and Best Time to Cross. Both are real answers; low is not an error, but do not present a low value to drivers as a measurement. |
 | `data.found` | false = we monitor the checkpoint but hold no reading; status carries the reason. |
 | `data.origin` | Which upstream the reading came from. |
 
@@ -51,4 +52,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#update-info
-*Auto-generated 2026-08-25 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-05 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
