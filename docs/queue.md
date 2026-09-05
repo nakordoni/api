@@ -35,8 +35,9 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data[].avg_cars` | Vehicles in the queue at that hour. |
 | `data[].wait_time` | Wait in minutes at that hour. |
 | `data[].wait_time_estimated` | true = the wait is our estimate from the queue length, not an official figure. |
-| `data[].type_of_data` | Provenance marker of the reading (official feed, camera count, driver report…). |
-| `snapshot` | Envelope-level, beside data: the current state — queue_now, wait_min, updated_at, age_min. Read this for 'now'; data is the history behind it. |
+| `data[].type_of_data` | 1 = a real observation; 2 = a forecast point (future hours). It says whether the row was measured or predicted — it carries no information about where the reading came from. |
+| `data[].data_quality` | How that row was arrived at: high = counted from a real observation source at the crossing, low = a modelled estimate where no counting source exists. Present on observation rows only (type_of_data 1) — a forecast point is predicted by definition. Same high\|low vocabulary as the checkpoints directory, Border Queue and Best Time to Cross. Both are real answers; low is not an error, but it is an estimate and should be labelled as one if you show it to drivers. |
+| `snapshot` | Envelope-level, beside data: the current state — queue_now, wait_min, updated_at, age_min, data_quality. Read this for 'now'; data is the history behind it. |
 
 
 ## Response envelope
@@ -54,4 +55,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#queue
-*Auto-generated 2026-08-25 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-05 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
