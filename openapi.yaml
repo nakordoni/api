@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-08-25
+# Generated 2026-09-05
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -43,11 +43,11 @@ paths:
 /checkpoints: 
   get: 
     summary: Checkpoints Directory API
-    description: "Directory of all monitored border checkpoints: IDs, names, countries, coordinates and status. Use it to discover ppid values for the other APIs. Each row carries has_day_stats — false means the Best Time to Cross API has no matrix for that checkpoint and would answer 404, so skip it instead of polling."
+    description: "Directory of all monitored border checkpoints: IDs, names, countries, coordinates and status. Use it to discover ppid values for the other APIs. Each row carries has_day_stats — false means the Best Time to Cross API has no matrix for that checkpoint and would answer 404, so skip it instead of polling. Three more flags say what is available RIGHT NOW: has_live_data (is there a live queue value at all), last_observation (how old it is) and data_quality (high = counted at the crossing, low = a modelled estimate) — so you can tell an observed queue from an estimate, and a live one from one that stopped moving, before you poll."
     operationId: get_checkpoints
     parameters:       - name: country
         in: query
-        description: "Filter by numeric country code (1=UA, 2=PL, 3=SK, 4=HU, 5=RO, 6=MD, 7=BY, 8=LT, 9=LV, …)"
+        description: "Filter by country: either the ISO alpha-2 code (TR, GR, PL …) or the numeric checkpoint country code (1=UA, 2=PL, 3=SK, 4=HU, 5=RO, 6=MD, 7=BY, 8=LT, 9=LV, 14=TR, 19=GR, …). An unknown value answers 400 invalid_country listing every accepted value — it no longer returns an empty list."
         schema: 
           type: string
       - name: lang
@@ -69,11 +69,11 @@ paths:
 /multi: 
   get: 
     summary: "Multi-Checkpoint API"
-    description: "Fetch live queue status and/or data freshness for up to 20 checkpoints in a single request. Designed for dashboard builders who poll many PPIDs simultaneously — reduces 20+ individual calls to one. Quota counts as ⌈(N PPIDs × sub-products) / 2⌉ — 50% cheaper than the equivalent individual calls. Use include=queue,update-info to get both datasets at once."
+    description: "Fetch live queue status and/or data freshness for up to 5 checkpoints in a single request. Designed for dashboard builders who poll several PPIDs together — reduces 5 individual calls to one. Quota counts as ⌈(N PPIDs × sub-products) / 2⌉ — 50% cheaper than the equivalent individual calls. Use include=queue,update-info to get both datasets at once. From 2026-08-30 a request that lists more than 5 PPIDs is answered for its first 5 only: the rest are ignored (echoed back in meta.ppid_cap.ignored) and are not billed."
     operationId: get_multi
     parameters:       - name: ppids
         in: query
-        description: "Comma-separated list of checkpoint IDs (required, max 20) — e.g. id_2,id_13,id_15,id_59"
+        description: "Comma-separated list of checkpoint IDs (required, max 5 from 2026-08-30) — e.g. id_2,id_13,id_15. Extra IDs beyond the fifth are ignored, not rejected."
         schema: 
           type: string
       - name: include
@@ -1137,6 +1137,42 @@ paths:
       - name: lang
         in: query
         description: "Language(s) for the localized `name` field (default en) — same 24-language translator as the nakordoni.eu holiday calendar page. Falls back to the local/English name for anything not yet cached. Comma-separated for several, up to 10, e.g. lang=en,uk,pl — `name` stays the first requested language; every holiday also gets a `names` object keyed by language code with all of them."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/weather: 
+  get: 
+    summary: Border Weather Condition API
+    description: "The road-hazard condition at a border checkpoint on a single 0..5 scale: 0 clear road, 1 fog, 2 snow, 3 rain, 4 ice, 5 strong wind, named in the requested language and graded by severity. This is our own classification, not a meteorological feed — no temperature, pressure or wind readings are served, and none are needed to decide whether the approach is safe. Two writers feed the same scale: what drivers themselves report from the queue, and our weather models mapped onto it; ?sources= keeps only one of them. Every answer carries observed_at, data_age_minutes and is_fresh, and says no_data outright rather than implying a clear road when nothing was reported inside the window."
+    operationId: get_weather
+    parameters:       - name: ppid
+        in: query
+        description: "Checkpoint ID, e.g. id_13 (see /api/v1/data/checkpoints)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for condition and severity names (any of the 25 site languages; default en)
+        schema: 
+          type: string
+      - name: sources
+        in: query
+        description: "all (default) | community — only what drivers reported | model — only our weather-model classification"
+        schema: 
+          type: string
+      - name: max_age_minutes
+        in: query
+        description: "How far back a marker may be and still count (default 180, min 15, max 1440). Markers are written roughly hourly per checkpoint; driver reports arrive irregularly"
         schema: 
           type: string
     responses: 
