@@ -35,6 +35,8 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.best_slots[]` | Quietest 2-hour windows: dow, hour, v (the value). worst_slots is the same for the busiest. |
 | `data.overall_avg` | Average across the whole matrix, with overall_max. |
 | `data.samples` | Readings the matrix was built from, over period_days; data_quality grades that sample. |
+| `data.data_quality` | 'high' = the matrix is this checkpoint's OWN observations. 'low' = there was not enough direct history, so the mirror direction's matrix is returned as an estimate — see estimated_from. |
+| `data.estimated_from` | Present only when data_quality is low: the ppid the matrix actually came from (the same crossing in the opposite direction, same vehicle type). The numbers are NOT observations of the checkpoint you asked for — do not feed them to a model as if they were. data_quality_note carries the same warning as prose. |
 | `data.generated_at` | When the matrix was last recomputed (unix). It is precomputed daily, not per request. |
 
 
@@ -53,4 +55,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#day-stats
-*Auto-generated 2026-08-25 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-05 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
