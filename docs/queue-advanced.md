@@ -31,7 +31,7 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.advanced_wait_min` | Wait after every adjustment below is applied. dynamic_wait_min blends it with fresh driver reports. |
 | `data.wait_status` | Band for the wait, with trend_percent and trend_direction. |
 | `data.section_mode` | Measured section transit time feeding the model: value, modifier, age_min, stale. |
-| `data.weather` | Weather adjustment: multiplier, reason, weather_main, temperature, wind_speed, data_age_minutes. |
+| `data.weather` | Weather adjustment: multiplier, reason, data_age_minutes, plus the road condition on our own 0-5 hazard scale — condition_code (0 good, 1 fog, 2 snow, 3 rain, 4 ice, 5 wind), condition (the machine key) and severity (none\|low\|moderate\|major). Raw provider readings (temperature, wind speed, the provider's own condition name) are not served: the licence covers our derived value, not the observation behind it. condition_code is null when we hold no weather for the checkpoint — 0 would claim a clear road we have not observed. |
 | `data.service_rate` | Booth throughput: cars_per_min, modifier, age_min, stale. |
 | `data.shift_change` | Border-shift effect: adjustment_min, shift_hour, avg_coefficient, sample_count, in_window. |
 | `data.dynamic` | How driver reports were blended in: source, reports_n, reports_age_min, reported_median_min, blend_weight. |
@@ -54,4 +54,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#queue-advanced
-*Auto-generated 2026-08-25 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-05 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
