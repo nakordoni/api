@@ -68,7 +68,7 @@ curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
 | `fleet-history` | Fleet History API | Recorded GPS track of your own vehicles: every stored position point in a time window, in chronological order, with speed, bearing and accuracy. Filter to one vehicle or take the whole fleet. Window is limited to 31 days per call and 5000 points per response — page through longer periods by moving ?from= to the last returned timestamp. | heavy |
 
 
-**Quota classes** (Explorer free tier): `standard` = 200 req/day · `heavy` = 50 req/day
+**Quota classes** (Explorer free tier): `standard` = 1000 req/day · `heavy` = 200 req/day
 
 ---
 
