@@ -32,7 +32,7 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.checkpoints[].name` | Checkpoint name in the requested language. |
 | `data.checkpoints[].origin` | Numeric country code of the side the crossing is operated from. |
 | `data.checkpoints[].destination` | Numeric country code of the country across the border. |
-| `data.checkpoints[].crossing_type` | Vehicle type this row is monitored for: 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck. |
+| `data.checkpoints[].crossing_type` | Vehicle type this row is monitored for: 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck (Freight Transport), 9=truck up to 7.5 t. |
 | `data.checkpoints[].timezone` | IANA timezone of the crossing — every timestamp for it is in this zone. |
 | `data.checkpoints[].status` | 1=open, 3=closed, 0=inactive. |
 | `data.checkpoints[].redirect_to` | Present only on a checkpoint that was RETIRED as a duplicate of another one at the same physical crossing: the ppid that superseded it. Such a row always carries status 0 — point your integration at the id named here. The retired id still answers the other products for now, but it is not the canonical one and is not guaranteed to keep updating. |
@@ -58,4 +58,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#checkpoints
-*Auto-generated 2026-09-05 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-07 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
