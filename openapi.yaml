@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-09-05
+# Generated 2026-09-07
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -7,12 +7,13 @@ info:
 title: Nakordoni Developer API
 version: 1.0.0
 description: "Real-time border queue data for Europe."
+termsOfService: "https://nakordoni.eu/en/p/developer_api_terms"
 contact: 
   name: Nakordoni Dev Support
   url: "https://nakordoni.eu/en/developers/tickets"
 license: 
-  name: See attribution requirements
-  url: "https://nakordoni.eu/en/developers/docs#attribution"
+  name: "Nakordoni Developer API Terms v1.0 (licence, attribution, permitted use)"
+  url: "https://nakordoni.eu/en/p/developer_api_terms"
 servers:- url: "https://nakordoni.eu/api/v1/data"
   description: Production
 security:- BearerAuth: []
@@ -104,17 +105,17 @@ paths:
     operationId: get_border
     parameters:       - name: origin
         in: query
-        description: "Origin country code (URL path segment): 1=Ukraine, 2=Poland, 3=Slovakia, 4=Hungary, 5=Romania, 6=Moldova, 7=Belarus, 8=Lithuania, 9=Latvia, 11=Slovenia, 12=Bulgaria, 13=Serbia, 14=Turkey, 15=North Macedonia, 16=Croatia, 17=Bosnia, 18=Germany, 19=Greece, 20=Italy, 21=Albania, 22=Montenegro, 23=Kosovo"
+        description: "Origin country code (URL path segment): 1=Ukraine, 2=Poland, 3=Slovakia, 4=Hungary, 5=Romania, 6=Moldova, 7=Belarus, 8=Lithuania, 9=Latvia, 11=Slovenia, 12=Bulgaria, 13=Serbia, 14=Turkey, 15=North Macedonia, 16=Croatia, 17=Bosnia and Herzegovina, 18=Germany, 19=Greece, 20=Italy, 21=Albania, 22=Montenegro, 23=Kosovo."
         schema: 
           type: string
       - name: destination
         in: query
-        description: "Destination (URL path segment): single country code, comma-separated list (e.g. 2,3,5), or \"all\" to expand to all neighbours with monitored data"
+        description: "Destination (URL path segment): single country code, comma-separated list (e.g. 2,3,5), or \"all\" to expand to all neighbours with monitored data. \"all\" is deprecated and stops working on 2026-10-06 — data is licensed per country, so name them or move to /api/v3/."
         schema: 
           type: string
       - name: crossing_type
         in: query
-        description: "Vehicle type (URL path segment): 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck"
+        description: "Vehicle type (URL path segment): 4=Car, 5=Car. Tax Free, 6=Bus, 7=Pedestrian, 8=Freight Transport, 9=Freight Transport up to 7.5 tons. Other ids exist in the checkpoint directory (ferry 10-13, freight up to 3.5 t 14, rail 15); this product answers 400 for them."
         schema: 
           type: string
       - name: lang
@@ -136,7 +137,7 @@ paths:
 /search: 
   get: 
     summary: Checkpoint Search API
-    description: "Find checkpoint PPIDs by name. Pass a single name or a comma-separated list (up to 20). Searches all translation languages; returns all PPIDs at that location grouped by vehicle type (4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck). Use this to quickly discover the right ppid before calling the queue or forecast APIs."
+    description: "Find checkpoint PPIDs by name. Pass a single name or a comma-separated list (up to 20). Searches all translation languages; returns all PPIDs at that location grouped by vehicle type (4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck (Freight Transport), 9=truck up to 7.5 t). Use this to quickly discover the right ppid before calling the queue or forecast APIs."
     operationId: get_search
     parameters:       - name: name
         in: query
@@ -321,7 +322,7 @@ paths:
           type: string
       - name: crossing_type
         in: query
-        description: "Optional vehicle type override: 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck. Defaults to same type as the requested ppid."
+        description: "Optional vehicle type override: 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck (Freight Transport), 9=truck up to 7.5 t. Defaults to same type as the requested ppid."
         schema: 
           type: string
       - name: limit
@@ -1366,7 +1367,7 @@ paths:
           type: string
       - name: crossing_type
         in: query
-        description: "Vehicle type for border/alternatives feeds: 4=car, 6=bus, 8=truck<7.5t, 9=truck (optional)"
+        description: "Vehicle type for border/alternatives feeds: 4=car, 6=bus, 8=truck (Freight Transport), 9=truck up to 7.5 t (optional)"
         schema: 
           type: string
       - name: country
@@ -1412,7 +1413,7 @@ paths:
           type: string
       - name: type
         in: query
-        description: "Crossing type: 4=car UA→EU (default), 5=car EU→UA, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck"
+        description: "Crossing type: 4=car UA→EU (default), 5=car EU→UA, 6=bus, 7=pedestrian, 8=truck (Freight Transport), 9=truck up to 7.5 t"
         schema: 
           type: string
       - name: dest
