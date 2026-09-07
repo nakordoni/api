@@ -13,7 +13,7 @@ Nearby alternative checkpoints on the same border with current queues and distan
 |------|-------------|
 | `ppid` | Checkpoint ID (e.g. id_13) |
 | `lang` | Language code (default uk) |
-| `crossing_type` | Optional vehicle type override: 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck. Defaults to same type as the requested ppid. |
+| `crossing_type` | Optional vehicle type override: 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck (Freight Transport), 9=truck up to 7.5 t. Defaults to same type as the requested ppid. |
 | `limit` | Max results (1–10, default 5) |
 
 
@@ -55,4 +55,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#alternatives
-*Auto-generated 2026-09-05 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-07 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
