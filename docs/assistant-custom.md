@@ -17,7 +17,7 @@ Your own AI assistant, grounded on YOUR content plus OUR live border data. Point
 | `ppid` | Checkpoint context for queue/forecast/alternatives feeds, e.g. id_13 (optional) |
 | `origin` | Origin country code for the border feed (optional) |
 | `destination` | Destination country code for the border feed (optional) |
-| `crossing_type` | Vehicle type for border/alternatives feeds: 4=car, 6=bus, 8=truck<7.5t, 9=truck (optional) |
+| `crossing_type` | Vehicle type for border/alternatives feeds: 4=car, 6=bus, 8=truck (Freight Transport), 9=truck up to 7.5 t (optional) |
 | `country` | Country context for fuel / truck-bans / holidays / road-conditions feeds (optional) |
 | `lat` | Latitude for the POI feed (optional) |
 | `lon` | Longitude for the POI feed (optional) |
@@ -61,4 +61,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#assistant-custom
-*Auto-generated 2026-08-25 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-07 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
