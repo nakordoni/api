@@ -20,7 +20,7 @@ Border-crossing performance per bus carrier: crossings, average/median/min/max w
 ## Example
 
 ```bash
-curl "https://nakordoni.eu/api/v1/data/bus-carriers?ppid=all&days=30" \
+curl "https://nakordoni.eu/api/v1/data/bus-carriers?ppid=id_13&days=30" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
 
@@ -54,4 +54,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#bus-carriers
-*Auto-generated 2026-08-25 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-07 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
