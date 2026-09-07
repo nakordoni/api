@@ -11,16 +11,16 @@ All checkpoints on a given border + vehicle type in one call — live queue, wai
 
 | Name | Description |
 |------|-------------|
-| `origin` | Origin country code (URL path segment): 1=Ukraine, 2=Poland, 3=Slovakia, 4=Hungary, 5=Romania, 6=Moldova, 7=Belarus, 8=Lithuania, 9=Latvia, 11=Slovenia, 12=Bulgaria, 13=Serbia, 14=Turkey, 15=North Macedonia, 16=Croatia, 17=Bosnia, 18=Germany, 19=Greece, 20=Italy, 21=Albania, 22=Montenegro, 23=Kosovo |
-| `destination` | Destination (URL path segment): single country code, comma-separated list (e.g. 2,3,5), or "all" to expand to all neighbours with monitored data |
-| `crossing_type` | Vehicle type (URL path segment): 4=car, 5=taxfree car, 6=bus, 7=pedestrian, 8=truck<7.5t, 9=truck |
+| `origin` | Origin country code (URL path segment): 1=Ukraine, 2=Poland, 3=Slovakia, 4=Hungary, 5=Romania, 6=Moldova, 7=Belarus, 8=Lithuania, 9=Latvia, 11=Slovenia, 12=Bulgaria, 13=Serbia, 14=Turkey, 15=North Macedonia, 16=Croatia, 17=Bosnia and Herzegovina, 18=Germany, 19=Greece, 20=Italy, 21=Albania, 22=Montenegro, 23=Kosovo. |
+| `destination` | Destination (URL path segment): single country code, comma-separated list (e.g. 2,3,5), or "all" to expand to all neighbours with monitored data. "all" is deprecated and stops working on 2026-10-06 — data is licensed per country, so name them or move to /api/v3/. |
+| `crossing_type` | Vehicle type (URL path segment): 4=Car, 5=Car. Tax Free, 6=Bus, 7=Pedestrian, 8=Freight Transport, 9=Freight Transport up to 7.5 tons. Other ids exist in the checkpoint directory (ferry 10-13, freight up to 3.5 t 14, rail 15); this product answers 400 for them. |
 | `lang` | Language for checkpoint names in the response (default en) |
 
 
 ## Example
 
 ```bash
-curl "https://nakordoni.eu/api/v1/data/border/1/all/4" \
+curl "https://nakordoni.eu/api/v1/data/border/1/2/4" \
   -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
 ```
 
@@ -60,4 +60,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#border
-*Auto-generated 2026-09-05 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-07 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
