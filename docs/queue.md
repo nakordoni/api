@@ -37,7 +37,8 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data[].wait_time_estimated` | true = the wait is our estimate from the queue length, not an official figure. |
 | `data[].type_of_data` | 1 = a real observation; 2 = a forecast point (future hours). It says whether the row was measured or predicted — it carries no information about where the reading came from. |
 | `data[].data_quality` | How that row was arrived at: high = counted from a real observation source at the crossing, low = a modelled estimate where no counting source exists. Present on observation rows only (type_of_data 1) — a forecast point is predicted by definition. Same high\|low vocabulary as the checkpoints directory, Border Queue and Best Time to Cross. Both are real answers; low is not an error, but it is an estimate and should be labelled as one if you show it to drivers. |
-| `snapshot` | Envelope-level, beside data: the current state — queue_now, wait_min, updated_at, age_min, data_quality. Read this for 'now'; data is the history behind it. |
+| `snapshot.timezone` | IANA zone that snapshot.updated_at is expressed in — it is the checkpoint's own local time, not one fixed zone (e.g. Europe/Istanbul for id_385, Europe/Sofia for id_390, Europe/Budapest for id_407). Use it to resolve updated_at to an absolute instant. |
+| `snapshot` | Envelope-level, beside data: the current state — queue_now, wait_min, updated_at, timezone, age_min, data_quality. Read this for 'now'; data is the history behind it. |
 
 
 ## Response envelope
