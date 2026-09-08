@@ -1,6 +1,6 @@
 # Truck Parking API
 
-The closest truck parkings, Autohöfe and truck stops to a point or city — sorted by distance with distance_km, name, coordinates and country. 14k+ locations across Europe.
+The closest truck parkings, Autohöfe and truck stops to a point or city — sorted by distance with distance_km, name, coordinates and country. 22k+ named locations across Europe.
 
 **Endpoint:** `GET /api/v2/data/truck-parkings`
 **Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
