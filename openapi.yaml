@@ -518,7 +518,7 @@ paths:
 /truck-parkings: 
   get: 
     summary: Truck Parking API
-    description: "The closest truck parkings, Autohöfe and truck stops to a point or city — sorted by distance with distance_km, name, coordinates and country. 14k+ locations across Europe."
+    description: "The closest truck parkings, Autohöfe and truck stops to a point or city — sorted by distance with distance_km, name, coordinates and country. 22k+ named locations across Europe."
     operationId: get_truck_parkings
     parameters:       - name: lat
         in: query
