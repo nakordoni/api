@@ -1,6 +1,6 @@
 # Nearby Fuel Stations API
 
-The closest petrol stations to a point or city with current prices per fuel type, sorted by distance. Station-level coverage: DE, IT, FR, AT, ES, SI, HR, LU, PT, DK, plus PL for the Tricity area and the DE/PL border crossings only (Gdansk/Gdynia/Sopot and nearby towns) — same data as the nakordoni.eu fuel pages; use the fuel API country mode for national averages elsewhere. Prices are returned in each station's own currency (PLN for Polish stations, EUR elsewhere) — read the per-station currency field, never compare the raw numbers. When no stations match, the response includes a coverage object naming the covered countries, and a sparse_coverage list of countries covered only in part, instead of a silent empty list.
+The closest petrol stations to a point or city with current prices per fuel type, sorted by distance. Station-level coverage spans 39 European countries and is MEASURED, not fixed: every empty answer returns the current country list with per-country station counts in its coverage object, scoped to the grade you asked for, so read that rather than a list in this description — same data as the nakordoni.eu fuel pages; use the fuel API country mode for national averages elsewhere. Prices are returned in each station's own currency (PLN for Polish stations, EUR elsewhere) — read the per-station currency field, never compare the raw numbers. When no stations match, the response includes a coverage object instead of a silent empty list: station_countries and station_counts measured from the live index (scoped to `grade` when you named a fuel_type), sparse_coverage for the countries holding 25 priced stations or fewer, measured_at, and a fuel_type_note that separates the two reasons an answer can be empty — a grade name we could not place, versus a grade we recognise but do not price in that country.
 
 **Endpoint:** `GET /api/v2/data/fuel-stations`
 **Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
@@ -36,13 +36,14 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 |-------|-------------|
 | `data.anchor.lat` | The point actually searched (after city geocoding), with lng, ppid and radius_km. |
 | `data.anchor.fuel_type` | The canonical grade the list was filtered to; fuel_type_requested is what you sent, fuel_type_local the local pump name and fuel_type_country the country the name was read in. |
-| `data.data[].name` | Station, with brand and address. |
-| `data.data[].price` | Price for that grade in data.data[].currency — each station carries its own currency, so never compare the raw numbers. |
-| `data.data[].fuel_type` | Grade this price is for; a station appears once per grade. |
-| `data.data[].distance_km` | Distance from the anchor, with lat and lng of the station itself. |
-| `data.data[].updated_at` | When the price was last seen. |
-| `data.count` | Stations returned. |
-| `data.coverage` | Only when nothing matched: station_countries we cover, sparse_coverage for countries covered only in part, a note explaining both, and fuel_type_note when the grade name itself could not be placed. |
+| `data.stations[].name` | Station, with brand and address. Each physical station appears ONCE: its grades are nested under prices, not spread over repeated rows. |
+| `data.stations[].station_ref` | Stable key for the station (name + position). Key your records on it whenever id is null — id is set only for rows that come from our station directory. |
+| `data.stations[].prices` | Object keyed by grade (diesel, e5, e10, lpg …): price, currency and currency_symbol, local_name (the pump name used in that country), label, updated_at, age_hours and stale. Each station carries its own currency, so never compare the raw numbers. A station with no quote at all carries an empty object here. |
+| `data.stations[].grades` | The grade keys present in prices, alongside freshest_age_hours and a station-level stale flag (true only when NO quote of that station is current). |
+| `data.stations[].distance_km` | Distance from the anchor, with lat and lng of the station itself. |
+| `data.count` | Stations returned; data.total_found is how many matched inside the radius before limit was applied. |
+| `data.notices` | Present whenever we adjusted a parameter you sent: each entry names the param, the requested and the applied value, and the reason. |
+| `data.coverage` | Only when nothing matched. grade (the fuel_type your wording resolved to, or null), station_countries and station_counts measured from the live station index and scoped to that grade, sparse_coverage for countries with 25 priced stations or fewer, measured_at, a note explaining all of it, and fuel_type_note when the grade name could not be placed OR when we recognise the grade but price it nowhere in this country. |
 
 
 ## Response envelope
@@ -60,4 +61,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fuel-stations
-*Auto-generated 2026-09-07 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
