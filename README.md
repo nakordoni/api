@@ -14,7 +14,7 @@
 
 ```bash
 curl "https://nakordoni.eu/api/v1/data/queue?ppid=id_13" \
-  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 [Get a free Explorer key →](https://nakordoni.eu/en/developers/signup) (email only, instant, no card)
@@ -90,7 +90,7 @@ Full docs → [`docs/export.md`](docs/export.md) · https://nakordoni.eu/en/deve
 Every request must include:
 
 ```
-Authorization: Bearer NKD-DEV-XXXX-XXXX-XXXX
+Authorization: Bearer YOUR_API_KEY
 ```
 
 The key is issued instantly after email verification. No credit card required.
@@ -120,7 +120,7 @@ Errors return `ok: false` with `error.code` and the appropriate HTTP status.
 **JavaScript**
 ```js
 const res = await fetch('https://nakordoni.eu/api/v1/data/queue?ppid=id_13', {
-  headers: { 'Authorization': 'Bearer NKD-DEV-XXXX-XXXX-XXXX' }
+  headers: { 'Authorization': 'Bearer YOUR_API_KEY' }
 });
 const { data, snapshot } = await res.json();
 console.log('Queue:', snapshot.queue_now, 'cars | Wait:', snapshot.wait_min, 'min');
@@ -173,6 +173,11 @@ Explorer-plan integrations must display a visible "Data by nakordoni.eu" link on
 
 Pay As You Grow customers may omit attribution.
 
+Attribution is checked about once a week on the pages you list in the developer dashboard, by a
+checker whose user agent contains `NakordoniComplianceBot/1.0`. It opens only those pages and follows
+no other links. If bot protection or a firewall blocks unknown crawlers, allow this user agent — a
+listed page we cannot open is followed up by a support ticket.
+
 ---
 
 ## Per-product docs
@@ -183,4 +188,4 @@ OpenAPI 3.0 spec: [`openapi.yaml`](openapi.yaml)
 
 ---
 
-*Last updated: 2026-09-08*
+*Last updated: 2026-09-13*
