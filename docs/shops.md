@@ -24,7 +24,7 @@ The closest supermarkets and grocery shops to a point or city — sorted by dist
 
 ```bash
 curl "https://nakordoni.eu/api/v2/data/shops?city=Przemysl&country=PL&radius=20" \
-  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ## Response fields
@@ -53,4 +53,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#shops
-*Auto-generated 2026-09-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
