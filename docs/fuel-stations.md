@@ -25,7 +25,7 @@ The closest petrol stations to a point or city with current prices per fuel type
 
 ```bash
 curl "https://nakordoni.eu/api/v2/data/fuel-stations?city=Munich&country=DE&radius_km=20&fuel_type=diesel" \
-  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ## Response fields
@@ -36,9 +36,9 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 |-------|-------------|
 | `data.anchor.lat` | The point actually searched (after city geocoding), with lng, ppid and radius_km. |
 | `data.anchor.fuel_type` | The canonical grade the list was filtered to; fuel_type_requested is what you sent, fuel_type_local the local pump name and fuel_type_country the country the name was read in. |
-| `data.stations[].name` | Station, with brand and address. Each physical station appears ONCE: its grades are nested under prices, not spread over repeated rows. |
+| `data.stations[].name` | Station, with brand and address. Each physical station appears ONCE: its grades are nested under prices, not spread over repeated rows. `brand` is the chain when we know it and null when we do not — never a placeholder token, so treat null as "independent or unknown" and fall back to `name`. Address detail varies by national feed: some report a full street address, others only the town. |
 | `data.stations[].station_ref` | Stable key for the station (name + position). Key your records on it whenever id is null — id is set only for rows that come from our station directory. |
-| `data.stations[].prices` | Object keyed by grade (diesel, e5, e10, lpg …): price, currency and currency_symbol, local_name (the pump name used in that country), label, updated_at, age_hours and stale. Each station carries its own currency, so never compare the raw numbers. A station with no quote at all carries an empty object here. |
+| `data.stations[].prices` | Object keyed by grade (diesel, e5, e10, lpg …): price, currency and currency_symbol, local_name (the pump name used in that country), label, updated_at, confirmed_at, age_hours and stale. Each station carries its own currency, so never compare the raw numbers. A station with no quote at all carries an empty object here. TWO CLOCKS, and they answer different questions — do not derive one from the other: `updated_at` is when this price last MOVED, so a forecourt that has held the same price for ten days keeps a ten-day-old stamp and that is correct, not stale data; `confirmed_at` is when we last CONFIRMED the quote against its feed, and it is the clock `age_hours` and `stale` are measured on (age_hours = now − confirmed_at). Read `confirmed_at`/`stale` for freshness and `updated_at` for price history. Both are floored to the hour, so `now − confirmed_at` can sit up to an hour above `age_hours`, which is measured before the floor; `confirmed_at` is never earlier than `updated_at`, because a price change is itself a confirmation. |
 | `data.stations[].grades` | The grade keys present in prices, alongside freshest_age_hours and a station-level stale flag (true only when NO quote of that station is current). |
 | `data.stations[].distance_km` | Distance from the anchor, with lat and lng of the station itself. |
 | `data.count` | Stations returned; data.total_found is how many matched inside the radius before limit was applied. |
@@ -61,4 +61,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fuel-stations
-*Auto-generated 2026-09-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
