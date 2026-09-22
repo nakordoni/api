@@ -21,7 +21,7 @@ Nearby alternative checkpoints on the same border with current queues and distan
 
 ```bash
 curl "https://nakordoni.eu/api/v1/data/alternatives?ppid=id_13&crossing_type=4" \
-  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ## Response fields
@@ -55,4 +55,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#alternatives
-*Auto-generated 2026-09-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
