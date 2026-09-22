@@ -25,7 +25,7 @@ Best available fuel price for ANY point in Europe, resolved down a three-tier fa
 
 ```bash
 curl "https://nakordoni.eu/api/v2/data/fuel-local?lat=50.45&lon=30.52&lang=uk" \
-  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ## Response fields
@@ -58,4 +58,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fuel-local
-*Auto-generated 2026-09-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
