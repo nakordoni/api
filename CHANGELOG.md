@@ -6,6 +6,20 @@ See also the live changelog: https://nakordoni.eu/en/developers/changelog
 
 ---
 
+## 2026-09-22
+
+### Improved
+- **Coordinate products will only return data from your approved countries (from 13 October 2026)** — Under the API Terms, a Market is the country whose data you use, and your key covers the countries approved for your account. Until now, coordinate products (`lat`/`lon` — e.g. **Nearby Shops**, **Truck Parkings**, **Fuel Stations**) answered for any point in Europe. **From 13 October 2026**, this is checked when your request is served: A request whose `lat`/`lon` lies in a country that is not approved for your account returns **403** with `error.code` `market_not_allowed`. The message names the country and your approved list.; When the radius crosses a border, results whose `country_code` is outside your approved countries are removed. The response then carries `markets_filtered` (how many were removed) and `markets_notice`, and `total_found` counts only what you received.. This applies to accounts whose countries have been reviewed (status approved or partial). Nothing changes in the request — no parameter, no version. If your app needs another country, add it in the developer portal before 13 October. `market_not_allowed` is listed with the other error codes in the reference.
+
+---
+
+## 2026-09-14
+
+### Improved
+- **News submission and NakBus fleet now also in the partner dashboard** — Developer accounts linked to a Nakordoni Partners account with the same email can now submit news and manage their NakBus fleet (NakDriver / NakManager) from [partners.nakordoni.eu](https://partners.nakordoni.eu), with team roles (Owner, Manager, Viewer) and one-click sign-in between the two portals. The developer-portal pages, API keys, fleet endpoints and apps are unchanged.
+
+---
+
 ## 2026-09-08
 
 ### Fixed
