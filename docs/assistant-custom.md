@@ -27,7 +27,7 @@ Your own AI assistant, grounded on YOUR content plus OUR live border data. Point
 
 ```bash
 curl "https://nakordoni.eu/api/v2/data/assistant-custom?assistant_id=1&q=Should I cross tonight or in the morning?&ppid=id_13&lang=uk" \
-  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ## Response fields
@@ -61,4 +61,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#assistant-custom
-*Auto-generated 2026-09-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
