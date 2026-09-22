@@ -20,7 +20,7 @@ Ask our production AI assistant any border-crossing question (queues, forecasts,
 
 ```bash
 curl "https://nakordoni.eu/api/v1/data/assistant?q=How long is the queue at Krakovets now?&lang=en&ppid=id_13" \
-  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ## Response fields
@@ -49,4 +49,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#assistant
-*Auto-generated 2026-09-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
