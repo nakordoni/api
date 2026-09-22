@@ -19,7 +19,7 @@ ML ensemble forecast of queue levels: 24-hour and 7-day (168h) horizons with con
 
 ```bash
 curl "https://nakordoni.eu/api/v1/data/forecast?ppid=id_13&prediction_steps=24" \
-  -H "Authorization: Bearer NKD-DEV-YOUR-KEY-HERE"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ## Response fields
@@ -33,9 +33,6 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data[].avg_cars` | Predicted queue at that hour. |
 | `data[].lower_bound` | Confidence band around avg_cars, with upper_bound; the _50 pair is the narrower 50% band. |
 | `data[].type_of_data` | Provenance marker of the input reading the step was built from. |
-| `data[].source` | Which model produced the step, with formula and the corrected flag when a calibrator adjusted it. |
-| `data[].learned_mult` | Per-checkpoint learned multiplier applied, and weather_mult the weather one. |
-| `data[].v4` | Full breakdown from the v4 ensemble — component scores behind avg_cars. |
 
 
 ## Response envelope
@@ -53,4 +50,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#forecast
-*Auto-generated 2026-09-08 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-09-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
