@@ -1502,7 +1502,7 @@ paths:
 /road-conditions: 
   get: 
     summary: Road Conditions API
-    description: "Live road conditions on the approaches to a border crossing: accidents, roadworks, closures, congestion, weather hazards, potholes and ice. Merges our own driver reports with the incident feeds our navigator runs on (national road authorities and other traffic feeds) — deduplicated across feeds, each row carrying the `source` it came from. Without coordinates the answer is scoped to the BORDER CORRIDORS rather than a whole country: the last 50 km of the main road from each capital to the crossing, on both sides of the border. Pass ?ppid= for one crossing, or lat/lng+radius for a plain radius search anywhere."
+    description: "Live road conditions on the approaches to a border crossing: accidents, roadworks, closures, congestion, weather hazards, potholes and ice. Merges our own driver reports with the incident feeds our navigator runs on (national road authorities and other traffic feeds) — deduplicated across feeds, each row carrying a stable opaque id. Without coordinates the answer is scoped to the BORDER CORRIDORS rather than a whole country: the last 50 km of the main road from each capital to the crossing, on both sides of the border. Pass ?ppid= for one crossing, or lat/lng+radius for a plain radius search anywhere."
     operationId: get_road_conditions
     parameters:       - name: country
         in: query
