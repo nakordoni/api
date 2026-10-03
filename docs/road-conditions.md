@@ -1,6 +1,6 @@
 # Road Conditions API
 
-Live road conditions on the approaches to a border crossing: accidents, roadworks, closures, congestion, weather hazards, potholes and ice. Merges our own driver reports with the incident feeds our navigator runs on (national road authorities and other traffic feeds) — deduplicated across feeds, each row carrying the `source` it came from. Without coordinates the answer is scoped to the BORDER CORRIDORS rather than a whole country: the last 50 km of the main road from each capital to the crossing, on both sides of the border. Pass ?ppid= for one crossing, or lat/lng+radius for a plain radius search anywhere.
+Live road conditions on the approaches to a border crossing: accidents, roadworks, closures, congestion, weather hazards, potholes and ice. Merges our own driver reports with the incident feeds our navigator runs on (national road authorities and other traffic feeds) — deduplicated across feeds, each row carrying a stable opaque id. Without coordinates the answer is scoped to the BORDER CORRIDORS rather than a whole country: the last 50 km of the main road from each capital to the crossing, on both sides of the border. Pass ?ppid= for one crossing, or lat/lng+radius for a plain radius search anywhere.
 
 **Endpoint:** `GET /api/v1/data/road-conditions`
 **Quota class:** cheap — 1000/day (Explorer), 50000/day (PAYG)
@@ -44,7 +44,7 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.conditions[].latitude` | Where it is, with longitude and country_code. |
 | `data.conditions[].corridor_ppid` | The border crossing whose approach corridor this sits on, when it is on one. |
 | `data.conditions[].estimated_duration` | How long it is expected to last, with expires_at and created_at. |
-| `data.conditions[].source` | Upstream that reported it, with external_id — stable across refreshes, use it to deduplicate. |
+| `data.conditions[].external_id` | Opaque stable id of a feed incident ("rc_" + 16 hex, null for our own driver reports) — the same incident keeps it across polls, use it to deduplicate. id is a stable int. |
 | `data.total` | Matches for the query, with limit and offset for paging. |
 
 
