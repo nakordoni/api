@@ -6,6 +6,13 @@ See also the live changelog: https://nakordoni.eu/en/developers/changelog
 
 ---
 
+## 2026-10-03
+
+### Added
+- **New product: Truck Route API — truck routing with fuel, parking, weigh stations, tolls and an EU 561/2006 rest plan** — New product: **Truck Route API** (`GET /api/v2/data/truck-route`, v2 only). One call returns a truck-legal route and what a dispatcher needs along it. The route is computed by the same routing core as our TruckTurn truck navigation app, on our own map data. **Vehicle:** `height`, `width`, `length`, `weight`, `axle_load`, `axles`, `trailers`, `emission_class`, `hazmat` (ADR classes) and `adr_tunnel` (B–E). Truck driving bans and restriction zones are checked on the returned line.; **Along the route:** fuel stations with current prices, truck parkings and weigh stations, each with `km_from_start` and detour.; **Driver rest plan under EU Regulation 561/2006:** breaks (incl. split 15+30), daily and weekly rest (incl. reduced), solo or two-driver crew (`crew=2`), starting from the driver's current state if you pass it. Each stop is placed at a real parking along the route. It is a planning aid, not a tachograph record.; **ETA** including rests, truck driving bans and border waits. Plan by `depart_at` or `arrive_at`.; **Toll cost estimates per country** (EUR, by axles and emission class), with unpriced countries listed in `tolls.coverage_note`. Also `avoid` (tolls, ferries, motorways, borders, tunnels, unpaved, low-emission zones), up to 2 alternatives, a per-country split, and `geometry` as polyline5, polyline6 or GeoJSON.. **Quota:** a separate truck-route allowance: 10 calls per day on every account, more on paid plans, and an *Extra truck-route calls* add-on. In the sandbox you can run 10 truck routes per day, see the result on the map with the full route plan, and export it as GPX, KML, GeoJSON, CSV, calendar (.ics) or ITN. See the [product page](/en/developers/truck-route) and the reference.
+
+---
+
 ## 2026-09-22
 
 ### Improved
