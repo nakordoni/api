@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-09-22
+# Generated 2026-10-03
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -553,6 +553,282 @@ paths:
       - name: lang
         in: query
         description: Language for country names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/shade-route: 
+  get: 
+    summary: Shade Walking Route API
+    description: "Pedestrian routes ranked by how much of the way lies in building and tree shade at the time of the walk (heat) or in sun (cold). Each route comes with distance, duration, shade share, an asphalt surface temperature estimate and per-segment shade as GeoJSON, plus the best departure window in the next 6 hours. Pilot coverage: Poznan (PL); elsewhere plain routes with shade_routing=unavailable."
+    operationId: get_shade_route
+    parameters:       - name: from
+        in: query
+        description: "Start as lat,lon (required)"
+        schema: 
+          type: string
+      - name: to
+        in: query
+        description: "Destination as lat,lon — omit and pass loop_km for a round walk"
+        schema: 
+          type: string
+      - name: loop_km
+        in: query
+        description: "Round-walk length in km (1-15) when to is omitted"
+        schema: 
+          type: string
+      - name: depart
+        in: query
+        description: "Local ISO time of the walk, e.g. 2026-07-15T12:00 (default now)"
+        schema: 
+          type: string
+      - name: mode
+        in: query
+        description: "auto | heat | cold (default auto)"
+        schema: 
+          type: string
+      - name: alternatives
+        in: query
+        description: "Extra routes beyond the best and the direct one, 0-4 (default 2)"
+        schema: 
+          type: string
+      - name: segments
+        in: query
+        description: "0 to omit per-segment GeoJSON (summary only)"
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/shade-grid: 
+  get: 
+    summary: Shade Grid API
+    description: "Shade per H3 resolution-11 hex (about 25 m) for a small bounding box at a given time: share of open ground in building shade and in tree shade, and the combined value. Max 4 km2 / 3000 hexes per call. Pilot coverage: Poznan (PL)."
+    operationId: get_shade_grid
+    parameters:       - name: bbox
+        in: query
+        description: "west,south,east,north (required, max 4 km2)"
+        schema: 
+          type: string
+      - name: t
+        in: query
+        description: Local ISO time (default now)
+        schema: 
+          type: string
+      - name: mode
+        in: query
+        description: "auto | heat | cold"
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/shade-windows: 
+  get: 
+    summary: Shade Walk Windows API
+    description: "Shade share and pavement temperature estimate of one walk for every 15-minute departure in the next hours, and the best window. Pass the walk as an encoded polyline (precision 6) or as from + to / loop_km. Pilot coverage: Poznan (PL)."
+    operationId: get_shade_windows
+    parameters:       - name: polyline6
+        in: query
+        description: "Walk geometry, encoded polyline precision 6"
+        schema: 
+          type: string
+      - name: from
+        in: query
+        description: "Start lat,lon (when no polyline6)"
+        schema: 
+          type: string
+      - name: to
+        in: query
+        description: "Destination lat,lon"
+        schema: 
+          type: string
+      - name: loop_km
+        in: query
+        description: "Round-walk length in km"
+        schema: 
+          type: string
+      - name: depart
+        in: query
+        description: "First departure, local ISO time (default now)"
+        schema: 
+          type: string
+      - name: hours
+        in: query
+        description: "Hours to scan, 1-12 (default 6)"
+        schema: 
+          type: string
+      - name: mode
+        in: query
+        description: "auto | heat | cold"
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/dog-cool-spots: 
+  get: 
+    summary: Cool Spots for Dogs API
+    description: "Places to cool a dog down near a point: safe water access on lake and river shores, bathing places, drinking water, forests, all-day shaded patches of grass or footway, dog parks and dog-friendly indoor places. Each spot comes with walking distance, shade now and over the next 2 hours, nearby water, surface and a score. Shade coverage: Poznan (PL); elsewhere in the covered OSM region spots come without shade (shade_unavailable)."
+    operationId: get_dog_cool_spots
+    parameters:       - name: lat
+        in: query
+        description: Latitude (required)
+        schema: 
+          type: string
+      - name: lon
+        in: query
+        description: Longitude (required)
+        schema: 
+          type: string
+      - name: radius_m
+        in: query
+        description: "Search radius in metres, 100-5000 (default 1500)"
+        schema: 
+          type: string
+      - name: types
+        in: query
+        description: "Comma list of water_access, drinking_water, forest, shade_allday, dog_park, indoor (default all)"
+        schema: 
+          type: string
+      - name: t
+        in: query
+        description: Local ISO time (default now)
+        schema: 
+          type: string
+      - name: sort
+        in: query
+        description: "distance (default) | score"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max spots, 1-60 (default 25)"
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/dog-cool-spots-route: 
+  get: 
+    summary: Cool Spots for Dogs Along a Walk API
+    description: "Cool spots for dogs along a walking route: every spot within the corridor with its position along the walk and the shade at the time you reach it, plus the best cool stop around the middle of the walk. Pass the route as an encoded polyline (precision 6). Shade coverage: Poznan (PL)."
+    operationId: get_dog_cool_spots_route
+    parameters:       - name: polyline6
+        in: query
+        description: "Walk geometry, encoded polyline precision 6 (required)"
+        schema: 
+          type: string
+      - name: depart
+        in: query
+        description: "Departure, local ISO time (default now)"
+        schema: 
+          type: string
+      - name: speed_kmh
+        in: query
+        description: "Walking speed 2-8 km/h (default 4.5)"
+        schema: 
+          type: string
+      - name: corridor_m
+        in: query
+        description: "Corridor half-width in metres, 20-300 (default 150)"
+        schema: 
+          type: string
+      - name: types
+        in: query
+        description: Comma list of spot types (default all)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/route-cool-spots: 
+  get: 
+    summary: Cool Spots Along a Route API
+    description: "Truck-accessible stops within 2 km of a route you already have: truck parkings shaded by trees (canopy share within 100 m), rest areas with restaurant, motel or showers, and drinking water. Each spot comes with its position along the route, ETA, detour estimate, weather and sun at the ETA and a heat-aware score. Europe-wide."
+    operationId: get_route_cool_spots
+    parameters:       - name: polyline6
+        in: query
+        description: "Route geometry, encoded polyline precision 6 (required). Simplify to ~100 m first so the URL stays under 8 KB (about 2.5 KB for 800 km)"
+        schema: 
+          type: string
+      - name: depart
+        in: query
+        description: "Departure, ISO 8601 with offset or unix (default now)"
+        schema: 
+          type: string
+      - name: avg_speed_kmh
+        in: query
+        description: Average speed for the ETA (default 70)
+        schema: 
+          type: string
+      - name: types
+        in: query
+        description: "Comma list of parking_shade, rest_ac, drinking_water (default all)"
+        schema: 
+          type: string
+      - name: from_km
+        in: query
+        description: Only spots at or beyond this distance along the route (default 0)
+        schema: 
+          type: string
+      - name: corridor_km
+        in: query
+        description: "Max distance off the route, 0.2-2 (default 2)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max spots, 1-200 (default 60)"
         schema: 
           type: string
     responses: 
@@ -1566,6 +1842,207 @@ paths:
       - name: lang
         in: query
         description: Language code for checkpoint names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/truck-route: 
+  get: 
+    summary: Truck Route API
+    description: "Truck routing API with fuel stations and truck parking along the route, plus weigh stations and a driver rest plan. Send origin, destination and your vehicle (height, weight, length, width, axle load, hazmat) and get an HGV-legal route with the restrictions and dated truck driving bans it meets, the border crossings on it with their live wait, priced fuel stations, truck parkings (secure flag, capacity, amenities) and weighbridges within a corridor of the line. With include=rest the EU 561/2006 rules are applied to your driver state: 45-minute breaks at most 4 h 30 apart, daily rests before the 9 h / 10 h limit, each placed at a real parking before the limit is reached, weekend and holiday bans waited out, border waits on the timeline, single or double crew — and the ETA includes all of it. The rest plan is a planning aid, not a tachograph record."
+    operationId: get_truck_route
+    parameters:       - name: from
+        in: query
+        description: "Origin as lat,lon (required unless from_city is given), e.g. 52.2297,21.0122"
+        schema: 
+          type: string
+      - name: to
+        in: query
+        description: "Destination as lat,lon (required unless to_city is given)"
+        schema: 
+          type: string
+      - name: from_city
+        in: query
+        description: Origin city name instead of coordinates (add from_country for accuracy)
+        schema: 
+          type: string
+      - name: from_country
+        in: query
+        description: "ISO 3166-1 alpha-2 country of from_city, e.g. PL"
+        schema: 
+          type: string
+      - name: to_city
+        in: query
+        description: Destination city name instead of coordinates
+        schema: 
+          type: string
+      - name: to_country
+        in: query
+        description: "ISO 3166-1 alpha-2 country of to_city"
+        schema: 
+          type: string
+      - name: via
+        in: query
+        description: "Up to 5 waypoints as lat,lon|lat,lon"
+        schema: 
+          type: string
+      - name: height
+        in: query
+        description: Vehicle height in metres (1.0–5.0)
+        schema: 
+          type: string
+      - name: weight
+        in: query
+        description: "Gross vehicle weight in tonnes (1–60); drives weight-limited restrictions and bans"
+        schema: 
+          type: string
+      - name: length
+        in: query
+        description: Vehicle length in metres (2–30)
+        schema: 
+          type: string
+      - name: width
+        in: query
+        description: Vehicle width in metres (1.0–3.5)
+        schema: 
+          type: string
+      - name: axle_load
+        in: query
+        description: Axle load in tonnes (1–20)
+        schema: 
+          type: string
+      - name: axles
+        in: query
+        description: "Number of axles, tractor plus trailer (2–12); used for routing and for toll classes (default for tolls: 5 from 18 t, 3 from 12 t, else 2)"
+        schema: 
+          type: string
+      - name: trailers
+        in: query
+        description: "Number of trailers (0–3); reported back, no routing effect yet"
+        schema: 
+          type: string
+      - name: hazmat
+        in: query
+        description: "Dangerous goods: 0 (default), 1 = ADR load with class not given, or a comma list of ADR classes 1–9 and/or explosive, gas, flammable, flammable_solid, oxidizing, poison, radioactive, corrosive, harmful_to_water"
+        schema: 
+          type: string
+      - name: adr_tunnel
+        in: query
+        description: "ADR tunnel restriction code of the load: B, C, D or E. Tunnels whose category forbids it are avoided (implies hazmat)"
+        schema: 
+          type: string
+      - name: avoid
+        in: query
+        description: "Comma list of tolls, ferries, motorways, borders, tunnels, unpaved, low_emission_zones"
+        schema: 
+          type: string
+      - name: emission_class
+        in: query
+        description: "Vehicle emission class euro0 … euro6; used for low-emission-zone checks and toll notes (tolls are priced at Euro VI rates)"
+        schema: 
+          type: string
+      - name: alternatives
+        in: query
+        description: "Number of alternative routes, 0–2 (default 0; routes without via points only)"
+        schema: 
+          type: string
+      - name: geometry
+        in: query
+        description: "polyline5 (default), polyline6 or geojson"
+        schema: 
+          type: string
+      - name: arrive_at
+        in: query
+        description: Wanted arrival as RFC 3339; the departure is planned backwards including breaks and rests (instead of depart_at)
+        schema: 
+          type: string
+      - name: route_type
+        in: query
+        description: fastest (default) or eco
+        schema: 
+          type: string
+      - name: include
+        in: query
+        description: "Comma list of fuel, parking, weigh, rest (default: all four)"
+        schema: 
+          type: string
+      - name: corridor_km
+        in: query
+        description: "Max distance from the route for fuel, parking and weigh stations, 0.2–5 km (default 2)"
+        schema: 
+          type: string
+      - name: fuel
+        in: query
+        description: "Fuel grades to price, comma list (default diesel)"
+        schema: 
+          type: string
+      - name: depart_at
+        in: query
+        description: "Departure as ISO 8601 with time zone, up to 14 days ahead (default: now)"
+        schema: 
+          type: string
+      - name: aliases
+        in: query
+        description: "Accepted for easy switching: depart → depart_at, departAt, arriveAt, vehicleHeight, vehicleWidth, vehicleLength, vehicleWeight (kg or t), vehicleAxleWeight / axleWeight → axle_load, vehicleNumberOfAxles / axleCount → axles, vehicleTrailers → trailers, vehicleAdrTunnelRestrictionCode → adr_tunnel, vehicleEmissionClass → emission_class, maxAlternatives → alternatives, waypoints → via"
+        schema: 
+          type: string
+      - name: crew
+        in: query
+        description: "1 (default) or 2 drivers — double crew uses the 30-hour daily rest window and 9 h rests"
+        schema: 
+          type: string
+      - name: driven_since_break_min
+        in: query
+        description: "Driver state: minutes driven since the last 45-minute break (default 0)"
+        schema: 
+          type: string
+      - name: driven_today_min
+        in: query
+        description: "Driver state: minutes driven since the last daily rest (default 0)"
+        schema: 
+          type: string
+      - name: driven_week_min
+        in: query
+        description: "Driver state: minutes driven this calendar week (default 0)"
+        schema: 
+          type: string
+      - name: driven_last_week_min
+        in: query
+        description: "Driver state: minutes driven last week, for the 90 h fortnight limit (default 0)"
+        schema: 
+          type: string
+      - name: reduced_daily_rests_used
+        in: query
+        description: "Reduced (9 h) daily rests already taken since the last weekly rest, 0–3 (default 0)"
+        schema: 
+          type: string
+      - name: extended_days_used
+        in: query
+        description: "10-hour driving days already used this week, 0–2 (default 0)"
+        schema: 
+          type: string
+      - name: last_weekly_rest_end
+        in: query
+        description: "ISO 8601 end of the last weekly rest (default: assumed just before departure)"
+        schema: 
+          type: string
+      - name: reduced_weekly_ok
+        in: query
+        description: "1 = a reduced (24 h) weekly rest may be planned (default 0 = regular 45 h)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language code for names and messages (default en)
         schema: 
           type: string
     responses: 
