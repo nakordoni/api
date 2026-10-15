@@ -39,6 +39,7 @@ Truck routing API with fuel stations and truck parking along the route, plus wei
 | `depart_at` | Departure as ISO 8601 with time zone, up to 14 days ahead (default: now) |
 | `aliases` | Accepted for easy switching: depart → depart_at, departAt, arriveAt, vehicleHeight, vehicleWidth, vehicleLength, vehicleWeight (kg or t), vehicleAxleWeight / axleWeight → axle_load, vehicleNumberOfAxles / axleCount → axles, vehicleTrailers → trailers, vehicleAdrTunnelRestrictionCode → adr_tunnel, vehicleEmissionClass → emission_class, maxAlternatives → alternatives, waypoints → via |
 | `crew` | 1 (default) or 2 drivers — double crew uses the 30-hour daily rest window and 9 h rests |
+| `traffic` | forecast (default), live or off. forecast = learned recurring congestion + live traffic near the departure + roadworks, closures and weather at the passing time; live = current traffic without the learned pattern; off = no traffic layer (free-flow drive time) |
 | `driven_since_break_min` | Driver state: minutes driven since the last 45-minute break (default 0) |
 | `driven_today_min` | Driver state: minutes driven since the last daily rest (default 0) |
 | `driven_week_min` | Driver state: minutes driven this calendar week (default 0) |
@@ -68,11 +69,13 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.route.adr` | Only with adr_tunnel: tunnel_code, tunnels_avoided[] and tunnels_on_route[] (name, category, lat, lon). |
 | `data.route.low_emission_zones_avoided[]` | Only with avoid=low_emission_zones: zones the route was moved out of (name, country); low_emission_zones_on_route[] lists any that could not be avoided. |
 | `data.tolls` | Estimated truck tolls: currency (EUR), total_eur, complete, by_country[] (country, km_toll, cost_eur, basis), objects[] (priced tunnels and bridges: name, type, country, lat, lon, cost_eur, basis), estimate, coverage_note. A country we cannot price has cost_eur null and is named in coverage_note. |
-| `data.alternatives[]` | Only with alternatives: distance_m, duration_s, tolls (currency, total_eur, complete, by_country) and geometry for each alternative route. Alternatives are planned without time-dependent restrictions and are not ban-checked; the main route is. Empty when no reasonable alternative exists. |
+| `data.alternatives[]` | Only with alternatives: distance_m, duration_s, forecast_duration_s (with traffic), tolls (currency, total_eur, complete, by_country) and geometry for each alternative route. Alternatives are planned without time-dependent restrictions and are not ban-checked; the main route is. Empty when no reasonable alternative exists. |
 | `data.route.restriction_hits[]` | Restrictions for this vehicle still on the line: kind, name, country, at_km. |
-| `data.route.truck_bans[]` | Dated truck driving bans on the route: name, kind, country, details, min_weight_t, window_from, window_to, eta_at_ban, km_from_start, applies, active, avoided. |
+| `data.route.truck_bans[]` | Dated truck driving bans on the route: name, kind, country, details, min_weight_t, window_from, window_to, eta_at_ban (on the traffic forecast timeline), eta_at_ban_free (free-flow timeline), km_from_start, applies, active, avoided. |
 | `data.route.border_crossings[]` | Crossings on the route: name, ppid, from_country, to_country, lat, lon, km_from_start, status; wait_min = time on the exit side + the entry side at the planned arrival (wait_at), null when neither side is measured (wait_minutes = same value, legacy name); wait_sides[] (side country, role exit\|entry, ppid, min, basis live\|forecast, note when not measured); wait_notes[]; wait_capped (a side over 48 h is planned at 48 h); registration_required = an electronic-queue lane: register before arriving, the time to get a slot is not included in the wait. |
-| `data.route.warnings[]` | code and message, e.g. ban_avoidance_skipped, restrictions_on_route, adr_tunnel_on_route, adr_tunnel_not_checked, low_emission_zone_on_route, tolls_not_fully_avoided, arrive_at_not_reachable. |
+| `data.route.warnings[]` | code and message, e.g. ban_avoidance_skipped, restrictions_on_route, adr_tunnel_on_route, adr_tunnel_not_checked, low_emission_zone_on_route, closure_on_route (a full motorway closure overlaps the passing time), tolls_not_fully_avoided, arrive_at_not_reachable. |
+| `data.route.closures_on_route[]` | German motorways: closures, roadworks and traffic warnings within 150 m of the line whose time window overlaps the moment the truck passes: type (closure, roadwork, warning), road, title, km_from_start, eta, from, to, full_closure, lorry_specific (text names lorries or a weight limit), lat, lon. The route is not changed around them. |
+| `data.traffic_forecast` | Unless traffic=off: model, mode, duration_base, duration_s_free, duration_s_forecast, delay_s (recurring, live, roadworks, weather, total), hotspots[] (km_from_start, km_to, eta, delay_s, reason recurring\|live\|roadworks\|lane_closure\|closure\|weather, label, road, confidence low\|medium\|high, dow_hour, delay_by_reason, country; jam_frequency and road_condition where known), weather_on_route[], closures_avoided[], recommended_alternative (a forecast-faster alternative is only recommended — the primary route is never swapped), coverage (how much data backed the plan, with a note), calc_ms. The forecast timeline drives the ETA, rest plan, ban timing and border-wait timing. A planning estimate; data collection started in September 2026. |
 | `data.rest_plan[]` | EU 561/2006 stops in order: type (break, daily_rest, weekly_rest), start_at, end_at, duration_min, km_from_start, parking (a parkings[] row or null), reason, overlaps_ban, counts_as. |
 | `data.waits[]` | Forced waits on the timeline: ban_wait (a driving ban) and border_wait, same shape as rest_plan. |
 | `data.eta` | Arrival time including driving, breaks, rests, ban waits and border waits; with driving_time_min, total_time_min and crew. |
@@ -80,7 +83,7 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.assumptions[]` | Defaults applied to driver state you did not send, and country rules not planned for. |
 | `data.rest_warnings[]` | code, km_from_start, message — e.g. no_parking_in_window when a stop had to be placed at the legal limit. |
 | `data.fuel_stations[]` | name, brand, lat, lon, country, km_from_start, distance_from_route_km, detour_km, prices[] (fuel_type, price, currency, stale), price_updated_at. |
-| `data.parkings[]` | name, type (parking, rest_area, truck_stop, autohof), lat, lon, country, km_from_start, distance_from_route_km, detour_km, capacity, secure, amenities[], opening_hours. |
+| `data.parkings[]` | name, type (parking, rest_area, truck_stop, autohof), lat, lon, country, km_from_start, distance_from_route_km, detour_km, capacity, capacity_trucks (official truck spaces where known, e.g. German motorway rest areas), secure, amenities[], opening_hours. |
 | `data.weigh_stations[]` | name, lat, lon, country, km_from_start, distance_from_route_km, detour_km, type and side (null when not known). |
 | `data.coverage` | corridor_km, countries_on_route, fuel_grades, fuel countries with sparse or no price data, truncated lists, measured_at. |
 | `data.resolved_locations` | Only with from_city/to_city: query, lat, lon, label of the geocoded point. |
@@ -103,4 +106,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#truck-route
-*Auto-generated 2026-10-03 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-10-15 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
