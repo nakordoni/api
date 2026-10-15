@@ -38,6 +38,10 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.anchor` | The point searched and the resolved grade: lat, lng, radius_km, fuel_type, fuel_type_requested, fuel_type_local, fuel_type_country. |
 | `data.count` | Stations returned; data.total_found is how many matched inside the radius before limit was applied. |
 | `data.coverage` | Only when nothing matched — grade, station_countries + station_counts measured from the live index (scoped to that grade), sparse_coverage, measured_at, and fuel_type_note for both an unplaceable grade name and a recognised grade we do not price in this country. |
+| `data.empty_reason` | Only when nothing matched — machine-readable why: no_station_in_radius (try a wider radius_km; see nearest_station_km) \| no_price_for_fuel_type (stations in the radius, none quoting this grade) \| fuel_type_not_priced_in_country (no feed prices this grade in `country`) \| unknown_fuel_type \| no_fresh_price_in_radius. The radius is never widened for you. |
+| `data.suggestion` | Only when nothing matched — one short sentence in your `lang` that turns empty_reason into advice, e.g. "No station within 5 km — the nearest is 6.4 km away; try radius_km=10." (the advised radius is rounded up to a 5 km step and never above the 25 km maximum), "We have no hvo prices in DE; try diesel, truckdiesel.", or the list of valid fuel_type values. Advice for people, not a contract: branch on empty_reason / nearest_station_km, show suggestion to users. |
+| `data.nearest_station_km` | Only when nothing matched — distance to the nearest station quoting the requested grade (any grade when none was named), searched up to data.nearest_search_km (50); null = none that close. |
+| `data.country` | Only when nothing matched — ISO-2 country of the point (your ?country= wins). |
 
 
 ## Response envelope
@@ -55,4 +59,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fuel-cheapest
-*Auto-generated 2026-10-03 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-10-15 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
