@@ -6,6 +6,16 @@ See also the live changelog: https://nakordoni.eu/en/developers/changelog
 
 ---
 
+## 2026-10-14
+
+### Improved
+- **Fuel: empty answers now explain why** — When `/api/v2/data/fuel-stations` or `/api/v2/data/fuel-cheapest` finds no station, the answer is still HTTP 200 with an empty list, and it now says why. Only on an empty answer, `data` carries `empty_reason` (`no_station_in_radius`, `no_price_for_fuel_type`, `fuel_type_not_priced_in_country`, `unknown_fuel_type` or `no_fresh_price_in_radius`), `nearest_station_km` (the nearest station with your grade, searched up to `nearest_search_km` = 50 km; `null` if none), `country` and `suggestion`, one short sentence in your `lang`, for example: *No station within 5 km — the nearest is 6.4 km away; try radius_km=10.* Branch your code on `empty_reason` and `nearest_station_km`. `suggestion` is advice for people and its wording can change. We never widen the radius for you. If you sample an area or a route on a grid, use `radius_km` 10–15. Answers that contain stations are unchanged. Details: [Empty answers](/en/developers/docs/fuel-stations#empty-answers).
+
+### Fixed
+- **Fuel stations: decimal search radius is honoured; brand names are consistent** — **Search radius.** `radius_km` on `/api/v2/data/fuel-stations` now keeps one decimal place. A radius such as `4.8` was previously cut to `4` without a notice, so each search covered up to a third less area than requested and could return fewer stations or none. `anchor.radius_km` shows the radius actually applied; whole numbers are returned as before. **Brand names.** The same brand is now always spelled the same way in `brand` — for example `ORLEN` and `orlen` are returned as `Orlen`, and `CircleK` as `Circle K`. Stations, prices, ids and fields are unchanged. If you match brands by exact spelling (for logos or filters), please check your list against the new names.
+
+---
+
 ## 2026-10-03
 
 ### Added
