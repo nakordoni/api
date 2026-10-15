@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-10-03
+# Generated 2026-10-15
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -1329,6 +1329,176 @@ paths:
         description: Unauthorized
       429: 
         description: Rate limit exceeded
+/exchange-cities: 
+  get: 
+    summary: Exchange Office Cities API
+    description: "Polish cities where we list currency exchange offices (kantors), with how many offices each has and how many currently publish rates. Use the city id with the other exchange products."
+    operationId: get_exchange_cities
+    parameters:       - name: lang
+        in: query
+        description: Language for city names (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/exchange-offices: 
+  get: 
+    summary: Exchange Offices API
+    description: "Directory of currency exchange offices (kantors) in Poland: name, address, coordinates, opening hours, phone, website and whether the office also quotes wholesale rates. Filter by city, by a currency the office quotes, or to offices open right now (Polish local time)."
+    operationId: get_exchange_offices
+    parameters:       - name: city
+        in: query
+        description: "City id from exchange-cities, e.g. warszawa (optional; omit for every city)"
+        schema: 
+          type: string
+      - name: currency
+        in: query
+        description: "Only offices that quote this currency, ISO 4217 code such as EUR (optional)"
+        schema: 
+          type: string
+      - name: open_now
+        in: query
+        description: "1 = only offices open right now, by their published hours in Polish local time (optional)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Max offices returned, 1-300 (default 100)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for city names and page links (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/exchange-office: 
+  get: 
+    summary: Exchange Office Rates API
+    description: "One exchange office with its current buy and sell rates against PLN. Retail and wholesale rates are returned separately: wholesale applies only from min_amount_pln and must not be compared with retail. Every rate carries its own time, so an old quote is never presented as today's."
+    operationId: get_exchange_office
+    parameters:       - name: id
+        in: query
+        description: "Office id from exchange-offices (required)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for city name and page link (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/exchange-best-rates: 
+  get: 
+    summary: Best Exchange Rates API
+    description: "Where to buy or sell one currency for PLN in one city right now: the offices with the best RETAIL rates, ranked, next to the official NBP reference rate. Only rates no older than 6 hours compete, and quotes far off the city median are left out as likely errors. Wholesale rates never enter the ranking."
+    operationId: get_exchange_best_rates
+    parameters:       - name: city
+        in: query
+        description: "City id from exchange-cities, e.g. warszawa (required)"
+        schema: 
+          type: string
+      - name: currency
+        in: query
+        description: "Currency to compare against PLN, ISO 4217 code such as EUR (required)"
+        schema: 
+          type: string
+      - name: limit
+        in: query
+        description: "Offices per list, 1-20 (default 5)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language for city name and page links (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/exchange-history: 
+  get: 
+    summary: Exchange Rate History API
+    description: "Retail rate history for one currency against PLN, either for one office or for a whole city (average and best rate across its offices), hourly or as daily averages, with the NBP reference rate for the same days. History is kept for the last 92 days; office series start on 2026-10-14, city series on 2026-08-01."
+    operationId: get_exchange_history
+    parameters:       - name: id
+        in: query
+        description: "Office id from exchange-offices — office history (give id or city)"
+        schema: 
+          type: string
+      - name: city
+        in: query
+        description: "City id from exchange-cities — city history (give id or city)"
+        schema: 
+          type: string
+      - name: currency
+        in: query
+        description: ISO 4217 code such as EUR (required)
+        schema: 
+          type: string
+      - name: days
+        in: query
+        description: "Days back from now, 1-92 (default 7)"
+        schema: 
+          type: string
+      - name: interval
+        in: query
+        description: hour (default) or day — day averages each Polish calendar day
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language code (default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
 /truck-bans: 
   get: 
     summary: Truck Driving Bans API
@@ -1998,6 +2168,11 @@ paths:
       - name: crew
         in: query
         description: "1 (default) or 2 drivers — double crew uses the 30-hour daily rest window and 9 h rests"
+        schema: 
+          type: string
+      - name: traffic
+        in: query
+        description: "forecast (default), live or off. forecast = learned recurring congestion + live traffic near the departure + roadworks, closures and weather at the passing time; live = current traffic without the learned pattern; off = no traffic layer (free-flow drive time)"
         schema: 
           type: string
       - name: driven_since_break_min
