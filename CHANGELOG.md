@@ -6,6 +6,14 @@ See also the live changelog: https://nakordoni.eu/en/developers/changelog
 
 ---
 
+## 2026-10-22
+
+### Improved
+- **Route Planner API: stop places, EU 561 driver state, eCherha registration (v2 additive, v3 defaults)** — `GET /api/v2/data/route-plan` gets a larger stop model in **v2** (additive: nothing is removed or renamed) and new defaults in **v3** (`/api/v3/data/route-plan`). **v2, additive.** With `stop_places=1` each break, meal, overnight and weekly-rest stop carries `places[]`: candidate parkings in a driving-time window around the stop, each with `name`, `type`, `country`, `lat`, `lon`, `at_km`, `at_drive_s`, `offset_min`, `off_route_km`, `detour_km`, `exceeds_4h30` and `type_rank`. Tune the search with `places_before_min`, `places_after_min`, `places_radius_km` and `rest_radius_km`; a radius above 25 km is clamped and reported as the warning `radius_clamped`. `rest_rules=legacy|eu561` picks the rest model, and with `eu561` you can send your driver state: `driven_since_break_min`, `driven_today_min`, `duty_started_min_ago`, `driven_week_min`, `driven_fortnight_min`, `extended_days_used`, `reduced_rests_used` and `allow_reduced`. New stop types: `ban_wait` (with `ban`: `name`, `country`, `from`, `until`) and `weekly_rest`; a wait that satisfies a break or rest is marked `counts_as`. Ukraine-exit truck crossings with an electronic queue add `registration_required`, `registration_wait_minutes`, `registration_wait_source`, `registration_wait_at`, `registration_note` and `registration_url`, and the warnings `echerha_registration` and `echerha_wait_unverified`. **v3, new defaults.** `rest_rules` defaults to `eu561`; place names are strict (only real parkings and rest areas); the eCherha published wait (fresh data, not capped) is used as the border wait, and a border wait counts as the break or rest that was due. v2 keeps the legacy rest model and the original place filter, so existing integrations do not change. Details: [Route Planner API](/en/developers/docs/route-plan).
+- **Truck Route API v3: eCherha border wait and registration fields** — `GET /api/v3/data/truck-route` now uses the eCherha border wait. On **v3**, `border_crossings[]` for Ukraine-exit truck lanes with an electronic queue take `wait_min` from the eCherha published wait (fresh data only, not capped; when it is stale `wait_min` is `null` and the warning `echerha_wait_unverified` is added) and carry `registration_required`, `registration_wait_minutes`, `registration_wait_source`, `registration_wait_at`, `registration_note` and `registration_url`, with the warning `echerha_registration`. The rest plan treats a border wait as time spent at the border: a long queue counts as the break, daily rest or weekly rest that was due (`counts_as` on the `waits[]` row) instead of being added on top. v2 is unchanged. Details: [Truck Route API](/en/developers/docs/truck-route).
+
+---
+
 ## 2026-10-14
 
 ### Improved
