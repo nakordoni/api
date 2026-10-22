@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-10-15
+# Generated 2026-10-22
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -29,6 +29,23 @@ paths:
     summary: API Status
     description: "Live health of every Developer-API product: online / degraded / offline, response latency and last-checked time, plus an overall rollup. Public — no API key required, never counts against your quota. Refreshed every 5 minutes. Mirrors the human status page at nakordoni.eu/{lang}/status."
     operationId: get_status
+    parameters: []
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/account-usage: 
+  get: 
+    summary: Account Usage API
+    description: "What is left of your limits right now, for the key you call with: plan, per-second cap, and for each daily quota class (cheap, heavy, route) the limit, units used, units remaining and when the counter resets (midnight UTC). Also your approved countries as this key sees them and where to upgrade. Not metered — reading it never uses quota — and limited to 30 calls per minute per key. The numbers are the same ones the X-Devapi-Limit / X-Devapi-Remaining headers carry on every metered call."
+    operationId: get_account_usage
     parameters: []
     responses: 
       200: 
@@ -1994,6 +2011,71 @@ paths:
         description: "1 = add an advisory overnight stop when the drive exceeds 11 h (default 0)"
         schema: 
           type: string
+      - name: rest_rules
+        in: query
+        description: "legacy (default in v2) or eu561 — with overnight=1 and vehicle=truck|bus: 9 h driving per day, 11 h daily rest (type overnight, minutes 660), 45 min break after 4 h 30. eu561 is the default from v3"
+        schema: 
+          type: string
+      - name: driven_since_break_min
+        in: query
+        description: "eu561 driver state: minutes driven since the last 45 min break (default 0)"
+        schema: 
+          type: string
+      - name: driven_today_min
+        in: query
+        description: "eu561: minutes driven since the last daily rest (default 0)"
+        schema: 
+          type: string
+      - name: duty_started_min_ago
+        in: query
+        description: "eu561: minutes elapsed since the last daily rest ended; the next daily rest must start within 13 h (15 h after a reduced rest) of that (default 0)"
+        schema: 
+          type: string
+      - name: driven_week_min
+        in: query
+        description: "eu561: minutes driven this week; at 56 h a weekly_rest stop (45 h) is added (default 0)"
+        schema: 
+          type: string
+      - name: driven_fortnight_min
+        in: query
+        description: "eu561: minutes driven in the fortnight; cap 90 h (default 0)"
+        schema: 
+          type: string
+      - name: extended_days_used
+        in: query
+        description: "eu561: 10 h driving days already used this week, max 2 (default 0). A 10 h day is planned only when it lets the trip end without another daily rest"
+        schema: 
+          type: string
+      - name: reduced_rests_used
+        in: query
+        description: "eu561: reduced 9 h daily rests used since the last weekly rest, max 3 (default 0)"
+        schema: 
+          type: string
+      - name: allow_reduced
+        in: query
+        description: "eu561: 1 = may use a 9 h reduced daily rest when it lets the trip end next day (default 0)"
+        schema: 
+          type: string
+      - name: places_before_min
+        in: query
+        description: "With stop_places=1: minutes of driving before each break or rest in which to look for places, 0–120 (default 45)"
+        schema: 
+          type: string
+      - name: places_after_min
+        in: query
+        description: "With stop_places=1: minutes of driving after each break or rest in which to look for places, 0–120 (default 15)"
+        schema: 
+          type: string
+      - name: places_radius_km
+        in: query
+        description: "With stop_places=1: max distance off the route for break and meal places, 0.5–25 km (default 5; above 25 it is clamped and warning radius_clamped is returned)"
+        schema: 
+          type: string
+      - name: rest_radius_km
+        in: query
+        description: "With stop_places=1: max distance off the route for overnight and weekly-rest places, 0.5–25 km (default 5; above 25 it is clamped with radius_clamped)"
+        schema: 
+          type: string
       - name: geometry
         in: query
         description: "1 = include the full route geometry (default 0)"
@@ -2028,7 +2110,7 @@ paths:
 /truck-route: 
   get: 
     summary: Truck Route API
-    description: "Truck routing API with fuel stations and truck parking along the route, plus weigh stations and a driver rest plan. Send origin, destination and your vehicle (height, weight, length, width, axle load, hazmat) and get an HGV-legal route with the restrictions and dated truck driving bans it meets, the border crossings on it with their live wait, priced fuel stations, truck parkings (secure flag, capacity, amenities) and weighbridges within a corridor of the line. With include=rest the EU 561/2006 rules are applied to your driver state: 45-minute breaks at most 4 h 30 apart, daily rests before the 9 h / 10 h limit, each placed at a real parking before the limit is reached, weekend and holiday bans waited out, border waits on the timeline, single or double crew — and the ETA includes all of it. The rest plan is a planning aid, not a tachograph record."
+    description: "Truck routing API with fuel stations and truck parking along the route, plus weigh stations and a driver rest plan. Send origin, destination and your vehicle (height, weight, length, width, axle load, hazmat) and get an HGV-legal route with the restrictions and dated truck driving bans it meets, the border crossings on it with their live wait, priced fuel stations, truck parkings (secure flag, capacity, amenities) and weighbridges within a corridor of the line. With include=rest the EU 561/2006 rules are applied to your driver state: 45-minute breaks at most 4 h 30 apart, daily rests before the 9 h / 10 h limit, each placed at a real parking before the limit is reached, weekend and holiday bans waited out, border waits on the timeline, single or double crew — and the ETA includes all of it. The rest plan is a planning aid, not a tachograph record. Beta: vehicle_type=motorhome plans private motorhomes (no rest plan; tolls priced with motorhome rules per country)."
     operationId: get_truck_route
     parameters:       - name: from
         in: query
@@ -2063,6 +2145,11 @@ paths:
       - name: via
         in: query
         description: "Up to 5 waypoints as lat,lon|lat,lon"
+        schema: 
+          type: string
+      - name: vehicle_type
+        in: query
+        description: "truck (default) or motorhome (beta). motorhome: height, weight, width, length and axle-load limits and every \"no trucks\" / weight-category sign apply (strict); weekend, holiday and night bans for goods vehicles are not applied (listed with applies=false), city-centre and low-emission zones still apply; ETA uses motorhome speed limits (over 3.5 t, Germany motorway 80 km/h); no rest plan and no weigh stations; tolls use motorhome rules per country (see data.tolls and the Motorhome section below). Bans: up to 7.5 t no weekend/holiday/night ban applies (Austria and Slovakia only with a trailer); over 7.5 t they are lifted in CH, DE, FR, HU and IT. weight is required; crew, driven_*, reduced_*, extended_* and last_weekly_rest_end are rejected with 400."
         schema: 
           type: string
       - name: height
