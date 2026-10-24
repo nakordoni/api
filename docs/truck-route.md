@@ -85,7 +85,7 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.weekly_rest_check` | next_weekly_rest_due_by, weekly_rest_on_trip, driven_week_min_at_arrival, driven_fortnight_min_at_arrival, weekly and fortnight limits, reduced rests and 10 h days used at arrival. |
 | `data.assumptions[]` | Defaults applied to driver state you did not send, and country rules not planned for. |
 | `data.rest_warnings[]` | code, km_from_start, message — e.g. no_parking_in_window when a stop had to be placed at the legal limit. |
-| `data.fuel_stations[]` | name, brand, lat, lon, country, km_from_start, distance_from_route_km, detour_km, prices[] (fuel_type, price, currency, stale), price_updated_at. |
+| `data.fuel_stations[]` | name, brand, lat, lon, country, km_from_start, distance_from_route_km, detour_km, prices[] (fuel_type, price, currency, stale), price_updated_at. A fuel price last confirmed more than 90 days ago is not returned (the same rule as the fuel products; see Price age on the fuel-stations page). |
 | `data.parkings[]` | name, type (parking, rest_area, truck_stop, autohof), lat, lon, country, km_from_start, distance_from_route_km, detour_km, capacity, capacity_trucks (official truck spaces where known, e.g. German motorway rest areas), secure, amenities[], opening_hours. |
 | `data.weigh_stations[]` | name, lat, lon, country, km_from_start, distance_from_route_km, detour_km, type and side (null when not known). |
 | `data.coverage` | corridor_km, countries_on_route, fuel_grades, fuel countries with sparse or no price data, truncated lists, measured_at. |
