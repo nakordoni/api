@@ -6,6 +6,13 @@ See also the live changelog: https://nakordoni.eu/en/developers/changelog
 
 ---
 
+## 2026-10-24
+
+### Improved
+- **Fuel: station prices older than 90 days are no longer returned** — Station prices on `/api/v2/data/fuel-stations`, `/api/v2/data/fuel-cheapest`, `/api/v2/data/fuel-local` and `/api/v2/data/fuel` with `mode=nearest` now have a maximum age of 90 days. A price that we last confirmed more than 90 days ago is no longer returned. Before, such a price was returned with `stale` = `true`. What changes in the answers: a grade that has only an older price is missing from `prices`; a station with no price left is not listed, or has an empty `prices` object where unpriced stations are shown; and an answer can be empty where it listed old prices before. An empty answer carries `empty_reason` as usual. `fuel-local` can then answer from the region or country tier. The `stale` flag is unchanged: it is `true` when a price was last confirmed more than 7 days ago. Price history is kept. `fuel-cities`, `fuel-cost`, national averages and `fuel-grades` have no practical change. Details: [Price age](/en/developers/docs/fuel-stations#price-age).
+
+---
+
 ## 2026-10-22
 
 ### Improved
