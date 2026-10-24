@@ -53,4 +53,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fleet-history
-*Auto-generated 2026-10-22 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-10-24 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
