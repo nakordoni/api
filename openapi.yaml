@@ -2605,11 +2605,11 @@ paths:
 /fleet-compliance-validate: 
   get: 
     summary: Fleet Compliance — Validate API
-    description: "Check a driver's recorded activity against EU 561/2006 (or AETR) driving and rest rules and Directive 2002/15/EC working time. Send the timeline as a JSON POST body — the current shift plus up to 28 days or more of tachograph-like history — and get every violation with its rule article, timestamp and seriousness (Regulation (EU) 2016/403 bands), warnings, and what the driver has left right now: daily driving, 56 h weekly and 90 h fortnight budgets, when the next break, daily rest and weekly rest are due, extended days and reduced rests used, and any reduced weekly rest compensation owed with its deadline. Covers 4 h 30 breaks (incl. 15 + 30 split), 9/10 h days, 11/9 h and 3 + 9 h daily rest, six 24-hour periods between weekly rests, reduced weekly rest sequences and compensation, double crew (9 h rest within 30 h), ferry/train interrupted rest, and 2002/15 48 h average, 60 h week, breaks after 6 h and the 10 h night-work cap. route_plan_state can be passed straight to route-plan."
+    description: "Check a driver's recorded activity against EU 561/2006 (or AETR) driving and rest rules and Directive 2002/15/EC working time. Send the timeline as a JSON POST body — the current shift plus up to 28 days or more of tachograph-like history — and get every violation with its rule article, timestamp and seriousness (Regulation (EU) 2016/403 bands), warnings, and what the driver has left right now: daily driving, 56 h weekly and 90 h fortnight budgets, when the next break, daily rest and weekly rest are due, extended days and reduced rests used, and any reduced weekly rest compensation owed with its deadline. Covers 4 h 30 breaks (incl. 15 + 30 split), 9/10 h days, 11/9 h and 3 + 9 h daily rest, six 24-hour periods between weekly rests, reduced weekly rest sequences and compensation, double crew (9 h rest within 30 h), ferry/train interrupted rest, and 2002/15 48 h average, 60 h week, breaks after 6 h and the 10 h night-work cap. Since v1.1: the Art. 12 exception (up to 1 h, or 2 h after a 30 min break, past the daily and weekly limits to reach the operational centre or home for a weekly rest) with the compensation owed and its deadline, the Art. 8(8a) 4-week return to base or home, the Art. 8(6a) 12-day derogation for occasional international coach services, and national 2002/15 night windows by country. route_plan_state can be passed straight to route-plan."
     operationId: get_fleet_compliance_validate
     parameters:       - name: activities
         in: query
-        description: "(JSON body, required) Driver activities, oldest first or in any order. Each activity: {type: drive | other_work | availability | break | rest, start, end} — ISO-8601 (a datetime without offset is read in tz) or unix seconds. Optional on rests: ferry (true on a ferry or train), sleeper_cabin, scheduled_journey_h, in_vehicle. Gaps between activities count as rest (reported in warnings); overlaps are rejected."
+        description: "(JSON body, required) Driver activities, oldest first or in any order. Each activity: {type: drive | other_work | availability | break | rest, start, end} — ISO-8601 (a datetime without offset is read in tz) or unix seconds. Optional on rests: ferry (true on a ferry or train), sleeper_cabin, scheduled_journey_h, in_vehicle, location (residence | operational_centre | elsewhere — EU 561 Art. 8(8a) 4-week return check). Optional on drives: art12_exceed (true = driving past the limit under EU 561 Art. 12 to reach the operational centre or home for a weekly rest). Gaps between activities count as rest (reported in warnings); overlaps are rejected."
         schema: 
           type: string
       - name: history
@@ -2647,6 +2647,16 @@ paths:
         description: "(JSON body, eu561) true = the driver is in international goods transport outside the Member State of establishment (two consecutive reduced weekly rests allowed under Art. 8(6))."
         schema: 
           type: string
+      - name: passenger_12day
+        in: query
+        description: "(JSON body) true or {abroad_24h: bool} = single occasional international passenger service: weekly rest may be postponed up to twelve 24-hour periods after a regular weekly rest (EU 561 Art. 8(6a), AETR Art. 8(6)(b)); the rests after it and night driving (22:00-06:00: multi-manning or a 3 h driving period) are checked."
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: (JSON body) ISO country code for the national 2002/15 night window (same as wtd.country).
+        schema: 
+          type: string
       - name: include_wtd
         in: query
         description: "(JSON body) false = skip the Directive 2002/15/EC checks (default true)."
@@ -2654,7 +2664,7 @@ paths:
           type: string
       - name: wtd
         in: query
-        description: "(JSON body) 2002/15 options: reference_weeks 1-52 (default 17), reference_mode rolling | fixed, reference_start, night_window HH:MM-HH:MM (default 00:00-04:00), country."
+        description: "(JSON body) 2002/15 options: reference_weeks 1-52 (default 17), reference_mode rolling | fixed, reference_start, night_window HH:MM-HH:MM (default 00:00-04:00), country (EU/EEA ISO code: national night window, see limits), carriage goods | passengers."
         schema: 
           type: string
     responses: 
@@ -2696,7 +2706,7 @@ paths:
     operationId: get_fleet_compliance_plan_check
     parameters:       - name: shifts
         in: query
-        description: "(JSON body, required, max 60, span max 62 days) [{start, end, countries?, drive_min?, other_work_min?, activities?}]. Without activities the shift is laid out as other work, then driving in 4 h 30 blocks with 45 min breaks. Each activity: {type: drive | other_work | availability | break | rest, start, end} — ISO-8601 (a datetime without offset is read in tz) or unix seconds. Optional on rests: ferry (true on a ferry or train), sleeper_cabin, scheduled_journey_h, in_vehicle. Gaps between activities count as rest (reported in warnings); overlaps are rejected."
+        description: "(JSON body, required, max 60, span max 62 days) [{start, end, countries?, drive_min?, other_work_min?, activities?}]. Without activities the shift is laid out as other work, then driving in 4 h 30 blocks with 45 min breaks. Each activity: {type: drive | other_work | availability | break | rest, start, end} — ISO-8601 (a datetime without offset is read in tz) or unix seconds. Optional on rests: ferry (true on a ferry or train), sleeper_cabin, scheduled_journey_h, in_vehicle, location (residence | operational_centre | elsewhere — EU 561 Art. 8(8a) 4-week return check). Optional on drives: art12_exceed (true = driving past the limit under EU 561 Art. 12 to reach the operational centre or home for a weekly rest). Gaps between activities count as rest (reported in warnings); overlaps are rejected."
         schema: 
           type: string
       - name: countries
