@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-10-24
+# Generated 2026-10-26
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -1614,6 +1614,220 @@ paths:
         description: Unauthorized
       429: 
         description: Rate limit exceeded
+/holiday-calendar-holidays: 
+  get: 
+    summary: Holiday Calendar — Holidays API
+    description: "Public, bank, regional, religious and observance holidays for 51 countries (Europe + Gulf) and their regions, 2020-2035, from our own holiday rule engine. Every holiday says whether it is a day off, a bank holiday or inside school holidays, whether a weekend holiday moved to another day, whether its date is still estimated (Islamic calendar), and whether a truck driving ban applies that day and when. Covers Ukraine's martial-law rule (holidays listed, not days off) and decree day transfers (transfers[]). Up to 10 countries per call; a year or any range up to 731 days."
+    operationId: get_holiday_calendar_holidays
+    parameters:       - name: country
+        in: query
+        description: "ISO-2 country code, or comma-separated list of up to 10 (required), e.g. DE or DE,PL,UA"
+        schema: 
+          type: string
+      - name: year
+        in: query
+        description: "YYYY, 2020-2035 (default: current year). Ignored when from/to is sent"
+        schema: 
+          type: string
+      - name: from
+        in: query
+        description: "Range start YYYY-MM-DD (with to; at most 731 days)"
+        schema: 
+          type: string
+      - name: to
+        in: query
+        description: "Range end YYYY-MM-DD"
+        schema: 
+          type: string
+      - name: region
+        in: query
+        description: "ISO 3166-2 region, e.g. DE-BY (or BY with one country): national holidays + that region's only. Omit for every region"
+        schema: 
+          type: string
+      - name: type
+        in: query
+        description: "Comma-separated filter: PUBLIC, BANK, REGIONAL, RELIGIOUS, OBSERVANCE, SCHOOL, OPTIONAL, HALF_DAY, BRIDGE, or all. Default: everything except BRIDGE"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: "Comma-separated language codes for name.translations (default: every language we hold), e.g. en,uk,pl"
+        schema: 
+          type: string
+      - name: q
+        in: query
+        description: "Search in holiday names (any language), e.g. christmas"
+        schema: 
+          type: string
+      - name: id
+        in: query
+        description: One holiday by id (other filters ignored)
+        schema: 
+          type: string
+      - name: school
+        in: query
+        description: "1 = also list school-holiday periods (school_holidays[]) for countries that publish them"
+        schema: 
+          type: string
+      - name: include
+        in: query
+        description: "impact = add business_intelligence to each holiday (Pro and higher)"
+        schema: 
+          type: string
+      - name: min_impact
+        in: query
+        description: "Only holidays with an impact_score of at least this (0-100); implies include=impact"
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/holiday-calendar-business-days: 
+  get: 
+    summary: Holiday Calendar — Business Days API
+    description: "Business-day arithmetic for one country, optionally one region: count working days between two dates, add or subtract working days, test a date, or find the next / previous working day. Honours the country's own weekend, national and regional day-off holidays, decree transfers (a Saturday that is worked) and Ukraine's martial-law rule. Dates 2020-01-01 to 2035-12-31. Answers from a precomputed calendar in a few milliseconds."
+    operationId: get_holiday_calendar_business_days
+    parameters:       - name: op
+        in: query
+        description: "count (default) | add | subtract | is | next | prev"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code (required, one)"
+        schema: 
+          type: string
+      - name: region
+        in: query
+        description: "ISO 3166-2 region, e.g. DE-BY (optional)"
+        schema: 
+          type: string
+      - name: start_date
+        in: query
+        description: "YYYY-MM-DD (required)"
+        schema: 
+          type: string
+      - name: end_date
+        in: query
+        description: "YYYY-MM-DD (op=count)"
+        schema: 
+          type: string
+      - name: days
+        in: query
+        description: "Working days to add or subtract, 0-3650 (op=add|subtract); 0 = start_date if it is a working day, else the next (add) or previous (subtract) one"
+        schema: 
+          type: string
+      - name: inclusive
+        in: query
+        description: "op=count: true (default) counts start_date and end_date; false leaves start_date out"
+        schema: 
+          type: string
+      - name: weekend
+        in: query
+        description: "Optional weekend override, e.g. fri,sat or 5,6 (ISO weekdays); none = no weekend days"
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/holiday-calendar-countries: 
+  get: 
+    summary: Holiday Calendar — Countries API
+    description: "The 51 countries (Europe + Gulf) the holiday calendar covers, each with its weekend days, time zone, regions, holiday types and whether school holidays are included. With ?country= one country in detail: working days per year 2020-2035, holidays and days off per year, decree day transfers and the next five holidays."
+    operationId: get_holiday_calendar_countries
+    parameters:       - name: country
+        in: query
+        description: "ISO-2 country code for the detail view (optional; omit for the list)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: Language codes for next_holidays names (detail view; default en)
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/holiday-calendar-impact: 
+  get: 
+    summary: Holiday Calendar — Business Impact API
+    description: "Model-estimated business impact of holidays for retail, logistics and demand planning (Pro and higher). insights scores every holiday 0-100 with the probability that shops are closed, the demand categories that rise before it, long-weekend and bridge position and our border-traffic multiplier, plus a per-country summary. demand-surge returns the dated windows around day-off holidays (pre-holiday, holiday, post-holiday) with an intensity each. Scores are estimates from holiday type, day-off status, scope, calendar position, truck bans and our traffic multipliers — not observed sales data."
+    operationId: get_holiday_calendar_impact
+    parameters:       - name: op
+        in: query
+        description: "insights (default) | demand-surge"
+        schema: 
+          type: string
+      - name: country
+        in: query
+        description: "ISO-2 country code, or comma-separated list of up to 10 (required)"
+        schema: 
+          type: string
+      - name: year
+        in: query
+        description: "YYYY, 2020-2035 (default: current year)"
+        schema: 
+          type: string
+      - name: from
+        in: query
+        description: "Range start YYYY-MM-DD (with to; at most 731 days)"
+        schema: 
+          type: string
+      - name: to
+        in: query
+        description: "Range end YYYY-MM-DD"
+        schema: 
+          type: string
+      - name: region
+        in: query
+        description: "ISO 3166-2 region, e.g. DE-BY (optional)"
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: "Language codes for names (default: all held)"
+        schema: 
+          type: string
+      - name: min_impact
+        in: query
+        description: "Only holidays with an impact_score of at least this (0-100)"
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
 /weather: 
   get: 
     summary: Border Weather Condition API
@@ -2375,6 +2589,159 @@ paths:
       - name: limit
         in: query
         description: "Max points returned, 1-5000 (default 1000, values above 5000 are clamped). `truncated: true` means more points exist in the window."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/fleet-compliance-validate: 
+  get: 
+    summary: Fleet Compliance — Validate API
+    description: "Check a driver's recorded activity against EU 561/2006 (or AETR) driving and rest rules and Directive 2002/15/EC working time. Send the timeline as a JSON POST body — the current shift plus up to 28 days or more of tachograph-like history — and get every violation with its rule article, timestamp and seriousness (Regulation (EU) 2016/403 bands), warnings, and what the driver has left right now: daily driving, 56 h weekly and 90 h fortnight budgets, when the next break, daily rest and weekly rest are due, extended days and reduced rests used, and any reduced weekly rest compensation owed with its deadline. Covers 4 h 30 breaks (incl. 15 + 30 split), 9/10 h days, 11/9 h and 3 + 9 h daily rest, six 24-hour periods between weekly rests, reduced weekly rest sequences and compensation, double crew (9 h rest within 30 h), ferry/train interrupted rest, and 2002/15 48 h average, 60 h week, breaks after 6 h and the 10 h night-work cap. route_plan_state can be passed straight to route-plan."
+    operationId: get_fleet_compliance_validate
+    parameters:       - name: activities
+        in: query
+        description: "(JSON body, required) Driver activities, oldest first or in any order. Each activity: {type: drive | other_work | availability | break | rest, start, end} — ISO-8601 (a datetime without offset is read in tz) or unix seconds. Optional on rests: ferry (true on a ferry or train), sleeper_cabin, scheduled_journey_h, in_vehicle. Gaps between activities count as rest (reported in warnings); overlaps are rejected."
+        schema: 
+          type: string
+      - name: history
+        in: query
+        description: (JSON body) Older activities in the same format (e.g. the last 28 days from the tachograph); merged with activities.
+        schema: 
+          type: string
+      - name: tz
+        in: query
+        description: "(JSON body) IANA time zone for calendar weeks (Monday 00:00) and the night window, default UTC."
+        schema: 
+          type: string
+      - name: ruleset
+        in: query
+        description: (JSON body) eu561 (default) or aetr. limits lists the AETR differences that are applied.
+        schema: 
+          type: string
+      - name: crew
+        in: query
+        description: "(JSON body) single (default) or double (multi-manning)."
+        schema: 
+          type: string
+      - name: now
+        in: query
+        description: "(JSON body) Evaluation time, default the end of the last activity; time after the last activity counts as rest."
+        schema: 
+          type: string
+      - name: last_weekly_rest_end
+        in: query
+        description: "(JSON body) End of the last weekly rest before the timeline, when the timeline does not contain it."
+        schema: 
+          type: string
+      - name: international_goods
+        in: query
+        description: "(JSON body, eu561) true = the driver is in international goods transport outside the Member State of establishment (two consecutive reduced weekly rests allowed under Art. 8(6))."
+        schema: 
+          type: string
+      - name: include_wtd
+        in: query
+        description: "(JSON body) false = skip the Directive 2002/15/EC checks (default true)."
+        schema: 
+          type: string
+      - name: wtd
+        in: query
+        description: "(JSON body) 2002/15 options: reference_weeks 1-52 (default 17), reference_mode rolling | fixed, reference_start, night_window HH:MM-HH:MM (default 00:00-04:00), country."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/fleet-compliance-limits: 
+  get: 
+    summary: Fleet Compliance — Limits API
+    description: "The rule parameters the compliance checks use, as JSON, so an app can show them: EU 561/2006 (as amended by 2020/1054), AETR with its verified differences from 561, and Directive 2002/15/EC with its options, plus the Regulation (EU) 2016/403 seriousness bands. Static; cache it."
+    operationId: get_fleet_compliance_limits
+    parameters:       - name: ruleset
+        in: query
+        description: "Optional: eu561, aetr or wtd — return one ruleset only."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/fleet-compliance-plan-check: 
+  get: 
+    summary: Fleet Compliance — Plan Check API
+    description: "Check planned shifts or trip days before dispatch. Send the shifts and the countries they run in as a JSON POST body; each shift comes back with the truck driving bans it hits (weekend, Sunday, holiday and other bans from our truck-ban calendar, filtered by vehicle weight), the public holidays and weekend days it touches, the EU 561 / AETR and 2002/15 breaches the plan would cause, and the earliest legal start: after the required daily or weekly rest and outside every blocking ban."
+    operationId: get_fleet_compliance_plan_check
+    parameters:       - name: shifts
+        in: query
+        description: "(JSON body, required, max 60, span max 62 days) [{start, end, countries?, drive_min?, other_work_min?, activities?}]. Without activities the shift is laid out as other work, then driving in 4 h 30 blocks with 45 min breaks. Each activity: {type: drive | other_work | availability | break | rest, start, end} — ISO-8601 (a datetime without offset is read in tz) or unix seconds. Optional on rests: ferry (true on a ferry or train), sleeper_cabin, scheduled_journey_h, in_vehicle. Gaps between activities count as rest (reported in warnings); overlaps are rejected."
+        schema: 
+          type: string
+      - name: countries
+        in: query
+        description: "(JSON body) ISO country codes used for shifts that do not list their own, e.g. [\"DE\",\"AT\"]."
+        schema: 
+          type: string
+      - name: tz
+        in: query
+        description: "(JSON body) IANA time zone of the plan (datetimes without offset), default UTC. Ban windows use each country's own time zone."
+        schema: 
+          type: string
+      - name: weight_t
+        in: query
+        description: "(JSON body) Vehicle weight in tonnes; bans with a weight threshold at or above it are skipped. Omitted = every ban is included."
+        schema: 
+          type: string
+      - name: history
+        in: query
+        description: (JSON body) Recent activities before the plan (format as in validate) so rests and budgets carry over.
+        schema: 
+          type: string
+      - name: last_weekly_rest_end
+        in: query
+        description: (JSON body) End of the last weekly rest before the plan.
+        schema: 
+          type: string
+      - name: ruleset
+        in: query
+        description: "(JSON body) eu561 (default) or aetr. crew single | double. international_goods, include_wtd, wtd as in validate."
+        schema: 
+          type: string
+      - name: allow_reduced_daily_rest
+        in: query
+        description: "(JSON body) true = suggestions may use a 9 h reduced daily rest (default: 11 h)."
+        schema: 
+          type: string
+      - name: allow_reduced_weekly_rest
+        in: query
+        description: "(JSON body) true = suggestions may use a 24 h reduced weekly rest (default: 45 h)."
+        schema: 
+          type: string
+      - name: blocking_types
+        in: query
+        description: "(JSON body) Ban types that move a suggested start (default Sunday, Saturday, Holiday, Holiday Eve, General; nationwide bans only). Others are still flagged."
         schema: 
           type: string
     responses: 
