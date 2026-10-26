@@ -31,6 +31,7 @@ Which side of a coach gets the sun or the shade on a trip, and which seats are b
 | `timeline` | 0 = leave out the timeline (15-minute rows). |
 | `track` | 0 = leave out the timed track points. |
 | `weather` | 1 (default) or 0. With 1, a weather forecast along the trip is used when the trip is within the next 3 days (72 h); later trips and weather=0 use clear sky. |
+| `animation` | 1 (default) or 0. With 0, the animation block (sun and coach position every 5 minutes) is left out. POST body: animation true\|false. |
 
 
 ## Example
@@ -60,7 +61,7 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `data.timeline[]` | One row per 15 min: t, lat, lon, hd (heading), az / el (sun azimuth / elevation), side (left \| right \| ahead \| behind \| none), w (sun strength); wx {code, f, temp, precip} when a forecast was used. |
 | `data.track[]` | Track points [lat, lon, sun side] for drawing the route (leave out with track=0). |
 | `data.input` | POST only: how your route was read — source, timed_by, stops, points, legs_routed, legs_straight, timezone. |
-| `data.images` | POST only: seat_map, route_map, timeline — each {url, format, expires_at}; url = https://api.nakordoni.eu/images/<random name>.<png \| webp \| jpg> (body format, default png). Files are kept 12 hours. format svg: PNG files plus the seat map as inline SVG (seat_map.svg). |
+| `data.images` | POST only: seat_map, route_map, timeline — each {url, format, expires_at}; url = https://api.nakordoni.dev/images/<random name>.<png \| webp \| jpg> (body format, default png). Files are kept 12 hours. format svg: PNG files plus the seat map as inline SVG (seat_map.svg). |
 | `data.embed_html` | POST only: a self-contained HTML figure with the seat map (inline SVG) to paste into a page; null with embed_html=false. |
 
 
