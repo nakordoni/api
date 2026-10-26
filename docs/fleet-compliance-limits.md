@@ -28,7 +28,7 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | Field | Description |
 |-------|-------------|
 | `data.rulesets.eu561` | name, source, params (minutes: break_after_drive_min 270, daily_drive_min 540, weekly_drive_min 3360, …), notes[]. |
-| `data.rulesets.aetr` | Same params plus differences_vs_eu561_verified[] (topic, aetr, eu561), same_as_eu561 and unverified_todo[]. |
+| `data.rulesets.aetr` | Same params plus differences_vs_eu561_verified[] (topic, aetr, eu561), same_as_eu561, amendments_after_2010_checked (source, result, encoded[]) and unverified_todo[]. |
 | `data.rulesets.wtd_2002_15` | params (avg_week_max_min 2880, week_max_min 3600, reference_weeks, night window, break rules) and options. |
 | `data.severity` | Seriousness scale and the 2016/403 Annex I bands per infringement type. |
 | `data.activity_types` | Accepted activity types and rest flags for validate and plan-check. |
