@@ -2948,3 +2948,49 @@ paths:
         description: Unauthorized
       429: 
         description: Rate limit exceeded
+/lane-cost-index: 
+  get: 
+    summary: Lane Cost Index API
+    description: "Cost index of a truck lane in Europe: the EUR per km cost floor of one loaded trip from A to B for a vehicle class — fuel, tolls, driver time and per diem. Per country on the route you get the km, the toll (and the toll vehicle class priced), the diesel litres and cost. Driver time follows the EU 561/2006 driving and rest rules. A 3-month trend shows how the cost index moved. It is a cost index, not a freight price: vehicle capital, insurance, overhead and margin are not included. Fuel and tolls are net of VAT. When a country on the route has no toll or fuel data, or the driver rate of the origin country is not on file, incomplete is true and the total is a lower bound."
+    operationId: get_lane_cost_index
+    parameters:       - name: from
+        in: query
+        description: "Origin: \"lat,lng\" (for example 52.4064,16.9252) or a city id (poznan, warsaw, berlin, munich, bucharest, zaragoza, lyon, milan, vienna, sofia, budapest). The carrier is assumed to be based in the origin country."
+        schema: 
+          type: string
+      - name: to
+        in: query
+        description: "Destination: \"lat,lng\" or a city id."
+        schema: 
+          type: string
+      - name: vehicle
+        in: query
+        description: "Vehicle preset (default artic_40t): van_3_5t, rigid_7_5t, rigid_12t, rigid_18t, artic_26t, artic_40t, artic_44t."
+        schema: 
+          type: string
+      - name: euro
+        in: query
+        description: "Euro emission class 0-6 (default 6), used for the tolls."
+        schema: 
+          type: string
+      - name: co2_class
+        in: query
+        description: "CO2 emission class 1-5 (default 1), used for the tolls."
+        schema: 
+          type: string
+      - name: empty_return
+        in: query
+        description: "1 = add the empty return trip on the same route (fuel, tolls, driver time); eur_per_km stays per loaded km. Default 0."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
