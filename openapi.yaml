@@ -2907,3 +2907,44 @@ paths:
         description: Unauthorized
       429: 
         description: Rate limit exceeded
+/toll-cost: 
+  get: 
+    summary: Truck Toll Cost API
+    description: "Truck toll cost for a route across Europe. Send the route line as coordinates (for example the geometry from truck-route or from your own router), or just waypoints and we route them with our truck routing. Set the vehicle (axles, gross weight, Euro emission class, CO2 emission class) and get the total in EUR or your currency, a per-country breakdown (tolled km, effective EUR per km, cost, the vehicle class priced, whether a class fallback was used, date of the tariff), motorway concession sections, tunnels and bridges with their own truck tolls (for example Calafat-Vidin) as separate items, and the tolled km in total. Per-km HGV tolls and HGV vignettes (DE, AT, PL, CZ, SK, HU, BG, RO, CH, BE, NL, DK, SE, SI and more) are priced from official tariff tables. Euro and CO2 class specific rates are used where an official tariff for that class is on file; otherwise the default class rate is used and class_fallback is true. Estimates are net of VAT."
+    operationId: get_toll_cost
+    parameters:       - name: coordinates
+        in: query
+        description: "(JSON body, this or waypoints) The route line as [[lon, lat], ...] — GeoJSON order, points at most ~1 km apart (a decoded route geometry), up to 50,000 points and 6000 km. It is matched to our road graph and priced as sent."
+        schema: 
+          type: string
+      - name: waypoints
+        in: query
+        description: "(JSON body, this or coordinates) 2 to 7 points as [lon, lat] or {lat, lon}: origin, up to 5 via points, destination. We compute the fastest truck route for this vehicle and price it. Dated driving bans do not change this route; for a ban-aware plan call truck-route and send its geometry as coordinates."
+        schema: 
+          type: string
+      - name: vehicle
+        in: query
+        description: "(JSON body) {axles: 2-12 (default 5), gross_weight_t: 3.5-60 (default 40), euro: 0-6 (default 6), co2_class: 1-5 (default none)}."
+        schema: 
+          type: string
+      - name: date
+        in: query
+        description: "(JSON body) Travel date YYYY-MM-DD within one year of today (default today). Tariffs valid on that date are used; with waypoints, the route is computed for that day."
+        schema: 
+          type: string
+      - name: currency
+        in: query
+        description: "(JSON body) ISO 4217 code for total (default EUR), e.g. PLN, CZK, HUF, RON, BGN, CHF, SEK, DKK. All line items stay in EUR."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
