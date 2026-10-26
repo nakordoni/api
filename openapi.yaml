@@ -2870,6 +2870,11 @@ paths:
         description: "1 (default) or 0. With 1, a weather forecast along the trip is used when the trip is within the next 3 days (72 h); later trips and weather=0 use clear sky."
         schema: 
           type: string
+      - name: animation
+        in: query
+        description: "1 (default) or 0. With 0, the animation block (sun and coach position every 5 minutes) is left out. POST body: animation true|false."
+        schema: 
+          type: string
     responses: 
       200: 
         description: Success
