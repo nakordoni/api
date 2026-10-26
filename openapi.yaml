@@ -2765,3 +2765,140 @@ paths:
         description: Unauthorized
       429: 
         description: Rate limit exceeded
+/bus-sun-side: 
+  get: 
+    summary: Bus Sun Side API
+    description: "Which side of a coach gets the sun or the shade on a trip, and which seats are best for shade or for the view. The trip is walked in 5-minute steps: position and heading from the route, solar position at that place and time, then a per-seat estimate for the chosen bus layout. Use a route from our licensed-route registry (route_id), two points (from/to), or POST your own route (stops or a polyline) to also get a seat map, a route map and a timeline as images. Results are an estimate from geometry and solar position; real shade also depends on curtains, buildings, terrain and weather."
+    operationId: get_bus_sun_side
+    parameters:       - name: route_id
+        in: query
+        description: Route id from our bus route registry (the same ids as the bus pages on nakordoni.eu). Use route_id or from+to.
+        schema: 
+          type: string
+      - name: dir
+        in: query
+        description: direct (default) or return.
+        schema: 
+          type: string
+      - name: date
+        in: query
+        description: "Travel date YYYY-MM-DD (default today). The sun position depends on the date."
+        schema: 
+          type: string
+      - name: dep
+        in: query
+        description: "Departure time HH:MM local to the route (default: the registry timetable)."
+        schema: 
+          type: string
+      - name: from
+        in: query
+        description: "Free form: start point lat,lon (with to)."
+        schema: 
+          type: string
+      - name: to
+        in: query
+        description: "Free form: end point lat,lon (with from)."
+        schema: 
+          type: string
+      - name: depart
+        in: query
+        description: "Free form: departure YYYY-MM-DDTHH:MM, local time of the start point."
+        schema: 
+          type: string
+      - name: lang
+        in: query
+        description: "Language of the place names and texts, 25 languages (en, uk, pl, de, …). Default en."
+        schema: 
+          type: string
+      - name: bus_model
+        in: query
+        description: "Bus model id from bus-sun-catalog (default standard_coach). Any field below overrides the model."
+        schema: 
+          type: string
+      - name: rows
+        in: query
+        description: "Seat rows, 8-20."
+        schema: 
+          type: string
+      - name: layout
+        in: query
+        description: "Seat layout: 2+2, 2+1 or 1+2 (left+right of the aisle)."
+        schema: 
+          type: string
+      - name: door_side
+        in: query
+        description: right (continental Europe) or left.
+        schema: 
+          type: string
+      - name: windshield
+        in: query
+        description: large or normal — how much sun the first rows get through the windscreen.
+        schema: 
+          type: string
+      - name: rear_window
+        in: query
+        description: "none, small or large — sun on the last rows."
+        schema: 
+          type: string
+      - name: window_height
+        in: query
+        description: standard or panoramic (tall side windows).
+        schema: 
+          type: string
+      - name: deck
+        in: query
+        description: "single, upper or lower (double-deck coaches)."
+        schema: 
+          type: string
+      - name: mid_door
+        in: query
+        description: 1 or 0 — middle door present (removes the seats there).
+        schema: 
+          type: string
+      - name: timeline
+        in: query
+        description: "0 = leave out the timeline (15-minute rows)."
+        schema: 
+          type: string
+      - name: track
+        in: query
+        description: "0 = leave out the timed track points."
+        schema: 
+          type: string
+      - name: weather
+        in: query
+        description: "1 (default) or 0. With 1, a weather forecast along the trip is used when the trip is within the next 3 days (72 h); later trips and weather=0 use clear sky."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/bus-sun-catalog: 
+  get: 
+    summary: Bus Sun Side — Bus Catalogue API
+    description: "The bus models bus-sun-side accepts (generic vehicle classes, not specific makes) with their seat layout, rows, door side, windows and deck, plus the allowed values of every bus parameter. Static; cache it."
+    operationId: get_bus_sun_catalog
+    parameters:       - name: bus_model
+        in: query
+        description: "Optional: return one model only (404 unknown_bus_model if the id is not in the catalogue)."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
