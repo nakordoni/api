@@ -6,6 +6,13 @@ See also the live changelog: https://nakordoni.eu/en/developers/changelog
 
 ---
 
+## 2026-10-27
+
+### Added
+- **New: Plate Image Recognition API — read licence plates from a vehicle photo** — New product `plate-recognition` (`POST /api/v2/data/plate-recognition`). It reads the licence plates in a photo of a vehicle. The engine is our own plate detector and reader, tuned on European trucks and buses. **Input**: one image (JPEG, PNG, WebP, BMP or TIFF, max 8 MB) as JSON `image_url` or `image_base64`, as a multipart upload in the field `image`, or as raw bytes with an `image/*` Content-Type.; **Output**: `results[]` with `plate`, `score`, `candidates[]`, `region`, `box`, `dscore` and `vehicle`, plus `processing_time` in ms.; **Errors**: 400 missing or invalid image, 404 `no_plate_detected`, 413 image larger than 8 MB, 500 `engine_error`.; **Privacy**: images are processed in memory and never stored. `image_url` must be a public address; private and internal addresses, and redirects to them, are refused.. Standard key auth, quota class heavy. Available from `/api/v2/`; no existing endpoint changed.
+
+---
+
 ## 2026-10-26
 
 ### Improved
