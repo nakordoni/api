@@ -1,5 +1,5 @@
 # Nakordoni Developer API — OpenAPI 3.0 spec
-# Generated 2026-10-26
+# Generated 2026-10-28
 # Regenerate: sudo -u www-data php /var/www/html/helpers/push_github_docs.php --file=openapi.yaml
 
 openapi:3.0.3
@@ -2981,6 +2981,78 @@ paths:
       - name: empty_return
         in: query
         description: "1 = add the empty return trip on the same route (fuel, tolls, driver time); eur_per_km stays per loaded km. Default 0."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/market-rate: 
+  get: 
+    summary: Market Rate API
+    description: "Market rate of a truck lane in Europe: the median and the 75th percentile price in EUR per km per month, from prices that transport companies agreed with their customers and chose to share. Anonymised: a month is published only when at least 5 different companies contributed on that lane and vehicle class; otherwise the month is insufficient_data and no number is given. No company and no single price is ever shown. Use it with the Lane Cost Index API: the cost index is the cost floor, the market rate is what the market paid."
+    operationId: get_market_rate
+    parameters:       - name: from
+        in: query
+        description: "Origin: a country code (PL), \"lat,lng\" (for example 52.4064,16.9252) or a city id (poznan, warsaw, berlin, munich, bucharest, zaragoza, lyon, milan, vienna, sofia, budapest)."
+        schema: 
+          type: string
+      - name: to
+        in: query
+        description: "Destination: a country code, \"lat,lng\" or a city id."
+        schema: 
+          type: string
+      - name: vehicle
+        in: query
+        description: "Vehicle class (default artic): van, rigid, artic. Lane Cost Index presets (van_3_5t, rigid_18t, artic_40t, ...) are accepted."
+        schema: 
+          type: string
+      - name: level
+        in: query
+        description: "country (default) = all trips between the two countries; region = trips between the 2 x 3 degree grid cells of the given points (needs \"lat,lng\" or a city id on both ends)."
+        schema: 
+          type: string
+      - name: months
+        in: query
+        description: "Number of months, 1-12 (default 6)."
+        schema: 
+          type: string
+      - name: until
+        in: query
+        description: "Last month YYYY-MM (default the current month), within the last 24 months."
+        schema: 
+          type: string
+    responses: 
+      200: 
+        description: Success
+        content: 
+          application/json: 
+            schema: 
+              type: object
+      401: 
+        description: Unauthorized
+      429: 
+        description: Rate limit exceeded
+/plate-recognition: 
+  get: 
+    summary: Plate Image Recognition API
+    description: "Read the licence plates in a photo of a vehicle. POST one image (JPEG, PNG, WebP, BMP or TIFF, max 8 MB) as a JSON body with image_url or image_base64, as a multipart/form-data upload in the field \"image\", or as the raw bytes with an image/* Content-Type. Every plate found comes back with the text, a 0-1 score, alternative readings, the plate box in pixels and the detection score. The engine is our own plate detector and reader, tuned on European trucks and buses. Images are processed in memory and never stored. image_url must be a public http(s) address; private and internal addresses, and redirects to them, are refused, and the download is stopped after 10 seconds."
+    operationId: get_plate_recognition
+    parameters:       - name: image_url
+        in: query
+        description: "(JSON body) Public http(s) URL of the image. Max 8 MB, max 3 redirects, 10 s download limit."
+        schema: 
+          type: string
+      - name: image_base64
+        in: query
+        description: "(JSON body) The image as base64 (a data:image/...;base64, prefix is allowed). Send image_url or image_base64, not both."
         schema: 
           type: string
     responses: 
