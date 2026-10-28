@@ -103,4 +103,4 @@ curl -X POST "https://nakordoni.eu/api/v4/data/plate-recognition" \
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#plate-recognition
-*Auto-generated 2026-10-27 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-10-28 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
