@@ -6,9 +6,20 @@ See also the live changelog: https://nakordoni.eu/en/developers/changelog
 
 ---
 
-## 2026-10-27
+## 2026-10-28
 
 ### Added
+- **Truck Route API v3: dedicated routing server and the new base URL api.nakordoni.dev** — Version **v3** of `truck-route` is now documented. It is available at `GET https://api.nakordoni.dev/v3/truck-route` and at `GET /api/v3/data/truck-route`. It takes the same request parameters as v2. It also has the v3 response fields from 2026-10-22: rest stop rules and the eCherha border wait. The route is calculated on our dedicated routing server first. If that server does not answer in time, our main server calculates the route. The response format is the same.; The response header `X-Route-Source` tells you which server answered: `primary` or `fallback`.; The same API key and the same quota class as v2: `route`, 1 unit per call.. **v2 stays supported and does not change.** To move to v3, change the version in your request URL. Docs: [Truck Route API v3](/en/developers/docs/truck-route/v3).
+
+---
+
+## 2026-10-27
+
+### Improved
+- **Plate Image Recognition API v4: request options regions, camera_id, timestamp and config** — Version **v4** of `plate-recognition` (`POST /api/v4/data/plate-recognition`) accepts new optional request options. Without them, the v4 output does not change. `regions`: the countries you expect, as ISO codes (for example `["PL","DE"]`). The country guess and the order of the readings are biased toward these countries.; `camera_id` and `timestamp`: returned unchanged in `data.camera_id` and `data.timestamp`. They are not stored beyond the normal request log.; `config.threshold`: results with a score below this value are left out.; `config.mode`: `fast` skips the vehicle detection, for a speed close to v2. `region` is still filled and `vehicle` is `null`.. Send the options in the JSON body, as multipart fields or as query parameters. New 400 error codes: `bad_regions`, `bad_camera_id`, `bad_timestamp`, `bad_config`, `bad_threshold`, `bad_mode`. v2 does not change and ignores the options. Docs: [Plate Image Recognition v4](/en/developers/docs/plate-recognition/v4).
+
+### Added
+- **Plate Image Recognition API v4: country of the plate and vehicle type** — New version **v4** of `plate-recognition` (`POST /api/v4/data/plate-recognition`). It fills two fields that v2 always returns as `null`: `results[].region`: `{code, score}` with the ISO country code of the plate (for example `UA`), read from the plate format. When several countries use the same format, the score is low.; `results[].vehicle`: `{type, score, box}` of the vehicle that carries the plate. `type` is `car`, `bus`, `truck` or `motorcycle`.. The request, the other fields and the error codes do not change. v4 takes longer than v2 because of the vehicle detection (typically 0.5-1.5 s per image). v2 does not change and keeps returning `null` for both fields. Docs: [Plate Image Recognition v4](/en/developers/docs/plate-recognition/v4).
 - **New: Plate Image Recognition API — read licence plates from a vehicle photo** — New product `plate-recognition` (`POST /api/v2/data/plate-recognition`). It reads the licence plates in a photo of a vehicle. The engine is our own plate detector and reader, tuned on European trucks and buses. **Input**: one image (JPEG, PNG, WebP, BMP or TIFF, max 8 MB) as JSON `image_url` or `image_base64`, as a multipart upload in the field `image`, or as raw bytes with an `image/*` Content-Type.; **Output**: `results[]` with `plate`, `score`, `candidates[]`, `region`, `box`, `dscore` and `vehicle`, plus `processing_time` in ms.; **Errors**: 400 missing or invalid image, 404 `no_plate_detected`, 413 image larger than 8 MB, 500 `engine_error`.; **Privacy**: images are processed in memory and never stored. `image_url` must be a public address; private and internal addresses, and redirects to them, are refused.. Standard key auth, quota class heavy. Available from `/api/v2/`; no existing endpoint changed.
 
 ---
