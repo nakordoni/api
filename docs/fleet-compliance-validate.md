@@ -69,4 +69,4 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 ---
 
 Full docs: https://nakordoni.eu/en/developers/docs#fleet-compliance-validate
-*Auto-generated 2026-10-26 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
+*Auto-generated 2026-10-28 — regenerate: `sudo -u www-data php /var/www/html/helpers/push_github_docs.php`*
