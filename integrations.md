@@ -26,7 +26,7 @@ Community and partner projects that bring Nakordoni data into the tools people a
 
 ## Markdown
 
-- Telegram: https://nakordoni.eu/api/v1/integrations/telegram.md
+- Telegram (own bot via Bot Token, shared bot coming; text templates; 8 image cards for border queues and truck bans; plan limits; attribution styles A1–A6): https://nakordoni.eu/api/v1/integrations/telegram.md
 - Home Assistant / OAuth: https://nakordoni.eu/api/v1/integrations/home-assistant.md
 - API reference: https://nakordoni.eu/api/v1/docs.md
 
