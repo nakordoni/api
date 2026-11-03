@@ -38,6 +38,36 @@ Inside the `data` object of the envelope. A field is `null`, absent or an empty 
 | `error.code` | 400: image_required, bad_json, bad_base64, one_image_only, bad_image_url, image_url_not_allowed, image_url_fetch_failed, image_url_timeout, invalid_image, image_too_small, unsupported_image_type, unsupported_content_type, upload_failed. 404: no_dog_detected. 413: payload_too_large. 500: engine_error. 503: engine_unavailable or engine_busy, with a Retry-After header and error.retry_after (seconds); when the engine is already paused before your call starts, the 503 engine_unavailable is not counted against your quota. |
 
 
+## Version v3
+
+Same request as v2. v3 recognises dogs and cats; breeds are given for dogs only. New fields: species (dog, cat or none), species_score and animals[]. A photo with no dog and no cat is not an error: v3 answers HTTP 200 with species "none" (v2 answers 404 no_dog_detected). For a cat, breed is null, breeds is empty and models_agree is false. v2 stays supported and does not change.
+
+**Endpoint:** `POST /api/v3/data/pet-recognition`
+
+### Example (v3)
+
+```bash
+curl -X POST "https://nakordoni.eu/api/v3/data/pet-recognition" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"image_url":"https://upload.wikimedia.org/wikipedia/commons/2/26/YellowLabradorLooking_new.jpg"}'
+```
+
+### Response fields (v3)
+
+| Field | Description |
+|-------|-------------|
+| `data.success` | true when the image was analysed, also when no animal was found. data.message says the result in words. |
+| `data.processing_time` | Time spent on the request in milliseconds. |
+| `data.species` | dog, cat or none: the species with the highest detector score. |
+| `data.species_score` | Detector confidence 0-1 for data.species; 0 when species is none. |
+| `data.animals[]` | Every dog and cat found, as {species, score}, highest score first. Empty when species is none. |
+| `data.breed` | Dogs only: {id, name, score} when both breed models agree; otherwise null. Always null for a cat or none. |
+| `data.breeds[]` | Dogs only: up to 3 breeds {id, name, score}, most likely first. The score is relative and often low (0.05-0.2) even for a correct breed, so compare breeds by order. Empty for a cat or none, and when the dog matches none of the 60 breeds. |
+| `data.models_agree` | true when both breed models chose the same first breed (then data.breed is set); false for a cat or none. |
+| `error.code` | 400: image_required, bad_json, bad_base64, one_image_only, bad_image_url, image_url_not_allowed, image_url_fetch_failed, image_url_timeout, invalid_image, image_too_small, unsupported_image_type, unsupported_content_type, upload_failed. 413: payload_too_large. 500: engine_error. 503: engine_unavailable or engine_busy, with a Retry-After header and error.retry_after (seconds); when the engine is already paused before your call starts, the 503 engine_unavailable is not counted against your quota. In v3, a photo with no dog and no cat is not an error (species none). |
+
+
 ## Response envelope
 
 ```json
